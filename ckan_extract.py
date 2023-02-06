@@ -9,7 +9,6 @@ import geojson
 from geojson import Polygon
 
 from pygeometa.core import read_mcf, render_j2_template
-from pygeometa.schemas.iso19139 import ISO19139OutputSchema
 
 
 
@@ -110,13 +109,7 @@ def output_xml(ckan_dict, url):
     }
 
 
-    # choose ISO 19139 output schema
-    iso_os = ISO19139OutputSchema()
-
-    ## default schema is pretty limited
-    #xml_string = iso_os.write(mcf_dict)
-
-    xml_string = render_j2_template(mcf_dict, template_dir='.')
+    xml_string = render_j2_template(mcf_dict, template_dir='./templates/iso19115-3')
     print(xml_string)
 
     # write to disk

@@ -2,7 +2,7 @@ tika
 yake
 pytextrank
 spacy
-en-core-web-sm==3.4.1
+# en-core-web-sm
 PyPDF2
 requests
 geojson
