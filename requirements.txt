@@ -7,3 +7,4 @@ PyPDF2
 requests
 geojson
 pygeometa
+sickle

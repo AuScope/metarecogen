@@ -73,7 +73,7 @@ def output_xml(ckan_dict, url):
             "fees": "None",
             "accessconstraints": "license",
             "rights": {
-                "en": "Copyright (c) 2010 Her Majesty the Queen in Right of Canada",
+                "en": f"{ckan_dict['license_title']} ({ckan_dict['license_url']})",
             },
             "url": url,
             "status": "completed",
