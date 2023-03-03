@@ -6,6 +6,8 @@ import spacy
 import pytextrank
 import glob
 import sys
+import sqlite3
+from contextlib import closing
 
 def parse_pdf(filename):
     reader = PdfReader(filename)
@@ -70,10 +72,38 @@ CREATE TABLE term (
   );
 """
 def extract_db_terms():
-    pass
+    """ Function to create a lookup table that translates geological terms into keywords
+    """
+    keyword_lkup = {}
+    name_dict = {}
+    link_dict = {}
+    with closing(sqlite3.connect("../db/thesauri.db")) as con:
+        with closing(con.cursor()) as cur:
+            for row in cur.execute("SELECT code, name, parent FROM term"):
+                print(row)
+                link_dict[row[0]] = row[2]
+                name_dict[row[0]] = row[1]
+    for k,v in link_dict.items():
+        parent = v
+        child = -1
+        gchild = -1
+        ggchild = -1
+        while parent != 1 and parent != None:
+            ggchild = gchild
+            gchild = child
+            child = parent
+            parent = link_dict[parent]
+        try:
+            if name_dict[ggchild] not in ['chemical elements', 'chemical element groups']:
+                print("parent of", name_dict[k], "is:  ", name_dict[ggchild]) 
+                keyword_lkup[k] = name_dict[ggchild]
+        except KeyError:
+            pass
+    return keyword_lkup
 
 if __name__ == "__main__":
-    for file in glob.glob('*.pdf'):
-        text = parse_pdf(file)
-        run_yake(text)
-        run_textrank(text)
+    #for file in glob.glob('*.pdf'):
+    #    text = parse_pdf(file)
+    #    run_yake(text)
+    #    run_textrank(text)
+    extract_db_terms()
