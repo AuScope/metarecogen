@@ -51,36 +51,14 @@
                   <cit:deliveryPoint>
                     <gco:CharacterString>{{ record['contact']['address'] }}</gco:CharacterString>
                   </cit:deliveryPoint>
-                  <cit:city>
-                    <gco:CharacterString>Adelaide</gco:CharacterString>
-                  </cit:city>
-                  <cit:administrativeArea>
-                    <gco:CharacterString>South Australia</gco:CharacterString>
-                  </cit:administrativeArea>
-                  <cit:postalCode>
-                    <gco:CharacterString>5001</gco:CharacterString>
-                  </cit:postalCode>
                   <cit:country>
                     <gco:CharacterString>Australia</gco:CharacterString>
                   </cit:country>
-                  <cit:electronicMailAddress>
-                    <gco:CharacterString>george.gouthas@sa.gov.au</gco:CharacterString>
-                  </cit:electronicMailAddress>
                 </cit:CI_Address>
               </cit:address>
                  {% endif %}
             </cit:CI_Contact>
           </cit:contactInfo>
-          <cit:individual>
-            <cit:CI_Individual>
-              <cit:name>
-                <gco:CharacterString>George Gouthas</gco:CharacterString>
-              </cit:name>
-              <cit:positionName>
-                <gco:CharacterString>Project Geoscientist</gco:CharacterString>
-              </cit:positionName>
-            </cit:CI_Individual>
-          </cit:individual>
         </cit:CI_Organisation>
       </cit:party>
     </cit:CI_Responsibility>
@@ -88,7 +66,7 @@
   <mdb:dateInfo>
     <cit:CI_Date>
       <cit:date>
-        <gco:DateTime>2022-11-03T06:12:41</gco:DateTime>
+        <gco:DateTime>{{ record['identification']['dates']['creation'] }}</gco:DateTime>
       </cit:date>
       <cit:dateType>
         <cit:CI_DateTypeCode codeList="http://standards.iso.org/iso/19115/resources/Codelists/cat/codelists.xml#CI_DateTypeCode" codeListValue="creation" />
@@ -98,7 +76,7 @@
   <mdb:dateInfo>
     <cit:CI_Date>
       <cit:date>
-        <gco:DateTime>2022-11-03T06:14:04</gco:DateTime>
+        <gco:DateTime>{{ record['identification']['dates']['publication'] }}</gco:DateTime>
       </cit:date>
       <cit:dateType>
         <cit:CI_DateTypeCode codeList="http://standards.iso.org/iso/19115/resources/Codelists/cat/codelists.xml#CI_DateTypeCode" codeListValue="revision" />
@@ -112,96 +90,45 @@
       </cit:title>
     </cit:CI_Citation>
   </mdb:metadataStandard>
-  <mdb:metadataLinkage>
-    <cit:CI_OnlineResource>
-      <cit:linkage>
-        <gco:CharacterString>http://portal.auscope.org/geonetwork/srv/api/records/bf9fc04e-682e-4918-a60c-15bde3ec2ea5</gco:CharacterString>
-      </cit:linkage>
-      <cit:function>
-        <cit:CI_OnLineFunctionCode codeList="http://standards.iso.org/iso/19115/resources/Codelists/cat/codelists.xml#CI_OnLineFunctionCode" codeListValue="completeMetadata" />
-      </cit:function>
-    </cit:CI_OnlineResource>
-  </mdb:metadataLinkage>
   <mdb:identificationInfo>
     <mri:MD_DataIdentification>
       <mri:citation>
         <cit:CI_Citation>
           <cit:title>
-            <gco:CharacterString>3D Geological Model of North Gawler Province - Understanding and modelling potential field anomalies.</gco:CharacterString>
+            <gco:CharacterString>{{ record['identification']['title']['en'] }}</gco:CharacterString>
           </cit:title>
           <cit:date>
             <cit:CI_Date>
               <cit:date>
-                <gco:Date>2010-01-01</gco:Date>
+                <gco:Date>{{ record['metadata']['datestamp'] }}</gco:Date>
               </cit:date>
             </cit:CI_Date>
           </cit:date>
         </cit:CI_Citation>
       </mri:citation>
       <mri:abstract>
-        <gco:CharacterString>This model was produced by The South Australian Centre for Mineral Exploration Under Cover (CMXUC), a collaborative research initiative of the Government of South Australia and the University of Adelaide.
-
-In this area, basement is buried beneath Neoproterozoic-Recent cover, of the Eastern Officer, Arckaringa and Eromanga Basins. The depth to basement horizon, shows the complex geometry of the Munyarai Trough which forms a foreland to the uplifted Musgrave Block; the Marla Overthrust Zone and Ammaroodinna Ridge which were uplifted after the deposition of Cambrian to Silurian sedimentary rocks; the Middle Bore Fault Zone which was last active during deposition of the Arckaringa Basin and the Wintinna Trough.
-
-Large potential field anomalies have been observed in the Marla Region of Northern South Australia and have been used to define the northern limit of the Gawler Craton. This project’s aim was to model the source of those anomalies in order to understand the sources of those anomalies.</gco:CharacterString>
+        <gco:CharacterString>{{ record['identification']['abstract']['en'] }}</gco:CharacterString>
       </mri:abstract>
-      <mri:pointOfContact>
-        <cit:CI_Responsibility>
-          <cit:role>
-            <cit:CI_RoleCode codeList="http://standards.iso.org/iso/19115/resources/Codelists/cat/codelists.xml#CI_RoleCode" codeListValue="author" />
-          </cit:role>
-          <cit:party>
-            <cit:CI_Individual>
-              <cit:name>
-                <gco:CharacterString>Gouthas, G.</gco:CharacterString>
-              </cit:name>
-            </cit:CI_Individual>
-          </cit:party>
-        </cit:CI_Responsibility>
-      </mri:pointOfContact>
       <mri:extent>
         <gex:EX_Extent>
           <gex:geographicElement>
             <gex:EX_GeographicBoundingBox>
               <gex:westBoundLongitude>
-                <gco:Decimal>132.7052603</gco:Decimal>
+                <gco:Decimal>{{ record['identification']['extents']['spatial'][0]['bbox'][1] }}</gco:Decimal>
               </gex:westBoundLongitude>
               <gex:eastBoundLongitude>
-                <gco:Decimal>134.4664228</gco:Decimal>
+                <gco:Decimal>{{ record['identification']['extents']['spatial'][0]['bbox'][0] }}</gco:Decimal>
               </gex:eastBoundLongitude>
               <gex:southBoundLatitude>
-                <gco:Decimal>-28.3847194</gco:Decimal>
+                <gco:Decimal>{{ record['identification']['extents']['spatial'][0]['bbox'][2] }}</gco:Decimal>
               </gex:southBoundLatitude>
               <gex:northBoundLatitude>
-                <gco:Decimal>-26.9293133</gco:Decimal>
+                <gco:Decimal>{{ record['identification']['extents']['spatial'][0]['bbox'][3] }}</gco:Decimal>
               </gex:northBoundLatitude>
             </gex:EX_GeographicBoundingBox>
           </gex:geographicElement>
         </gex:EX_Extent>
       </mri:extent>
-      <mri:descriptiveKeywords>
-        <mri:MD_Keywords>
-          <mri:keyword>
-            <gco:CharacterString>Magnetic Anomalies</gco:CharacterString>
-          </mri:keyword>
-          <mri:keyword>
-            <gco:CharacterString>Report</gco:CharacterString>
-          </mri:keyword>
-        </mri:MD_Keywords>
-      </mri:descriptiveKeywords>
-      <mri:descriptiveKeywords>
-        <mri:MD_Keywords>
-          <mri:keyword>
-            <gco:CharacterString>South Australia</gco:CharacterString>
-          </mri:keyword>
-          <mri:keyword>
-            <gco:CharacterString>North Gawler</gco:CharacterString>
-          </mri:keyword>
-          <mri:type>
-            <mri:MD_KeywordTypeCode codeListValue="place" codeList="http://standards.iso.org/iso/19115/resources/Codelists/cat/codelists.xml#MD_KeywordTypeCode" />
-          </mri:type>
-        </mri:MD_Keywords>
-      </mri:descriptiveKeywords>
       <mri:descriptiveKeywords>
         <mri:MD_Keywords>
           <mri:keyword>
@@ -241,7 +168,7 @@ Large potential field anomalies have been observed in the Marla Region of Northe
           <mrd:onLine>
             <cit:CI_OnlineResource>
               <cit:linkage>
-                <gco:CharacterString>https://sarigbasis.pir.sa.gov.au/WebtopEw/ws/samref/sarig1/image/DDD/GDP00026.pdf</gco:CharacterString>
+                <gco:CharacterString></gco:CharacterString>
               </cit:linkage>
               <cit:protocol>
                 <gco:CharacterString>WWW:LINK-1.0-http--link</gco:CharacterString>
@@ -254,7 +181,7 @@ Large potential field anomalies have been observed in the Marla Region of Northe
           <mrd:onLine>
             <cit:CI_OnlineResource>
               <cit:linkage>
-                <gco:CharacterString>http://dsd-gdp.s3.amazonaws.com/GDP00026_PDF.ZIP</gco:CharacterString>
+                <gco:CharacterString></gco:CharacterString>
               </cit:linkage>
               <cit:protocol>
                 <gco:CharacterString>WWW:LINK-1.0-http--link</gco:CharacterString>

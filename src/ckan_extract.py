@@ -48,7 +48,7 @@ def output_xml(ckan_dict, url):
             },
             "dates": {
                 "creation": ckan_dict['metadata_created'],
-                "publication": ckan_dict['metadata_created']
+                "publication": ckan_dict['metadata_modified']
             },
             "keywords": {
                 "default": {
@@ -109,7 +109,7 @@ def output_xml(ckan_dict, url):
     }
 
 
-    xml_string = render_j2_template(mcf_dict, template_dir='./templates/iso19115-3')
+    xml_string = render_j2_template(mcf_dict, template_dir='../data/templates/ISO19115-3')
     print(xml_string)
 
     # write to disk
