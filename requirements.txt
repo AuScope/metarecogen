@@ -8,3 +8,5 @@ requests
 geojson
 pygeometa
 sickle
+transformers
+torch

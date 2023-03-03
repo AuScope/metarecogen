@@ -61,6 +61,17 @@ def run_textrank(text):
         print(phrase.chunks)
         print()
 
+"""
+CREATE TABLE term (
+  code    integer not NULL,
+  name    character varying(128),
+  parent  integer,
+  scope   character varying(1024)
+  );
+"""
+def extract_db_terms():
+    pass
+
 if __name__ == "__main__":
     for file in glob.glob('*.pdf'):
         text = parse_pdf(file)
