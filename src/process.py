@@ -3,15 +3,26 @@
 from oai_extract import OaiExtractor
 from ckan_extract import CkanExtractor
 
-
-STATES = { 'vic': { 'method': 'PDF',
+"""
+Create ISO19139 or ISO19115-3 XML metadata records from PDF reports or online metadata services (e.g. CKAN, dSpace, geonetwork)
+"""
+STATES = {
+        #
+        # Victoria has some PDF reports 
+        'vic': { 'method': 'PDF',
                     'params': { 'URLS': [ ] }
                   },
-        'tas': { 'method': 'PDF',
-                  'params': { 'URLS': [ ] }
-               },
+        #
+        # Tasmania's metadata is not available yet
+        'tas': { 'method': None },
+        #
+        # NSW has no sources
         'nsw': { 'method': None },
+        #
+        # GA has no sources
         'ga': { 'method': None },
+        #
+        # QLD has a CKAN repo
         'qld': { 'method': 'CKAN',
                  'params': [ { 'model_endpath': 'quamby',
                                'ckan_url': 'https://geoscience.data.qld.gov.au',
@@ -23,6 +34,8 @@ STATES = { 'vic': { 'method': 'PDF',
                              }
                  ]
                },
+        #
+        # SA has a geonetwork with ISO19139 records
         'sa': { 'method': 'ISO19139',
                 'params': [  { 'model_endpath': 'burramine',
                                'metadata_url' :'https://catalog.sarig.sa.gov.au/geonetwork/srv/api/records/37e0f6f0-b9c7-47f0-bbed-482ce35851a4/formatters/xml'
@@ -44,15 +57,19 @@ STATES = { 'vic': { 'method': 'PDF',
                              }
                 ]
               },
+        #
+        # NT has an OAI-PMH interface
         'nt': { 'method': 'OAIPMH',
                  'params': [  { 'model_endpath': 'mcarthur',
-                                 'bbox': [154.3, 109.1, -43.9, -10.6],
+                                'bbox': [154.3, 109.1, -43.9, -10.6],
                                 'oai_id': 'oai:geoscience.nt.gov.au:1/81751',
                                 'oai_prefix': 'oai_dc',
                                 'service_name': "NTGS GEMIS"
                             }
                  ]
                },
+        #
+        # WA has ISO19139 records 
         'wa': { 'method': 'ISO19139',
                 'params': [{ 'model_endpath': 'sandstone',
                             'metadata_url': 'https://dasc.dmirs.wa.gov.au/Download/Metadata?fileName=Metadata_Statements/XML/3D_Sandstone_2015.xml'
@@ -64,7 +81,7 @@ STATES = { 'vic': { 'method': 'PDF',
               }
 }
 
-def pdf_convert(params_list):
+def pdf_convert(param_list):
     pass
 
 def ckan_convert(param_list):
