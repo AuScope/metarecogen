@@ -13,7 +13,7 @@ from extractor import Extractor
 
 class CkanExtractor(Extractor):
 
-    def output_xml(self, ckan_dict, url):
+    def output_xml(self, ckan_dict, url, model_endpath):
         # print(json.dumps(ckan_dict, indent=4))
         try:
             extent = geojson.loads(ckan_dict['GeoJSONextent'])
@@ -97,6 +97,18 @@ class CkanExtractor(Extractor):
                         "en": ckan_dict['resources'][0]['resource:description'],
                     },
                     "function": "download"
+                },
+                "www": {
+                    "url": f"http://geomodels.auscope.org.au/model/{model_endpath}",
+                    "type": "WWW:LINK",
+                    "rel": "service",
+                    "name": {
+                        "en": "3D Geological model website",
+                    },
+                    "description": {
+                        "en": "3D Geological model website",
+                    },
+                    "function": "website"
                 }
             },
             "dataquality": {
@@ -111,14 +123,13 @@ class CkanExtractor(Extractor):
 
 
         xml_string = render_j2_template(mcf_dict, template_dir='../data/templates/ISO19115-3')
-        print(xml_string)
 
         # write to disk
-        with open('output.xml', 'w') as ff:
+        with open(f"{model_endpath}.xml", 'w') as ff:
             ff.write(xml_string)
 
 
-    def write_record(self, ckan_url, package_id):
+    def write_record(self, model_endpath, ckan_url, package_id):
         # Set up CKAN URL
         url_path =  Path('api') / '3' / 'action' / 'package_show'
         url = f'{ckan_url}/{url_path}'
@@ -129,7 +140,7 @@ class CkanExtractor(Extractor):
         except json.JSONDecodeError:
             return False
         if dict['success'] is True:
-            self.output_xml(dict['result'], r.url)
+            self.output_xml(dict['result'], r.url, model_endpath)
             return True
         return False
 

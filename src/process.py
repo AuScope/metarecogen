@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
 
+from oai_extract import OaiExtractor
+from ckan_extract import CkanExtractor
+
+
 STATES = { 'vic': { 'method': 'PDF',
                     'params': { 'URLS': [ ] }
                   },
@@ -9,27 +13,84 @@ STATES = { 'vic': { 'method': 'PDF',
         'nsw': { 'method': None },
         'ga': { 'method': None },
         'qld': { 'method': 'CKAN',
-                 'params': { 'URL': 'https://dffgg.ggfgf/api' }
+                 'params': [ { 'model_endpath': 'quamby',
+                               'ckan_url': 'https://geoscience.data.qld.gov.au',
+                               'package_id': 'ds000006'
+                             },
+                             { 'model_endpath': 'mtdore',
+                               'ckan_url': 'https://geoscience.data.qld.gov.au',
+                               'package_id': 'ds000002'
+                             }
+                 ]
                },
         'sa': { 'method': 'ISO19139',
-                'params': { 'URL': 'https://dffgg.ggfgf/api' }
+                'params': [  { 'model_endpath': 'burramine',
+                               'metadata_url' :'https://catalog.sarig.sa.gov.au/geonetwork/srv/api/records/37e0f6f0-b9c7-47f0-bbed-482ce35851a4/formatters/xml'
+                             },
+                             { 'model_endpath': 'centralflinders',
+                               'metadata_url' :'https://catalog.sarig.sa.gov.au/geonetwork/srv/api/records/2369469b-4906-4352-9100-632974e0ec04/formatters/xml'
+                             },
+                             { 'model_endpath': 'northflinders',
+                               'metadata_url' :'https://catalog.sarig.sa.gov.au/geonetwork/srv/api/records/a86d7379-ca96-4e7d-8e1f-58bfeba9a8f5/formatters/xml'
+                             },
+                             { 'model_endpath': 'ngawler',
+                               'metadata_url' :'https://catalog.sarig.sa.gov.au/geonetwork/srv/api/records/9c6ae754-291d-4100-afd9-478c3a9ddf42/formatters/xml'
+                             },
+                             { 'model_endpath': 'curnamonased',
+                               'metadata_url' :'https://catalog.sarig.sa.gov.au/geonetwork/srv/api/records/bda114bc-1eb8-4569-94e5-a9fa1a994645/formatters/xml'
+                             },
+                             { 'model_endpath': 'westgawler',
+                               'metadata_url' :'https://catalog.sarig.sa.gov.au/geonetwork/srv/api/records/13ed6259-1ceb-4728-848f-35e81b502d12/formatters/xml'
+                             }
+                ]
               },
         'nt': { 'method': 'OAIPMH',
-                 'params': { 'URLS': [ ] }
+                 'params': [  { 'model_endpath': 'mcarthur',
+                                 'bbox': [154.3, 109.1, -43.9, -10.6],
+                                'oai_id': 'oai:geoscience.nt.gov.au:1/81751',
+                                'oai_prefix': 'oai_dc',
+                                'service_name': "NTGS GEMIS"
+                            }
+                 ]
                },
         'wa': { 'method': 'ISO19139',
-                'params': { 'URLS': [ ] }
+                'params': [{ 'model_endpath': 'sandstone',
+                            'metadata_url': 'https://dasc.dmirs.wa.gov.au/Download/Metadata?fileName=Metadata_Statements/XML/3D_Sandstone_2015.xml'
+                          },
+                          { 'model_endpath': 'windimurra',
+                            'metadata_url': 'https://dasc.dmirs.wa.gov.au/Download/Metadata?fileName=Metadata_Statements/XML/3D_Windimurra_2015.xml'
+                          }
+                ]
               }
 }
 
+def pdf_convert(params_list):
+    pass
+
+def ckan_convert(param_list):
+    ce = CkanExtractor()
+    for params in param_list:
+        ce.write_record(**params)
+
+def iso19139_convert(param_list):
+    pass
+
+
+def oaipmh_convert(param_list):
+    # Get records from Northern Territory Geological Service
+    # OAI-PMH URL
+    OAI__URL = 'https://geoscience.nt.gov.au/gemis/ntgsoai/request'
+    oe = OaiExtractor(OAI__URL, 'output')
+    for params in param_list:
+        oe.write_record(**params)
 
 if __name__ == "__main__":
     for k,v in STATES.items():
         if v['method'] == 'PDF':
-            pdf_convert(k, v['params'])
+            pdf_convert(v['params'])
         elif v['method'] == 'CKAN':
-            pdf_convert(k, v['params'])
+            ckan_convert(v['params'])
         elif v['method'] == 'ISO19139':
-            pdf_convert(k, v['params'])
+            iso19139_convert(v['params'])
         elif v['method'] == 'OAIPMH':
-            pdf_convert(k, v['params'])
+            oaipmh_convert(v['params'])
