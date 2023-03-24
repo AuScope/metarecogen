@@ -123,8 +123,8 @@ class ISO19139Extractor(Extractor):
 
 
 if __name__ == "__main__":
-    metadata_url = "http://www.ntlis.nt.gov.au/metadata/export_data?type=xml&metadata_id=1080195AEBC6A054E050CD9B214436A1"
-    #metadata_url = 'https://warsydprdstadasc.blob.core.windows.net/downloads/Metadata_Statements/XML/3D_Windimurra_2015.xml'
+    #metadata_url = "http://www.ntlis.nt.gov.au/metadata/export_data?type=xml&metadata_id=1080195AEBC6A054E050CD9B214436A1"
+    metadata_url = 'https://warsydprdstadasc.blob.core.windows.net/downloads/Metadata_Statements/XML/3D_Windimurra_2015.xml'
     # Does not work
     #metadata_url = 'https://dasc.dmirs.wa.gov.au/Download/Metadata?fileName=Metadata_Statements/XML/3D_Sandstone_2015.xml'
     ce = ISO19139Extractor()

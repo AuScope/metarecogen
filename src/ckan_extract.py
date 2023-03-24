@@ -130,6 +130,7 @@ class CkanExtractor(Extractor):
 
 
     def write_record(self, model_endpath, ckan_url, package_id):
+        print(f"Converting: {model_endpath}")
         # Set up CKAN URL
         url_path =  Path('api') / '3' / 'action' / 'package_show'
         url = f'{ckan_url}/{url_path}'

@@ -3,7 +3,21 @@
 [project]
 # PEP 621 project metadata
 # See https://www.python.org/dev/peps/pep-0621/
-dependencies = ["tika", "yake", "pytextrank", "spacy", "PyPDF2", "requests", "geojson", "pygeometa", "sickle", "transformers", "torch"]
+dependencies = [
+    "tika",
+    "yake",
+    "pytextrank",
+    "spacy",
+    "PyPDF2",
+    "requests",
+    "geojson",
+    "pygeometa",
+    "sickle",
+    "transformers",
+    "torch",
+    "bas-metadata-library>=0.9.1",
+    "lxml>=4.9.2",
+]
 requires-python = ">=3.9"
 
 [build-system]

@@ -19,6 +19,7 @@ from extractor import Extractor
 class ISO19139Extractor2(Extractor):
 
     def write_record(self, model_endpath, metadata_url):
+        print(f"Converting: {model_endpath}")
         # XML Namespace dict
         ns = {'gmd': 'http://www.isotc211.org/2005/gmd', 'gco': 'http://www.isotc211.org/2005/gco'}
 
@@ -54,15 +55,18 @@ class ISO19139Extractor2(Extractor):
 
         # Look for a place to insert 'online_root'
         xpath_list = copy(master_xpath_list)
+        print(f'{xpath_list=}')
         result = []
         while len(result) == 0 and len(xpath_list) > 1:
             xpath = '/' + '/'.join(xpath_list)
-            #print(xpath)
+            print(xpath)
             result = root.xpath(xpath, namespaces=ns)
             xpath_list.pop()
 
         # Insert 'online_root' and any other required elements 
         leftovers = master_xpath_list[len(xpath_list):]
+        print(f'{leftovers=}')
+        print(f'{result=}')
         child = result[0]
         for elemtag in leftovers[1:]:
             tagtag = elemtag.split(':')[1] 
@@ -86,7 +90,8 @@ class ISO19139Extractor2(Extractor):
 
 
 if __name__ == "__main__":
-    metadata_url = "http://www.ntlis.nt.gov.au/metadata/export_data?type=xml&metadata_id=1080195AEBC6A054E050CD9B214436A1"
+    metadata_url = "https://warsydprdstadasc.blob.core.windows.net/downloads/Metadata_Statements/XML/3D_Sandstone_2015.xm"
+    #metadata_url = "http://www.ntlis.nt.gov.au/metadata/export_data?type=xml&metadata_id=1080195AEBC6A054E050CD9B214436A1"
     #metadata_url = 'https://warsydprdstadasc.blob.core.windows.net/downloads/Metadata_Statements/XML/3D_Windimurra_2015.xml'
     ce = ISO19139Extractor2()
     ce.write_record('windimurra', metadata_url)

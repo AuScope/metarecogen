@@ -2,9 +2,11 @@
 
 from oai_extract import OaiExtractor
 from ckan_extract import CkanExtractor
+from ISO19139_extract2 import ISO19139Extractor2
 
 """
-Create ISO19139 or ISO19115-3 XML metadata records from PDF reports or online metadata services (e.g. CKAN, dSpace, geonetwork)
+Create ISO19139 or ISO19115-3 XML metadata records from PDF reports or online metadata services
+(e.g. CKAN, dSpace, geonetwork)
 """
 STATES = {
         #
@@ -35,8 +37,8 @@ STATES = {
                  ]
                },
         #
-        # SA has a geonetwork with ISO19139 records
-        'sa': { 'method': 'ISO19139',
+        # SA has a geonetwork with ISO19115-3 records
+        'sa': { 'method': 'ISO191115-3',
                 'params': [  { 'model_endpath': 'burramine',
                                'metadata_url' :'https://catalog.sarig.sa.gov.au/geonetwork/srv/api/records/37e0f6f0-b9c7-47f0-bbed-482ce35851a4/formatters/xml'
                              },
@@ -58,24 +60,30 @@ STATES = {
                 ]
               },
         #
-        # NT has an OAI-PMH interface
-        'nt': { 'method': 'OAIPMH',
+        # NT has an OAI-PMH interface and ISO19139 records
+        'nt': { 'method': 'ISO19139',
                  'params': [  { 'model_endpath': 'mcarthur',
-                                'bbox': [154.3, 109.1, -43.9, -10.6],
-                                'oai_id': 'oai:geoscience.nt.gov.au:1/81751',
-                                'oai_prefix': 'oai_dc',
-                                'service_name': "NTGS GEMIS"
-                            }
+                                'metadata_url': 'http://www.ntlis.nt.gov.au/metadata/export_data?type=xml&metadata_id=1080195AEBC6A054E050CD9B214436A1'    }
                  ]
                },
-        #
+        # NT has an OAI-PMH interface and ISO19139 records
+        #'nt': { 'method': 'OAIPMH',
+        #         'params': [  { 'model_endpath': 'mcarthur',
+        #                        'bbox': [154.3, 109.1, -43.9, -10.6],
+        #                        'oai_id': 'oai:geoscience.nt.gov.au:1/81751',
+        #                        'oai_prefix': 'oai_dc',
+        #                        'service_name': "NTGS GEMIS"
+        #                    }
+        #         ]
+        #       },
+
         # WA has ISO19139 records 
         'wa': { 'method': 'ISO19139',
                 'params': [{ 'model_endpath': 'sandstone',
-                            'metadata_url': 'https://dasc.dmirs.wa.gov.au/Download/Metadata?fileName=Metadata_Statements/XML/3D_Sandstone_2015.xml'
+                            'metadata_url': 'https://warsydprdstadasc.blob.core.windows.net/downloads/Metadata_Statements/XML/3D_Sandstone_2015.xml'
                           },
                           { 'model_endpath': 'windimurra',
-                            'metadata_url': 'https://dasc.dmirs.wa.gov.au/Download/Metadata?fileName=Metadata_Statements/XML/3D_Windimurra_2015.xml'
+                            'metadata_url': 'https://warsydprdstadasc.blob.core.windows.net/downloads/Metadata_Statements/XML/3D_Windimurra_2015.xml'
                           }
                 ]
               }
@@ -89,9 +97,10 @@ def ckan_convert(param_list):
     for params in param_list:
         ce.write_record(**params)
 
-def iso19139_convert(param_list):
-    pass
-
+def ISO19139_convert(param_list):
+    ie = ISO19139Extractor2()
+    for params in param_list:
+        ie.write_record(**params)
 
 def oaipmh_convert(param_list):
     # Get records from Northern Territory Geological Service
@@ -108,6 +117,6 @@ if __name__ == "__main__":
         elif v['method'] == 'CKAN':
             ckan_convert(v['params'])
         elif v['method'] == 'ISO19139':
-            iso19139_convert(v['params'])
+            ISO19139_convert(v['params'])
         elif v['method'] == 'OAIPMH':
             oaipmh_convert(v['params'])

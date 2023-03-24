@@ -121,6 +121,7 @@ class OaiExtractor(Extractor):
 
 
     def write_record(self, bbox, model_endpath, oai_id, oai_prefix, service_name):
+        print("Converting: {model_endpath}")
         # Open connection to OAI-PMH
         sickle = Sickle(self.OAI_URL)
         rec = sickle.GetRecord(identifier=oai_id, metadataPrefix=oai_prefix)
