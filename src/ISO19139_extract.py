@@ -9,6 +9,7 @@ from extractor import Extractor
 class ISO19139Extractor(Extractor):
 
     def write_record(self, model_endpath, metadata_url):
+        print(f"Converting: {model_endpath}")
         # Read XML from URL
         try:
             metadata = requests.get(metadata_url)
@@ -107,7 +108,10 @@ class ISO19139Extractor(Extractor):
 </xsl:stylesheet>""".encode('utf-8')
         # Recovers from minor syntax errors
         parser = etree.XMLParser(recover=True)
-        doc = etree.fromstring(bytes(metadata.text, 'utf-8'), parser=parser)
+        encoding = 'utf-8'
+        if metadata.encoding is not None:
+            encoding = metadata.encoding
+        doc = etree.fromstring(bytes(metadata.text, encoding), parser=parser)
         xslt_tree = etree.XML(xslt)
         transform = etree.XSLT(xslt_tree)
         result = transform(doc)
@@ -117,15 +121,18 @@ class ISO19139Extractor(Extractor):
             # write to disk
             with open(f"{model_endpath}.xml", 'w') as ff:
                 ff.write(str_result)
-            print(f'{str_result=}')
+            #print(f'{str_result=}')
             return True
         return False
 
 
 if __name__ == "__main__":
-    #metadata_url = "http://www.ntlis.nt.gov.au/metadata/export_data?type=xml&metadata_id=1080195AEBC6A054E050CD9B214436A1"
-    metadata_url = 'https://warsydprdstadasc.blob.core.windows.net/downloads/Metadata_Statements/XML/3D_Windimurra_2015.xml'
-    # Does not work
-    #metadata_url = 'https://dasc.dmirs.wa.gov.au/Download/Metadata?fileName=Metadata_Statements/XML/3D_Sandstone_2015.xml'
+
+    metadata_urls = [
+ ("mcarthur", "http://www.ntlis.nt.gov.au/metadata/export_data?type=xml&metadata_id=1080195AEBC6A054E050CD9B214436A1"),
+ ("windimurra", "https://warsydprdstadasc.blob.core.windows.net/downloads/Metadata_Statements/XML/3D_Windimurra_2015.xml"),
+ ("sandstone", "https://warsydprdstadasc.blob.core.windows.net/downloads/Metadata_Statements/XML/3D_Sandstone_2015.xml")
+                    ]
     ce = ISO19139Extractor()
-    ce.write_record('mcarthur', metadata_url)
+    for name, url in metadata_urls:
+        ce.write_record(name, url)

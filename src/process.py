@@ -2,7 +2,8 @@
 
 from oai_extract import OaiExtractor
 from ckan_extract import CkanExtractor
-from ISO19139_extract2 import ISO19139Extractor2
+from ISO19139_extract import ISO19139Extractor
+from ISO19115_3_extract import ISO19115_3Extractor
 
 """
 Create ISO19139 or ISO19115-3 XML metadata records from PDF reports or online metadata services
@@ -38,7 +39,7 @@ STATES = {
                },
         #
         # SA has a geonetwork with ISO19115-3 records
-        'sa': { 'method': 'ISO191115-3',
+        'sa': { 'method': 'ISO19115-3',
                 'params': [  { 'model_endpath': 'burramine',
                                'metadata_url' :'https://catalog.sarig.sa.gov.au/geonetwork/srv/api/records/37e0f6f0-b9c7-47f0-bbed-482ce35851a4/formatters/xml'
                              },
@@ -98,7 +99,12 @@ def ckan_convert(param_list):
         ce.write_record(**params)
 
 def ISO19139_convert(param_list):
-    ie = ISO19139Extractor2()
+    ie = ISO19139Extractor()
+    for params in param_list:
+        ie.write_record(**params)
+
+def ISO19115_3convert(param_list):
+    ie = ISO19115_3Extractor()
     for params in param_list:
         ie.write_record(**params)
 
@@ -112,11 +118,18 @@ def oaipmh_convert(param_list):
 
 if __name__ == "__main__":
     for k,v in STATES.items():
+        #print("method=", v['method'])
         if v['method'] == 'PDF':
             pdf_convert(v['params'])
+
         elif v['method'] == 'CKAN':
             ckan_convert(v['params'])
+
+        elif v['method'] == 'ISO19115-3':
+            ISO19115_3convert(v['params'])
+
         elif v['method'] == 'ISO19139':
             ISO19139_convert(v['params'])
+
         elif v['method'] == 'OAIPMH':
             oaipmh_convert(v['params'])

@@ -16,6 +16,9 @@ from bas_metadata_library.standards.iso_19115_2 import MetadataRecordConfigV2, M
 
 from extractor import Extractor
 
+"""
+Uses XPATH insert technique to add in models URL to an iso19139 record
+"""
 class ISO19139Extractor2(Extractor):
 
     def write_record(self, model_endpath, metadata_url):
@@ -29,9 +32,15 @@ class ISO19139Extractor2(Extractor):
         except Exception as e:
             print(f"Cannot retrieve URL {metadata_url}\n", e)
             return False
+        #print(metadata.encoding)
+        #print(metadata.text)
+        #sys.exit(0)
 
         # Parse XML metadata record
-        root = etree.fromstring(bytes(metadata.text, 'utf-8'))
+        encoding = 'utf-8'
+        if metadata.encoding is not None:
+            encoding = metadata.enoding
+        root = etree.fromstring(bytes(metadata.text, encoding))
         master_xpath_list = [ 'gmd:MD_Metadata', 'gmd:distributionInfo', 'gmd:MD_Distribution', 'gmd:transferOptions',
                 'gmd:MD_DigitalTransferOptions', 'gmd:BLAH']
 
@@ -59,27 +68,35 @@ class ISO19139Extractor2(Extractor):
         result = []
         while len(result) == 0 and len(xpath_list) > 1:
             xpath = '/' + '/'.join(xpath_list)
-            print(xpath)
+            print("Searching for ", xpath)
             result = root.xpath(xpath, namespaces=ns)
+            print(f"{result=}")
             xpath_list.pop()
 
         # Insert 'online_root' and any other required elements 
         leftovers = master_xpath_list[len(xpath_list):]
         print(f'{leftovers=}')
         print(f'{result=}')
-        child = result[0]
+        # If not found then insert at root
+        if result==[]:
+            child = root[0]
+        else:
+            child = result[0]
         for elemtag in leftovers[1:]:
-            tagtag = elemtag.split(':')[1] 
-            newtag = '{http://www.isotc211.org/2005/gmd}' + tagtag 
-            if tagtag != 'BLAH':
+            tagname = elemtag.split(':')[1] 
+            newtag = '{http://www.isotc211.org/2005/gmd}' + tagname 
+            if tagname != 'BLAH':
+                # IF we need to insert a new tag in path
                 #print(f'Inserting {newtag=} @ {child=}')
                 child = etree.SubElement(child, newtag, nsmap=ns)
             else:
+                # Insert inline objects here
                 #print(f'Inserting {online_root=} @ {child=}')
                 child.append(online_root)
                 break
         
         xml_string = etree.tostring(root, pretty_print=True).decode("utf-8")
+        print(xml_string)
         #print("\n\n\nROOT:")
         #print(etree.tostring(root, pretty_print=True).decode("utf-8"))
         # write to disk
@@ -90,7 +107,8 @@ class ISO19139Extractor2(Extractor):
 
 
 if __name__ == "__main__":
-    metadata_url = "https://warsydprdstadasc.blob.core.windows.net/downloads/Metadata_Statements/XML/3D_Sandstone_2015.xm"
+    #metadata_url = "https://warsydprdstadasc.blob.core.windows.net/downloads/Metadata_Statements/XML/3D_Sandstone_2015.xml"
+    metadata_url = "https://warsydprdstadasc.blob.core.windows.net/downloads/Metadata_Statements/XML/3D_Sandstone_2015.xml"
     #metadata_url = "http://www.ntlis.nt.gov.au/metadata/export_data?type=xml&metadata_id=1080195AEBC6A054E050CD9B214436A1"
     #metadata_url = 'https://warsydprdstadasc.blob.core.windows.net/downloads/Metadata_Statements/XML/3D_Windimurra_2015.xml'
     ce = ISO19139Extractor2()
