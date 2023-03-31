@@ -1,54 +1,15 @@
 #!/usr/bin/env python3
 
-from PyPDF2 import PdfReader
+import io
+import sys
+import glob
+
 import yake
 import spacy
 import pytextrank
-import glob
-import sys
 
-def is_page_text(page):
-    total = len(page)
-    if total < 3000:
-        return False
-    alpha = 0
-    for char in page:
-        if char.isalpha():
-            alpha += 1
-    return float(alpha)/float(total)*100 > 73 
-    
+from pdf_helper import parse_pdf
 
-def parse_pdf(filename):
-    reader = PdfReader(filename)
-
-    meta = reader.metadata
-
-    print(len(reader.pages))
-
-    # All of the following could be None!
-    #print(meta.author)
-    #print(meta.creator)
-    #print(meta.producer)
-    #print(meta.subject)
-    #print(meta.title)
-    #print(meta)
-
-    text = ""
-    number_of_pages = len(reader.pages)
-    for idx, page in enumerate(reader.pages):
-        page_str = page.extract_text()
-        if is_page_text(page_str):
-            # print("Including page ", idx, "sz=", len(page_str))
-            text += page_str + " "
-            # print(page_str)
- 
-            
-        #print(repr(page.extract_text()))
-
-    return text
-
-#with open("MESAJ083011-019.txt", "r") as fd:
-#    text = fd.read()
 
 def run_yake(text):
 
@@ -86,15 +47,31 @@ def run_t5(text):
 
     inputs = tokenizer.encode("summarize: " + text, return_tensors='pt', max_length=512, truncation=True)
     summary_ids = model.generate(inputs, max_length=150, min_length=80, length_penalty=5., num_beams=2)
-    summary = tokenizer.decode(summary_ids[0])
-    print("SUMMARY:", summary)
+    if len(summary_ids) > 0:
+        return tokenizer.decode(summary_ids[0])
+    return ""
+
+def get_summary(text, encoding):
+    if encoding != False:
+        # text
+        if encoding is None:
+            encoding = 'utf-8'
+        stream_or_file = io.BytesIO(bytes(text, encoding))
+    else:
+        # filename
+        stream_or_file = text
+    pdf_text = parse_pdf(stream_or_file, True)
+    return run_t5(pdf_text)
+    
 
 if __name__ == "__main__":
     for file in glob.glob('../data/reports/wa/*.pdf'):
         print(f"\n\nFILE:{file}\n")
         #if 'G161893_VGP_TR35_3D-Geological-framework-Otway_low-res.pdf' in file: # threshold = 80
         #if 'sandstone.pdf' in file:
-        text = parse_pdf(file)
-        run_t5(text)
+        text = parse_pdf(file, True)
+        summary = run_t5(text)
+        print("SUMMARY:", summary)
+
         #run_yake(text)
         #run_textrank(text)

@@ -1,37 +1,15 @@
 #!/usr/bin/env python3
 
-from PyPDF2 import PdfReader
-import yake
-import spacy
-import pytextrank
 import glob
 import sys
 import sqlite3
 from contextlib import closing
 
-def parse_pdf(filename):
-    reader = PdfReader(filename)
+import yake
+import spacy
+import pytextrank
 
-    meta = reader.metadata
-
-    #print(len(reader.pages))
-
-    ## All of the following could be None!
-    #print(meta.author)
-    #print(meta.creator)
-    #print(meta.producer)
-    #print(meta.subject)
-    #print(meta.title)
-    #print(meta)
-
-
-    text = ""
-    number_of_pages = len(reader.pages)
-    for page in reader.pages:
-        text += page.extract_text() + " "
-
-    text = text.replace('\n', ' ')
-    return text
+from pdf_helper import parse_pdf
 
 def phrase_in_dict(phrase, dict):
     words = phrase.split(' ')
@@ -41,9 +19,9 @@ def phrase_in_dict(phrase, dict):
     return False, ''
 
 def run_yake(kw_lookup, text):
-    kw_extractor = yake.KeywordExtractor(top=3000)
+    kw_extractor = yake.KeywordExtractor(top=500)
     keywords = kw_extractor.extract_keywords(text)
-    print(len(keywords))
+    # print(len(keywords))
     kw_set = set()
     for kw in keywords:
         if kw[0] in kw_lookup:
@@ -55,9 +33,6 @@ def run_yake(kw_lookup, text):
     return kw_set
 
 def run_textrank(text):
-
-    print("textrank:")
-
 
     # load a spaCy model, depending on language, scale, etc.
     nlp = spacy.load("en_core_web_sm")
@@ -117,20 +92,27 @@ def extract_db_terms():
 def run_usgs(kw_dict, text):
     kw_set = set()
     text = text.replace('\n',' ')
-    print('#words', len(text.split(' ')))
+    # print('#words', len(text.split(' ')))
     for word in text.split(' '):
         if word.isalpha() and word in kw_dict:
             kw_set.add(kw_dict[word])
     return kw_set    
 
-if __name__ == "__main__":
-    text = parse_pdf('../data/reports/vic/G161893_VGP_TR35_3D-Geological-framework-Otway_low-res.pdf')
+def get_keywords(text):
     kw_dict = extract_db_terms()
  
     yake_kwset = run_yake(kw_dict, text)
-    print("yake:", yake_kwset)
+    return yake_kwset
+
+
+if __name__ == "__main__":
+    text = parse_pdf('../data/reports/vic/G161893_VGP_TR35_3D-Geological-framework-Otway_low-res.pdf', False)
+    kw_dict = extract_db_terms()
+ 
+    yake_kwset = run_yake(kw_dict, text)
+    print("usgs+yake:", yake_kwset)
     
     #run_textrank(text)
-    usgs_kwset = run_usgs(kw_dict, text)
-    print("pure usgs:", usgs_kwset)
+    #usgs_kwset = run_usgs(kw_dict, text)
+    #print("pure usgs:", usgs_kwset)
 

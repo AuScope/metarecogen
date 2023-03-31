@@ -4,6 +4,7 @@ from oai_extract import OaiExtractor
 from ckan_extract import CkanExtractor
 from ISO19139_extract import ISO19139Extractor
 from ISO19115_3_extract import ISO19115_3Extractor
+from pdf_extract import PDFExtractor
 
 """
 Create ISO19139 or ISO19115-3 XML metadata records from PDF reports or online metadata services
@@ -13,8 +14,30 @@ STATES = {
         #
         # Victoria has some PDF reports 
         'vic': { 'method': 'PDF',
-                    'params': { 'URLS': [ ] }
-                  },
+                 'params': [   { 'model_endpath': 'otway',
+                               'pdf_file': '../data/reports/vic/G107513_OtwayBasin_3D_notes.pdf',
+                               'organisation': "Geological Survey of Victoria",
+                               'title': "Otway 3D model",
+                               'bbox': { 'west': 154.3, 
+                                         'east': 109.1,
+                                         'south': -43.9,
+                                         'north': -10.6},
+                               # Not a single URL, uses redirection
+                               #'pdf_url': 'https://gsv.vic.gov.au/downloader/Downloader?ID=ERPublications/reports/GSV-3d-Vic/G107513_OtwayBasin_3D_notes.pdf' 
+                                },
+                             { 'model_endpath': 'bendigo',
+                               'pdf_file': '../data/reports/vic/G35615_3DVIC1_pt1.pdf',
+                               'organisation': "Geological Survey of Victoria",
+                               'title': "Bendigo 3D model",
+                               'bbox': { 'west': 154.3, 
+                                         'east': 109.1,
+                                         'south': -43.9,
+                                         'north': -10.6},
+                               # Not a single URL, uses redirection
+                               #'pdf_url': 'https://gsv.vic.gov.au/downloader/Downloader?ID=ERPublications/reports/GSV-3d-Vic/G35615_3DVIC1_pt1.pdf' 
+                             }
+                           ],
+            },
         #
         # Tasmania's metadata is not available yet
         'tas': { 'method': None },
@@ -90,8 +113,11 @@ STATES = {
               }
 }
 
+# TODO: Parametrize
 def pdf_convert(param_list):
-    pass
+    pe = PDFExtractor()
+    for params in param_list:
+        pe.write_record(**params)
 
 def ckan_convert(param_list):
     ce = CkanExtractor()
@@ -118,6 +144,9 @@ def oaipmh_convert(param_list):
 
 if __name__ == "__main__":
     for k,v in STATES.items():
+        # TEMPORARY
+        #if k != 'vic':
+        #    continue
         #print("method=", v['method'])
         if v['method'] == 'PDF':
             pdf_convert(v['params'])
