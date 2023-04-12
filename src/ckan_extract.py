@@ -32,7 +32,8 @@ class CkanExtractor(Extractor):
                 "parentidentifier": "",
                 "hierarchylevel": "dataset",
                 "datestamp": ckan_dict['metadata_modified'],
-                "dataseturi": url
+                "dataseturi": url,
+                "model_endpath": model_endpath
             },
             "spatial": {
                 "datatype": "tin",
@@ -85,8 +86,8 @@ class CkanExtractor(Extractor):
                     "organization": ckan_dict['organization']['title']
                 }
             },
-            "distribution": {
-                "wms": {
+            "distribution": [
+                {
                     "url": ckan_dict['resources'][0]['url'],
                     "type": "WWW:LINK",
                     "rel": "service",
@@ -94,11 +95,11 @@ class CkanExtractor(Extractor):
                         "en": ckan_dict['resources'][0]['name'],
                     },
                     "description": {
-                        "en": ckan_dict['resources'][0]['resource:description'],
+                        "en": "3D Model Download",
                     },
                     "function": "download"
                 },
-                "www": {
+                {
                     "url": f"http://geomodels.auscope.org.au/model/{model_endpath}",
                     "type": "WWW:LINK",
                     "rel": "service",
@@ -110,7 +111,7 @@ class CkanExtractor(Extractor):
                     },
                     "function": "website"
                 }
-            },
+            ],
             "dataquality": {
                 "scope": {
                     "level": "dataset"

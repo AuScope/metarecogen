@@ -168,27 +168,17 @@
           <mrd:onLine>
             <cit:CI_OnlineResource>
               <cit:linkage>
-                <gco:CharacterString></gco:CharacterString>
+		      <gco:CharacterString>{{ record['distribution'][0]['url'] }}</gco:CharacterString>
               </cit:linkage>
               <cit:protocol>
                 <gco:CharacterString>WWW:LINK-1.0-http--link</gco:CharacterString>
               </cit:protocol>
               <cit:name>
-                <gco:CharacterString>View Metadata PDF Report</gco:CharacterString>
+                <gco:CharacterString>{{ record['distribution'][0]['name']['en'] }}</gco:CharacterString>
               </cit:name>
-            </cit:CI_OnlineResource>
-          </mrd:onLine>
-          <mrd:onLine>
-            <cit:CI_OnlineResource>
-              <cit:linkage>
-                <gco:CharacterString></gco:CharacterString>
-              </cit:linkage>
-              <cit:protocol>
-                <gco:CharacterString>WWW:LINK-1.0-http--link</gco:CharacterString>
-              </cit:protocol>
-              <cit:name>
-                <gco:CharacterString>Download Metadata and 3D PDF Reports</gco:CharacterString>
-              </cit:name>
+              <cit:description>
+                <gco:CharacterString>{{ record['distribution'][0]['description']['en'] }}</gco:CharacterString>
+              </cit:description>
             </cit:CI_OnlineResource>
           </mrd:onLine>
         </mrd:MD_DigitalTransferOptions>
@@ -198,7 +188,7 @@
           <mrd:onLine>
             <cit:CI_OnlineResource>
               <cit:linkage>
-                <gco:CharacterString>http://geomodels.auscope.org/model/ngawler</gco:CharacterString>
+		      <gco:CharacterString>http://geomodels.auscope.org/model/{{ record['metadata']['model_endpath'] }}</gco:CharacterString>
               </cit:linkage>
               <cit:protocol>
                 <gco:CharacterString>WWW:LINK-1.0-http--link</gco:CharacterString>
@@ -206,8 +196,8 @@
               <cit:name>
                 <gco:CharacterString>3D Geological Model</gco:CharacterString>
               </cit:name>
-              <cit:description gco:nilReason="missing">
-                <gco:CharacterString />
+              <cit:description>
+                <gco:CharacterString>3D Geological Model in AuScope Geomodels Portal</gco:CharacterString>
               </cit:description>
             </cit:CI_OnlineResource>
           </mrd:onLine>
