@@ -22,7 +22,7 @@ STATES = {
                                          'east': 109.1,
                                          'south': -43.9,
                                          'north': -10.6},
-                               # Not a single URL, uses redirection
+                               # Could not use URL, not a simple URL, uses redirection
                                #'pdf_url': 'https://gsv.vic.gov.au/downloader/Downloader?ID=ERPublications/reports/GSV-3d-Vic/G107513_OtwayBasin_3D_notes.pdf' 
                                 },
                              { 'model_endpath': 'bendigo',
@@ -33,7 +33,7 @@ STATES = {
                                          'east': 109.1,
                                          'south': -43.9,
                                          'north': -10.6},
-                               # Not a single URL, uses redirection
+                               # Could not use URL, not a simple URL, uses redirection
                                #'pdf_url': 'https://gsv.vic.gov.au/downloader/Downloader?ID=ERPublications/reports/GSV-3d-Vic/G35615_3DVIC1_pt1.pdf' 
                              }
                            ],
@@ -144,7 +144,7 @@ def oaipmh_convert(param_list):
 
 if __name__ == "__main__":
     for k,v in STATES.items():
-        # TEMPORARY
+        ## TEMPORARY
         #if k != 'vic':
         #    continue
         #print("method=", v['method'])

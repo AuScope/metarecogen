@@ -14,12 +14,14 @@ from bas_metadata_library.standards.iso_19115_2 import MetadataRecordConfigV2, M
 from extractor import Extractor
 from keywords import get_keywords
 from summary import get_summary
+from add_links import add_model_link
 
 class PDFExtractor(Extractor):
 
-    def get_record_config(self, keywords, summary, organisation, title, bbox):
+    def get_record_config(self, keywords, summary, organisation, title, bbox, model_endpath):
         now = datetime.datetime.now()
         current_date = datetime.date(year=now.year, month=now.month, day=now.day)
+        keyw_terms = [{"term": keyw} for keyw in keywords]
         record_config = {
             "hierarchy_level": "dataset",
             "metadata": {
@@ -45,6 +47,18 @@ class PDFExtractor(Extractor):
                         }
                     }
                 },
+                "status": "completed",
+                "maintenance": {"maintenance_frequency": "asNeeded", "progress": "completed"},
+                "keywords": [{"terms": keyw_terms, "type": "theme"},
+                    {"terms": [{"term":"3D Geological Models"}], "type": "theme"}],
+                "constraints": [
+                    {
+                        "type": "usage",
+                        "restriction_code": "license",
+                        "statement": "Creative Commons Attribution 4.0 International Licence",
+                        "href": "http://creativecommons.org/licenses/"
+                    }
+                ],
             },
         }
         return record_config
@@ -69,17 +83,15 @@ class PDFExtractor(Extractor):
         summary = get_summary(text, encoding)
         #kwset = set(['kw1','kw2','kw3'])
         #summary = 'summary summary summary'
-        record_config = self.get_record_config(list(kwset), summary, organisation, title, bbox)
+        record_config = self.get_record_config(list(kwset), summary, organisation, title, bbox, model_endpath)
         configuration = MetadataRecordConfigV2(**record_config)
         record = MetadataRecord(configuration=configuration)
         document = record.generate_xml_document()
 
-        # output document
-        fp = open(f"{model_endpath}.xml", 'w')
-        fp.write(document.decode())
-        fp.close()
+        print(f"Writing {model_endpath}.xml")
+        add_model_link(model_endpath, document.decode())
 
 
 if __name__ == "__main__":
-    pe = PdfExtractor()
+    pe = PDFExtractor()
     pe.write_record("test-pdf", "https://blah/blah.pdf")

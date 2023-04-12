@@ -7,6 +7,8 @@ from lxml import etree
 from extractor import Extractor
 
 class ISO19139Extractor(Extractor):
+    """ Uses an XSLT to insert elements into XML
+    """
 
     def write_record(self, model_endpath, metadata_url):
         print(f"Converting: {model_endpath}")
