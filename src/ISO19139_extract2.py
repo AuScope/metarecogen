@@ -39,7 +39,7 @@ class ISO19139Extractor2(Extractor):
         # Parse XML metadata record
         encoding = 'utf-8'
         if metadata.encoding is not None:
-            encoding = metadata.enoding
+            encoding = metadata.encoding
         root = etree.fromstring(bytes(metadata.text, encoding))
         master_xpath_list = [ 'gmd:MD_Metadata', 'gmd:distributionInfo', 'gmd:MD_Distribution', 'gmd:transferOptions',
                 'gmd:MD_DigitalTransferOptions', 'gmd:BLAH']
