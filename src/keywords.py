@@ -30,6 +30,9 @@ def run_yake(kw_lookup, text):
         included, kw = phrase_in_dict(kw[0], kw_lookup)
         if included:
             kw_set.add(kw)
+    # If no USGS keywords found then just use YAKE's estimates
+    if len(kw_set) == 0:
+        kw_set = set(keywords[:5])
     return kw_set
 
 def run_textrank(text):
