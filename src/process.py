@@ -113,26 +113,11 @@ STATES = {
               }
 }
 
-# TODO: Parametrize
-def pdf_convert(param_list):
-    pe = PDFExtractor()
+def convert(extractor, param_list):
+    e = extractor()
     for params in param_list:
-        pe.write_record(**params)
+        e.write_record(**params)
 
-def ckan_convert(param_list):
-    ce = CkanExtractor()
-    for params in param_list:
-        ce.write_record(**params)
-
-def ISO19139_convert(param_list):
-    ie = ISO19139Extractor()
-    for params in param_list:
-        ie.write_record(**params)
-
-def ISO19115_3convert(param_list):
-    ie = ISO19115_3Extractor()
-    for params in param_list:
-        ie.write_record(**params)
 
 def oaipmh_convert(param_list):
     # Get records from Northern Territory Geological Service
@@ -145,20 +130,20 @@ def oaipmh_convert(param_list):
 if __name__ == "__main__":
     for k,v in STATES.items():
         ## TEMPORARY
-        #if k != 'vic':
+        #if k == 'vic':
         #    continue
         #print("method=", v['method'])
         if v['method'] == 'PDF':
-            pdf_convert(v['params'])
+            convert(PDFExtractor, v['params'])
 
         elif v['method'] == 'CKAN':
-            ckan_convert(v['params'])
+            convert(CkanExtractor, v['params'])
 
         elif v['method'] == 'ISO19115-3':
-            ISO19115_3convert(v['params'])
+            convert(ISO19115_3Extractor, v['params'])
 
         elif v['method'] == 'ISO19139':
-            ISO19139_convert(v['params'])
+            convert(ISO19139Extractor, v['params'])
 
         elif v['method'] == 'OAIPMH':
             oaipmh_convert(v['params'])

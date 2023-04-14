@@ -25,7 +25,8 @@ class OaiExtractor(Extractor):
                 "parentidentifier": "",
                 "hierarchylevel": "dataset",
                 "datestamp": oai_dict['relation'][2],
-                "dataseturi": oai_dict['source.uri'][0]
+                "dataseturi": oai_dict['source.uri'][0],
+                "model_endpath": model_endpath
             },
             "spatial": {
                 "datatype": "tin",

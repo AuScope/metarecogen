@@ -5,6 +5,7 @@ import requests
 from lxml import etree
 
 from extractor import Extractor
+from add_model_keyw import add_models_keyword
 
 class ISO19139Extractor(Extractor):
     """ Uses an XSLT to insert elements into XML
@@ -120,9 +121,11 @@ class ISO19139Extractor(Extractor):
         byte_result = etree.tostring(result, pretty_print=True)
         if byte_result is not None:
             str_result = byte_result.decode('utf-8')
-            # write to disk
-            with open(f"{model_endpath}.xml", 'w') as ff:
-                ff.write(str_result)
+            # Add '3D Geological Models' keyword and write to disk
+            add_models_keyword(model_endpath, str_result, 'utf-8', 'ISO19139')
+            ## write to disk
+            #with open(f"{model_endpath}.xml", 'w') as ff:
+            #    ff.write(str_result)
             #print(f'{str_result=}')
             return True
         return False
