@@ -9,12 +9,13 @@ import datetime
 import geojson
 from datetime import date
 
-from bas_metadata_library.standards.iso_19115_2 import MetadataRecordConfigV2, MetadataRecord
+from bas_metadata_library.standards.iso_19115_1 import MetadataRecordConfigV2, MetadataRecord
 
 from extractor import Extractor
 from keywords import get_keywords
 from summary import get_summary
 from add_links import add_model_link
+from add_coords import add_coords
 
 class PDFExtractor(Extractor):
 
@@ -37,6 +38,7 @@ class PDFExtractor(Extractor):
                 "character_set": "utf-8",
                 "language": "eng",
                 "topics": ['geoscientificInformation'],
+                # NB: bas-metadata-library does not appear to output bboxes
                 "extent": {
                     "geographic": {
                         "bounding_box": {
@@ -50,7 +52,7 @@ class PDFExtractor(Extractor):
                 "status": "completed",
                 "maintenance": {"maintenance_frequency": "asNeeded", "progress": "completed"},
                 "keywords": [{"terms": keyw_terms, "type": "theme"},
-                    {"terms": [{"term":"3D Geological Models"}], "type": "theme"}],
+                    {"terms": [{"term":"Auscope 3D Geological Models"}], "type": "theme"}],
                 "constraints": [
                     {
                         "type": "usage",
@@ -65,8 +67,9 @@ class PDFExtractor(Extractor):
 
 
 
-    def write_record(self, model_endpath, pdf_file, organisation, title, bbox, pdf_url=None):
+    def write_record(self, name, model_endpath, pdf_file, organisation, title, bbox, pdf_url=None):
         print(f"Converting: {model_endpath}")
+        #print("bbox=", repr(bbox))
         if pdf_url is not None:
             print("URL=", pdf_url)
             r = requests.get(pdf_url)
@@ -87,9 +90,10 @@ class PDFExtractor(Extractor):
         configuration = MetadataRecordConfigV2(**record_config)
         record = MetadataRecord(configuration=configuration)
         document = record.generate_xml_document()
-
-        print(f"Writing {model_endpath}.xml")
-        add_model_link(model_endpath, document.decode())
+        # bas-metadata-library does not output BBOX coords nor URL links so I have to do it manually
+        xml_txt = add_coords(bbox, model_endpath, document.decode(), 'utf-8', 'ISO19139')
+        # This writes out the file
+        add_model_link(model_endpath, xml_txt)
 
 
 if __name__ == "__main__":

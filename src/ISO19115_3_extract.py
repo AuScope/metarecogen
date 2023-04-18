@@ -10,7 +10,8 @@ from add_model_keyw import add_models_keyword
 
 class ISO19115_3Extractor(Extractor):
 
-    def write_record(self, model_endpath, metadata_url):
+    # bbox parameter is not used, use records' coords instead
+    def write_record(self, name, bbox, model_endpath, metadata_url):
         print(f"Converting: {model_endpath}")
         # Read XML from URL
         try:

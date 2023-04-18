@@ -130,7 +130,8 @@ class CkanExtractor(Extractor):
             ff.write(xml_string)
 
 
-    def write_record(self, model_endpath, ckan_url, package_id):
+    # NB: We don't use the 'bbox' parameter, we use the metadata record's coords instead
+    def write_record(self, name, bbox, model_endpath, ckan_url, package_id):
         print(f"Converting: {model_endpath}")
         # Set up CKAN URL
         url_path =  Path('api') / '3' / 'action' / 'package_show'

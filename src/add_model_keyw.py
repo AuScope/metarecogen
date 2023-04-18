@@ -13,6 +13,13 @@ from lxml.builder import ElementMaker
 
 
 def insert(root, insert_txt, master_xpath_list, ns):
+    """ Generic routine to insert text into XML document
+
+    :param root: XML doc root 
+    :param insert_txt: XML text to be inserted
+    :param master_xpath_list: XML path list of insertion point
+    :param ns: namespace dictionary
+    """
     # Parse XML snippet into doc object
     insert_root = etree.fromstring(bytes(insert_txt, 'utf-8'))
 
@@ -62,14 +69,32 @@ def insert(root, insert_txt, master_xpath_list, ns):
     
 
 def add_models_keyword(model_endpath, text, encoding, iso_ver):
+    """
+    Uses XPATH insert technique to add in "3D Geological Models" keyword to an XML record
+
+    :param model_endpath:
+    :param text: XML text to be inserted
+    :param encoding: character encoding of text, e.g. 'utf-8'
+    :param iso_ver: ISO XML version string, either 'ISO19139' or 'ISO19115-3'
+
+    Writes an XML file to {model_endpath}.xml
+    """
     if iso_ver == 'ISO19115-3':
         return __add_models_keyword_iso19115_3(model_endpath, text, encoding)
     return __add_models_keyword_iso19139(model_endpath, text, encoding)
 
-"""
-Uses XPATH insert technique to add in "3D Geological Models" keyword to an ISO19139 XML record
-"""
+
+
 def __add_models_keyword_iso19139(model_endpath, text, encoding):
+    """
+    Uses XPATH insert technique to add in "3D Geological Models" keyword to an ISO19139 XML record
+
+    :param model_endpath:
+    :param text: XML text to be inserted
+    :param encoding: character encoding of text, e.g. 'utf-8'
+
+    Writes an XML file to {model_endpath}.xml
+    """
     # ISO19139 XML Namespace dict
     ns = { 'gmd':"http://www.isotc211.org/2005/gmd",
            'gco':"http://www.isotc211.org/2005/gco",
@@ -91,7 +116,7 @@ def __add_models_keyword_iso19139(model_endpath, text, encoding):
          <gmd:descriptiveKeywords xmlns:gmd="http://www.isotc211.org/2005/gmd" xmlns:gco="http://www.isotc211.org/2005/gco" xmlns:srv="http://www.isotc211.org/2005/srv" xmlns:gmx="http://www.isotc211.org/2005/gmx" xmlns:gts="http://www.isotc211.org/2005/gts" xmlns:gsr="http://www.isotc211.org/2005/gsr" xmlns:gmi="http://www.isotc211.org/2005/gmi" xmlns:gml="http://www.opengis.net/gml/3.2" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.isotc211.org/2005/gmd http://schemas.opengis.net/csw/2.0.2/profiles/apiso/1.0.0/apiso.xsd">
             <gmd:MD_Keywords>
                <gmd:keyword>
-                  <gco:CharacterString>3D Geological Models</gco:CharacterString>
+                  <gco:CharacterString>AuScope 3D Geological Models</gco:CharacterString>
                </gmd:keyword>
                <gmd:type>
                   <gmd:MD_KeywordTypeCode codeList="http://standards.iso.org/iso/19139/resources/gmxCodelists.xml#MD_KeywordTypeCode" codeListValue="theme"/>
@@ -114,10 +139,16 @@ def __add_models_keyword_iso19139(model_endpath, text, encoding):
 
 
 
-"""
-Uses XPATH insert technique to add in "3D Geological Models" keyword to an ISO19115-3 XML record
-"""
 def __add_models_keyword_iso19115_3(model_endpath, text, encoding):
+    """
+    Uses XPATH insert technique to add in "3D Geological Models" keyword to an ISO19115-3 XML record
+
+    :param model_endpath:
+    :param text: XML text to be inserted
+    :param encoding: character encoding of text, e.g. 'utf-8'
+
+    Writes an XML file to {model_endpath}.xml
+    """
     # ISO19115-3 XML Namespace dict
     ns = {'mdb': "http://standards.iso.org/iso/19115/-3/mdb/1.0",
             'cat': "http://standards.iso.org/iso/19115/-3/cat/1.0",
@@ -160,7 +191,7 @@ def __add_models_keyword_iso19115_3(model_endpath, text, encoding):
     insert_txt = f"""<mri:descriptiveKeywords xmlns:mri="http://standards.iso.org/iso/19115/-3/mri/1.0" xmlns:gco="http://standards.iso.org/iso/19115/-3/gco/1.0">
 <mri:MD_Keywords>
 <mri:keyword>
-<gco:CharacterString>3D Geological Models</gco:CharacterString>
+<gco:CharacterString>AuScope 3D Geological Models</gco:CharacterString>
 </mri:keyword>
 <mri:type>
 <mri:MD_KeywordTypeCode codeList="http://standards.iso.org/iso/19115/resources/Codelists/cat/codelists.xml#MD_KeywordTypeCode" codeListValue="theme"/>

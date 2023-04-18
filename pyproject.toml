@@ -17,6 +17,7 @@ dependencies = [
     "torch",
     "bas-metadata-library>=0.9.1",
     "lxml>=4.9.2",
+    "pyproj>=3.5.0",
 ]
 requires-python = ">=3.9"
 
