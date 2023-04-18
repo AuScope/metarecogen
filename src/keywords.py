@@ -32,7 +32,7 @@ def run_yake(kw_lookup, text):
             kw_set.add(kw)
     # If no USGS keywords found then just use YAKE's estimates
     if len(kw_set) == 0:
-        kw_set = set(keywords[:5])
+        kw_set = set([kw[0] for kw in keywords])
     return kw_set
 
 def run_textrank(text):
@@ -105,17 +105,22 @@ def get_keywords(text):
     kw_dict = extract_db_terms()
  
     yake_kwset = run_yake(kw_dict, text)
+
     return yake_kwset
 
 
 if __name__ == "__main__":
-    text = parse_pdf('../data/reports/vic/G161893_VGP_TR35_3D-Geological-framework-Otway_low-res.pdf', False)
     kw_dict = extract_db_terms()
+    for file in ['G107513_OtwayBasin_3D_notes.pdf',
+                 # 'G161893_VGP_TR35_3D-Geological-framework-Otway_low-res.pdf', 
+                 #'G35615_3DVIC1_pt1.pdf'
+                 ]:
+        text = parse_pdf(f'../data/reports/vic/{file}', False)
  
-    yake_kwset = run_yake(kw_dict, text)
-    print("usgs+yake:", yake_kwset)
+        yake_kwset = run_yake(kw_dict, text)
+        print(f"{file}: usgs+yake: {yake_kwset}")
     
-    #run_textrank(text)
-    #usgs_kwset = run_usgs(kw_dict, text)
-    #print("pure usgs:", usgs_kwset)
+        #run_textrank(text)
+        #usgs_kwset = run_usgs(kw_dict, text)
+        #print("pure usgs:", usgs_kwset)
 
