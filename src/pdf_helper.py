@@ -1,22 +1,22 @@
 from PyPDF2 import PdfReader
 
-def is_page_text(page):
+def is_page_text(page, cutoff):
     """
     Tries to filter out non-alphabetic text
 
     :param page: a page of text, string
     """
     total = len(page)
-    if total < 3000:
+    if total < cutoff:
         return False
     alpha = 0
     for char in page:
         if char.isalpha():
             alpha += 1
-    return float(alpha)/float(total)*100 > 73 
+    return float(alpha)/float(total)*100 > 73.0
     
 
-def parse_pdf(pdf_stream, page_filter):
+def parse_pdf(pdf_stream, page_filter, cutoff=3000):
     """
     :param pdf_stream: filename or stream object
     :param page_filter: will try to filter out non-alphabetic text
@@ -39,12 +39,13 @@ def parse_pdf(pdf_stream, page_filter):
     number_of_pages = len(reader.pages)
     for idx, page in enumerate(reader.pages):
         page_str = page.extract_text()
-        if not page_filter or is_page_text(page_str):
+        if not page_filter or is_page_text(page_str, cutoff):
             # print("Including page ", idx, "sz=", len(page_str))
             text += page_str + " "
             # print(page_str)
  
             
         #print(repr(page.extract_text()))
+    #print(f"parse_pdf {pdf_stream=} {len(text)=} {page_filter=}")
 
     return text

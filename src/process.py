@@ -24,7 +24,8 @@ STATES = {
                             'model_endpath': 'otway',
                             'pdf_file': '../data/reports/vic/G107513_OtwayBasin_3D_notes.pdf',
                             'organisation': "Geological Survey of Victoria",
-                            'title': "Otway 3D model"
+                            'title': "Otway 3D model",
+                            'cutoff': 1000
                             # Could not use URL, not a simple URL, uses redirection
                             #'pdf_url': 'https://gsv.vic.gov.au/downloader/Downloader?ID=ERPublications/reports/GSV-3d-Vic/G107513_OtwayBasin_3D_notes.pdf' 
                             },
@@ -32,7 +33,8 @@ STATES = {
                               'model_endpath': 'bendigo',
                               'pdf_file': '../data/reports/vic/G35615_3DVIC1_pt1.pdf',
                               'organisation': "Geological Survey of Victoria",
-                              'title': "Bendigo 3D model"
+                              'title': "Bendigo 3D model",
+                              'cutoff': 3000
                             # Could not use URL, not a simple URL, uses redirection
                             #'pdf_url': 'https://gsv.vic.gov.au/downloader/Downloader?ID=ERPublications/reports/GSV-3d-Vic/G35615_3DVIC1_pt1.pdf' 
                             }

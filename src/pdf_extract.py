@@ -9,7 +9,9 @@ import datetime
 import geojson
 from datetime import date
 
+# NB: If you import from 'iso_19115_1' you get MD_MetaData, 'iso_19115_2' will give you instrument MI_Metadata
 from bas_metadata_library.standards.iso_19115_1 import MetadataRecordConfigV2, MetadataRecord
+from pdf_helper import parse_pdf
 
 from extractor import Extractor
 from keywords import get_keywords
@@ -67,23 +69,18 @@ class PDFExtractor(Extractor):
 
 
 
-    def write_record(self, name, model_endpath, pdf_file, organisation, title, bbox, pdf_url=None):
+    def write_record(self, name, model_endpath, pdf_file, organisation, title, bbox, cutoff, pdf_url=None):
         print(f"Converting: {model_endpath}")
         #print("bbox=", repr(bbox))
-        if pdf_url is not None:
-            print("URL=", pdf_url)
-            r = requests.get(pdf_url)
-            text = r.text
-            encoding = r.encoding
-        else:
-            if os.path.exists(pdf_file):
-                text = pdf_file
-                encoding = False
-            else:
-                print(f"{pdf_file} does not exist")
-                sys.exit(1)
-        kwset = get_keywords(text)
-        summary = get_summary(text, encoding)
+        if not os.path.exists(pdf_file):
+            print(f"{pdf_file} does not exist")
+            sys.exit(1)
+        # Extract keywords from PDF text
+        pdf_text = parse_pdf(pdf_file, False)
+        #print(f"write_record {model_endpath} {len(pdf_text)=}")
+        kwset = get_keywords(pdf_text)
+        #print("kwset=", kwset)
+        summary = get_summary(pdf_file, cutoff)
         #kwset = set(['kw1','kw2','kw3'])
         #summary = 'summary summary summary'
         record_config = self.get_record_config(list(kwset), summary, organisation, title, bbox, model_endpath)
