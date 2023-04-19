@@ -1,6 +1,6 @@
 # isometarecgen
 
-This is a prototype that generates ISO 19115 geospatial metadata records (ISO19139 and ISO19115-3) describing geological models from the AuScope Geological Models website <http://geomodels.auscope.org.au>.
+This is a prototype bundle of Python scripts that generate ISO 19115 geospatial metadata records (ISO19139 and ISO19115-3) describing geological models from the AuScope Geological Models website <http://geomodels.auscope.org.au>.
 
 The metadata records are extracted and compiled from these sources:  
 
@@ -9,6 +9,13 @@ The metadata records are extracted and compiled from these sources:
 3. ISO19139 XML
 4. OAI-PMH (dSpace)
 
+## Initialise
+
+Assumes PDM <https://github.com/pdm-project/pdm> is installed
+
+```
+pdm install
+```
 
 ## Run
 
