@@ -1,5 +1,7 @@
 # isometarecgen
 
+[![pdm-managed](https://img.shields.io/badge/pdm-managed-blueviolet)](https://pdm.fming.dev)
+
 This is a prototype bundle of Python scripts that generate ISO 19115 geospatial metadata records (ISO19139 and ISO19115-3) describing geological models from the AuScope Geological Models website <http://geomodels.auscope.org.au>.
 
 The metadata records are extracted and compiled from these sources:  
