@@ -18,7 +18,7 @@ from constants import OUTPUT_DIR
 Create ISO19139 or ISO19115-3 XML metadata records from PDF reports or online metadata services
 (e.g. CKAN, dSpace, geonetwork)
 """
-STATES = {
+CONFIG = {
         #
         # Victoria has some PDF reports 
         'vic': { 'method': 'PDF',
@@ -42,8 +42,6 @@ STATES = {
                             }
                            ],
             },
-}
-"""
         #
         # Tasmania's metadata is not available yet
         'tas': { 'method': None },
@@ -127,7 +125,7 @@ STATES = {
                           }
                 ]
               }
-        """
+}
 
 def convert(extractor, param_list):
     e = extractor()
@@ -185,7 +183,7 @@ if __name__ == "__main__":
 
     coord_dict = get_model_info()
 
-    for k,v in STATES.items():
+    for k,v in CONFIG.items():
         if v['method'] is None:
             continue
         param_list = v['params']

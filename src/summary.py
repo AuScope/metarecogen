@@ -2,6 +2,7 @@
 
 import io
 import sys
+import os
 import glob
 import re
 
@@ -10,7 +11,9 @@ import spacy
 import pytextrank
 
 from pdf_helper import parse_pdf
+from constants import OUTPUT_DIR
 
+OUTPUT_PDF_TXT = True
 
 def run_t5(text):
     import torch
@@ -25,21 +28,30 @@ def run_t5(text):
     return ""
 
 def get_summary(filename, cutoff):
-    #if encoding != False:
-    #    # text
-    #    if encoding is None:
-    #        encoding = 'utf-8'
-    #    stream_or_file = io.BytesIO(bytes(text, encoding))
-    #else:
-    #    # filename
-    #    stream_or_file = text
+    """
+    Summarise a PDF file
+
+    :param filename: filename of PDF file
+    :param cutoff: text pages below this threashold are ignored
+    :returns: text string of PDF file
+    """
     pdf_text = parse_pdf(filename, True, cutoff)
+    if OUTPUT_PDF_TXT:
+        txt_filename = os.path.basename(filename).split('.')[0] + ".txt"
+        with open(os.path.join(OUTPUT_DIR, txt_filename), 'w') as fd:
+            fd.write(pdf_text)
     #print(f"get_summary(): {filename=}")
     #print(f"{len(pdf_text)=}")
     summary =  run_t5(pdf_text)
     return(clean_summary(summary))
     
 def clean_summary(s):
+    """
+    Remove tags, empty sections etc. from summary
+
+    :param s: input string
+    :returns: cleaned string
+    """
     # Get rid of XML tags
     p = re.compile("<\w+>")
     s = p.sub("",s)

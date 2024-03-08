@@ -5,6 +5,7 @@ def is_page_text(page, cutoff):
     Tries to filter out non-alphabetic text
 
     :param page: a page of text, string
+    :param cutoff: page with less than 'cutoff' bytes are ignored
     """
     total = len(page)
     if total < cutoff:
@@ -18,8 +19,11 @@ def is_page_text(page, cutoff):
 
 def parse_pdf(pdf_stream, page_filter, cutoff=3000):
     """
+    Extracts the text from a PDF file
+
     :param pdf_stream: filename or stream object
     :param page_filter: will try to filter out non-alphabetic text
+    :param cutoff: page with less than 'cutoff' bytes are ignored
     """
     reader = PdfReader(pdf_stream)
 
