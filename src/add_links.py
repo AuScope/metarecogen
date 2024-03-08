@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 import sys
+import os
 import requests
 import json 
 from pathlib import Path
@@ -12,6 +13,7 @@ from copy import copy
 from lxml.builder import ElementMaker
 
 from add_model_keyw import insert
+from constants import OUTPUT_DIR
 
 
 """
@@ -52,7 +54,7 @@ def add_model_link(model_endpath, text):
     #print(etree.tostring(root, pretty_print=True).decode("utf-8"))
     # write to disk
     print(f"Writing {model_endpath}.xml")
-    with open(f"{model_endpath}.xml", 'w') as ff:
+    with open(os.path.join(OUTPUT_DIR, f"{model_endpath}.xml"), 'w') as ff:
         ff.write(xml_string)
 
     return True

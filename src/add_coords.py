@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 import sys
+import os
 import requests
 import json 
 from pathlib import Path
@@ -11,6 +12,7 @@ from io import BytesIO
 from copy import copy
 from lxml.builder import ElementMaker
 from add_model_keyw import insert
+from constants import OUTPUT_DIR
 
 
 
@@ -149,7 +151,7 @@ def __add_coords_iso19115_3(coords, model_endpath, text, encoding):
     #print(etree.tostring(root, pretty_print=True).decode("utf-8"))
 
     # write to disk
-    with open(f"{model_endpath}.xml", 'w') as ff:
+    with open(os.path.join(OUTPUT_DIR, f"{model_endpath}.xml"), 'w') as ff:
         ff.write(xml_string)
 
     return True

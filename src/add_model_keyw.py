@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 import sys
+import os
 import requests
 import json 
 from pathlib import Path
@@ -10,6 +11,8 @@ from lxml import etree
 from io import BytesIO
 from copy import copy
 from lxml.builder import ElementMaker
+
+from constants import OUTPUT_DIR
 
 
 def insert(root, insert_txt, master_xpath_list, ns):
@@ -132,7 +135,7 @@ def __add_models_keyword_iso19139(model_endpath, text, encoding):
     #print(etree.tostring(root, pretty_print=True).decode("utf-8"))
 
     # write to disk
-    with open(f"{model_endpath}.xml", 'w') as ff:
+    with open(os.path.join(OUTPUT_DIR, f"{model_endpath}.xml"), 'w') as ff:
         ff.write(xml_string)
 
     return True
@@ -207,7 +210,7 @@ def __add_models_keyword_iso19115_3(model_endpath, text, encoding):
     #print(etree.tostring(root, pretty_print=True).decode("utf-8"))
 
     # write to disk
-    with open(f"{model_endpath}.xml", 'w') as ff:
+    with open(os.path.join(OUTPUT_DIR, f"{model_endpath}.xml"), 'w') as ff:
         ff.write(xml_string)
 
     return True

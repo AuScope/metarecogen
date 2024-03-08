@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+import os
 import sys
 import datetime
 
@@ -6,6 +7,8 @@ from pygeometa.core import render_j2_template
 from sickle import Sickle
 
 from extractor import Extractor
+from constants import OUTPUT_DIR
+
 
 class OaiExtractor(Extractor):
 
@@ -116,7 +119,7 @@ class OaiExtractor(Extractor):
         xml_string = render_j2_template(mcf_dict, template_dir='../data/templates/ISO19115-3')
 
         # write to disk
-        with open(f"{model_endpath}.xml", 'w') as ff:
+        with open(os.path.join(OUTPUT_DIR, f"{model_endpath}.xml"), 'w') as ff:
             ff.write(xml_string)
 
 

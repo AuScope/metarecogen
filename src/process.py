@@ -12,6 +12,8 @@ from ISO19139_extract import ISO19139Extractor
 from ISO19115_3_extract import ISO19115_3Extractor
 from pdf_extract import PDFExtractor
 
+from constants import OUTPUT_DIR
+
 """
 Create ISO19139 or ISO19115-3 XML metadata records from PDF reports or online metadata services
 (e.g. CKAN, dSpace, geonetwork)
@@ -40,6 +42,8 @@ STATES = {
                             }
                            ],
             },
+}
+"""
         #
         # Tasmania's metadata is not available yet
         'tas': { 'method': None },
@@ -123,7 +127,7 @@ STATES = {
                           }
                 ]
               }
-}
+        """
 
 def convert(extractor, param_list):
     e = extractor()
@@ -170,6 +174,14 @@ if __name__ == "__main__":
     # TODO: Use a python API
     if not os.path.exists("geomodelportal"):
         os.system("git clone https://github.com/AuScope/geomodelportal.git")
+
+    # Create output dir
+    if not os.path.exists(OUTPUT_DIR):
+        try:
+            os.mkdir(OUTPUT_DIR)
+        except OSError as oe:
+            print(f"ERROR: Cannot create output dir {OUTPUT_DIR}: {oe}")
+            sys.exit(1)
 
     coord_dict = get_model_info()
 

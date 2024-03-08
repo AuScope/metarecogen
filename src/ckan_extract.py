@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 import sys
+import os
 import requests
 import json 
 from pathlib import Path
@@ -10,6 +11,8 @@ import geojson
 from pygeometa.core import render_j2_template
 
 from extractor import Extractor
+
+from constants import OUTPUT_DIR
 
 class CkanExtractor(Extractor):
 
@@ -126,7 +129,7 @@ class CkanExtractor(Extractor):
         xml_string = render_j2_template(mcf_dict, template_dir='../data/templates/ISO19115-3')
 
         # write to disk
-        with open(f"{model_endpath}.xml", 'w') as ff:
+        with open(os.path.join(OUTPUT_DIR, f"{model_endpath}.xml"), 'w') as ff:
             ff.write(xml_string)
 
 
