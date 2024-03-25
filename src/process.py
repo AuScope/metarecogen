@@ -13,121 +13,20 @@ from ISO19115_3_extract import ISO19115_3Extractor
 from pdf_extract import PDFExtractor
 
 from constants import OUTPUT_DIR
+from config import CONFIG
 
 """
 Create ISO19139 or ISO19115-3 XML metadata records from PDF reports or online metadata services
 (e.g. CKAN, dSpace, geonetwork)
 """
-CONFIG = {
-        #
-        # Victoria has some PDF reports 
-        'vic': { 'method': 'PDF',
-            'params': [   { 'name': 'Otway Basin',
-                            'model_endpath': 'otway',
-                            'pdf_file': '../data/reports/vic/G107513_OtwayBasin_3D_notes.pdf',
-                            'organisation': "Geological Survey of Victoria",
-                            'title': "Otway 3D model",
-                            'cutoff': 1000
-                            # Could not use URL, not a simple URL, uses redirection
-                            #'pdf_url': 'https://gsv.vic.gov.au/downloader/Downloader?ID=ERPublications/reports/GSV-3d-Vic/G107513_OtwayBasin_3D_notes.pdf' 
-                            },
-                            { 'name': 'Bendigo',
-                              'model_endpath': 'bendigo',
-                              'pdf_file': '../data/reports/vic/G35615_3DVIC1_pt1.pdf',
-                              'organisation': "Geological Survey of Victoria",
-                              'title': "Bendigo 3D model",
-                              'cutoff': 3000
-                            # Could not use URL, not a simple URL, uses redirection
-                            #'pdf_url': 'https://gsv.vic.gov.au/downloader/Downloader?ID=ERPublications/reports/GSV-3d-Vic/G35615_3DVIC1_pt1.pdf' 
-                            }
-                           ],
-            },
-        #
-        # Tasmania's metadata is not available yet
-        'tas': { 'method': None },
-        #
-        # NSW has no sources
-        'nsw': { 'method': None },
-        #
-        # GA has no sources
-        'ga': { 'method': None },
-        #
-        # QLD has a CKAN repo
-        'qld': { 'method': 'CKAN',
-            'params': [ { 'name': 'Quamby',
-                          'model_endpath': 'quamby',
-                          'ckan_url': 'https://geoscience.data.qld.gov.au',
-                          'package_id': 'ds000006'
-                        },
-                        { 'name': 'Mt Dore',
-                          'model_endpath': 'mtdore',
-                          'ckan_url': 'https://geoscience.data.qld.gov.au',
-                          'package_id': 'ds000002'
-                        }
-                 ]
-               },
-        #
-        # SA has a geonetwork with ISO19115-3 records
-        'sa': { 'method': 'ISO19115-3',
-                'params': [  { 'name': 'Burra Mine',
-                               'model_endpath': 'burramine',
-                               'metadata_url' :'https://catalog.sarig.sa.gov.au/geonetwork/srv/api/records/37e0f6f0-b9c7-47f0-bbed-482ce35851a4/formatters/xml'
-                             },
-                             { 'name': 'Central Flinders',
-                               'model_endpath': 'centralflinders',
-                               'metadata_url' :'https://catalog.sarig.sa.gov.au/geonetwork/srv/api/records/2369469b-4906-4352-9100-632974e0ec04/formatters/xml'
-                             },
-                             { 'name': 'North Flinders',
-                               'model_endpath': 'northflinders',
-                               'metadata_url' :'https://catalog.sarig.sa.gov.au/geonetwork/srv/api/records/a86d7379-ca96-4e7d-8e1f-58bfeba9a8f5/formatters/xml'
-                             },
-                             { 'name': 'North Gawler',
-                               'model_endpath': 'ngawler',
-                               'metadata_url' :'https://catalog.sarig.sa.gov.au/geonetwork/srv/api/records/9c6ae754-291d-4100-afd9-478c3a9ddf42/formatters/xml'
-                             },
-                             { 'name': 'Curnamona Sedimentary Basins',
-                               'model_endpath': 'curnamonased',
-                               'metadata_url' :'https://catalog.sarig.sa.gov.au/geonetwork/srv/api/records/bda114bc-1eb8-4569-94e5-a9fa1a994645/formatters/xml'
-                             },
-                             { 'name': 'Western Gawler',
-                               'model_endpath': 'westgawler',
-                               'metadata_url' :'https://catalog.sarig.sa.gov.au/geonetwork/srv/api/records/13ed6259-1ceb-4728-848f-35e81b502d12/formatters/xml'
-                             }
-                ]
-              },
-        #
-        # NT has an OAI-PMH interface and ISO19139 records
-        'nt': { 'method': 'ISO19139',
-                'params': [  { 'name': 'McArthur Basin',
-                               'model_endpath': 'mcarthur',
-                               'metadata_url': 'http://www.ntlis.nt.gov.au/metadata/export_data?type=xml&metadata_id=1080195AEBC6A054E050CD9B214436A1'    }
-                 ]
-               },
-        # NT has an OAI-PMH interface and ISO19139 records
-        #'nt': { 'method': 'OAIPMH',
-        #         'params': [  { 'model_endpath': 'mcarthur',
-        #                        'oai_id': 'oai:geoscience.nt.gov.au:1/81751',
-        #                        'oai_prefix': 'oai_dc',
-        #                        'service_name': "NTGS GEMIS"
-        #                    }
-        #         ]
-        #       },
-
-        # WA has ISO19139 records 
-        'wa': { 'method': 'ISO19139',
-                'params': [{ 'name': 'Sandstone',
-                             'model_endpath': 'sandstone',
-                            'metadata_url': 'https://warsydprdstadasc.blob.core.windows.net/downloads/Metadata_Statements/XML/3D_Sandstone_2015.xml'
-                          },
-                          { 'name': 'Windimurra',
-                            'model_endpath': 'windimurra',
-                            'metadata_url': 'https://warsydprdstadasc.blob.core.windows.net/downloads/Metadata_Statements/XML/3D_Windimurra_2015.xml'
-                          }
-                ]
-              }
-}
 
 def convert(extractor, param_list):
+    """
+    Runs conversion process
+
+    :param extractor: 'Extractor' class instance
+    :param param_list: parameters for extraction process
+    """
     e = extractor()
     for params in param_list:
         e.write_record(**params)
@@ -160,8 +59,9 @@ def get_model_info():
     return r_dict
 
 def oaipmh_convert(param_list):
-    # Get records from Northern Territory Geological Service
-    # OAI-PMH URL
+    """
+    Get records from Northern Territory Geological Service
+    """
     OAI__URL = 'https://geoscience.nt.gov.au/gemis/ntgsoai/request'
     oe = OaiExtractor(OAI__URL, 'output')
     for params in param_list:
@@ -173,6 +73,9 @@ if __name__ == "__main__":
     if not os.path.exists("geomodelportal"):
         os.system("git clone https://github.com/AuScope/geomodelportal.git")
 
+    # Get cooordinates from geomodels JSON config
+    coord_dict = get_model_info()
+
     # Create output dir
     if not os.path.exists(OUTPUT_DIR):
         try:
@@ -181,8 +84,7 @@ if __name__ == "__main__":
             print(f"ERROR: Cannot create output dir {OUTPUT_DIR}: {oe}")
             sys.exit(1)
 
-    coord_dict = get_model_info()
-
+    # Loop over datasets and process each one
     for k,v in CONFIG.items():
         if v['method'] is None:
             continue
@@ -191,10 +93,6 @@ if __name__ == "__main__":
             name = params['name']
             params['bbox'] = coord_dict[name]
 
-        # TEMPORARY
-        #if k != 'vic':
-        #    continue
-        #
         if v['method'] == 'PDF':
             convert(PDFExtractor, param_list)
 
