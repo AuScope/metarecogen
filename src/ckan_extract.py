@@ -15,9 +15,19 @@ from extractor import Extractor
 from constants import OUTPUT_DIR
 
 class CkanExtractor(Extractor):
+    """ Connects to CKAN repository
+        Uses Jinja templates to create ISO 19115-3 XML
+        Writes XML to disk
+    """
 
     def output_xml(self, ckan_dict, url, model_endpath):
-        # print(json.dumps(ckan_dict, indent=4))
+        """
+        Outputs XML
+
+        :param ckan_dict: information gathered from CKAN
+        :param url: CKAN API record URL
+        :param model_endpath: models path name
+        """
         try:
             extent = geojson.loads(ckan_dict['GeoJSONextent'])
             coords = extent.coordinates[0]
@@ -125,7 +135,6 @@ class CkanExtractor(Extractor):
             }
         }
 
-
         xml_string = render_j2_template(mcf_dict, template_dir='../data/templates/ISO19115-3')
 
         # write to disk
@@ -133,8 +142,16 @@ class CkanExtractor(Extractor):
             ff.write(xml_string)
 
 
-    # NB: We don't use the 'bbox' parameter, we use the metadata record's coords instead
     def write_record(self, name, bbox, model_endpath, ckan_url, package_id):
+        """
+        Write out XML for a CKAN record
+
+        :param name: name of model
+        :param bbox: bounding box NB: We don't use the 'bbox' parameter, we use the metadata record's coords instead
+        :param model_endpath: model path
+        :param ckan_url: URL to CKAN website
+        :param package_id: CKAN package id of record
+        """
         print(f"Converting: {model_endpath}")
         # Set up CKAN URL
         url_path =  Path('api') / '3' / 'action' / 'package_show'
@@ -151,6 +168,7 @@ class CkanExtractor(Extractor):
         return False
 
 
+# Used for testing only
 if __name__ == "__main__":
     SITE__URL = 'https://geoscience.data.qld.gov.au'
     ce = CkanExtractor()

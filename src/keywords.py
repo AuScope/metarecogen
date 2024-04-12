@@ -11,17 +11,34 @@ import pytextrank
 
 from pdf_helper import parse_pdf
 
-def phrase_in_dict(phrase, dict):
+"""
+Uses yake and USGS vocabulary to create geoscience keywords
+    USGS Thesaurus:   https://apps.usgs.gov/thesaurus/
+    yake:   https://pypi.org/project/yake/
+"""
+
+def phrase_in_dict(phrase, in_dict):
+    """
+    Returns true if phrase is in in_dict
+    """
     words = phrase.split(' ')
     for word in words:
-        if word in dict:
-            return True, dict[word]
+        if word in in_dict:
+            return True, in_dict[word]
     return False, ''
 
 def run_yake(kw_lookup, text):
+    """
+    Runs yake on some text and returns the top keywords
+
+    :param bw_lookup: lookup table mapping used to categorise geoscience terms into keywords
+    :param text: text to search for keywords
+    :returns: set() of yake's keywords
+    """
     kw_extractor = yake.KeywordExtractor(top=500)
+    # Extracts yakes top keywords
     keywords = kw_extractor.extract_keywords(text)
-    # print(len(keywords))
+    # Map yakes keywords to USGS keywords
     kw_set = set()
     for kw in keywords:
         if kw[0] in kw_lookup:
@@ -36,7 +53,9 @@ def run_yake(kw_lookup, text):
     return kw_set
 
 def run_textrank(text):
-
+    """
+    Runs textrank - not used
+    """
     # load a spaCy model, depending on language, scale, etc.
     nlp = spacy.load("en_core_web_sm")
 
@@ -62,7 +81,7 @@ CREATE TABLE term (
   );
 """
 def extract_db_terms():
-    """ Function to create a lookup table that translates geological terms into keywords
+    """ Function to create a lookup table that translates geological terms into keywords using USGS vocab
     """
     keyword_lkup = {}
     name_dict = {}
@@ -93,15 +112,27 @@ def extract_db_terms():
     return keyword_lkup
 
 def run_usgs(kw_dict, text):
+    """
+    Looks for keywords using USGS vocabulary
+
+    :param kw_dict: keyword dict extracted from USGS vocab - maps a variety of geoscience words to keywords
+    :param text: text in which to look for keywords
+    :returns: set() of keywords
+    """
     kw_set = set()
     text = text.replace('\n',' ')
-    # print('#words', len(text.split(' ')))
     for word in text.split(' '):
         if word.isalpha() and word in kw_dict:
             kw_set.add(kw_dict[word])
     return kw_set    
 
 def get_keywords(text):
+    """
+    Extracts keywords from text
+
+    :param text: text
+    :returns: 
+    """
     kw_dict = extract_db_terms()
  
     yake_kwset = run_yake(kw_dict, text)
@@ -109,6 +140,7 @@ def get_keywords(text):
     return yake_kwset
 
 
+# Used for testing only
 if __name__ == "__main__":
     kw_dict = extract_db_terms()
     for file in ['G107513_OtwayBasin_3D_notes.pdf',

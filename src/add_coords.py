@@ -17,15 +17,26 @@ from constants import OUTPUT_DIR
 
 
 def add_coords(coords, model_endpath, text, encoding, iso_ver):
+    """
+    Add coordinates to XML text
+
+    :param coords: coordinates
+    :param model_endpath: model path name
+    :param text: XML text
+    :param encoding: XML text encoding e.g. 'utf-8'
+    :param iso_ver: ISO XML version i.e. 'ISO19115-3' or 'ISO19139'
+    :returns: boolean and saves to disk for iso_ver 'ISO19115-3' or XML string for 'ISO19139'
+    """
     print(f"Adding coords to {model_endpath}")
     if iso_ver.upper() == 'ISO19115-3':
         return __add_coords_iso19115_3(coords, model_endpath, text, encoding)
     return __add_coords_iso19139(coords, model_endpath, text, encoding)
 
-"""
-Uses XPATH insert technique to add in BBOX coords to an ISO19139 XML record
-"""
+
 def __add_coords_iso19139(coords, model_endpath, text, encoding):
+    """
+    Uses XPATH insert technique to add in BBOX coords to an ISO19139 XML record
+    """
     # ISO19139 XML Namespace dict
     ns = { 'gmd':"http://www.isotc211.org/2005/gmd",
            'gco':"http://www.isotc211.org/2005/gco",
@@ -67,22 +78,14 @@ def __add_coords_iso19139(coords, model_endpath, text, encoding):
     # Insert 
     root = insert(root, insert_txt, insertpoint_xpath_list, ns)
     xml_string = etree.tostring(root, pretty_print=True).decode("utf-8")
-    #print(xml_string)
-    #print("\n\n\nROOT:")
-    #print(etree.tostring(root, pretty_print=True).decode("utf-8"))
-
-    ## write to disk
-    #with open(f"{model_endpath}.xml", 'w') as ff:
-    #    ff.write(xml_string)
-
     return xml_string
 
 
 
-"""
-Uses XPATH insert technique to add in BBOX coords to an ISO19115-3 XML record
-"""
 def __add_coords_iso19115_3(coords, model_endpath, text, encoding):
+    """
+    Uses XPATH insert technique to add in BBOX coords to an ISO19115-3 XML record
+    """
     # ISO19115-3 XML Namespace dict
     ns = {'mdb': "http://standards.iso.org/iso/19115/-3/mdb/1.0",
             'cat': "http://standards.iso.org/iso/19115/-3/cat/1.0",
@@ -146,11 +149,8 @@ def __add_coords_iso19115_3(coords, model_endpath, text, encoding):
     # Insert 
     root = insert(root, insert_txt, insertpoint_xpath_list, ns)
     xml_string = etree.tostring(root, pretty_print=True).decode("utf-8")
-    #print(xml_string)
-    #print("\n\n\nROOT:")
-    #print(etree.tostring(root, pretty_print=True).decode("utf-8"))
 
-    # write to disk
+    # Write to disk
     with open(os.path.join(OUTPUT_DIR, f"{model_endpath}.xml"), 'w') as ff:
         ff.write(xml_string)
 
@@ -158,6 +158,7 @@ def __add_coords_iso19115_3(coords, model_endpath, text, encoding):
 
 
 
+# Used for testing only
 if __name__ == "__main__":
     metadata_url = "https://catalog.sarig.sa.gov.au/geonetwork/srv/api/records/9c6ae754-291d-4100-afd9-478c3a9ddf42/formatters/xml"
 
@@ -169,8 +170,6 @@ if __name__ == "__main__":
     except Exception as e:
         print(f"Cannot retrieve URL {metadata_url}\n", e)
         sys.exit(1)
-    #print(f"{metadata.text=}")
-    #print(f"{metadata.encoding=}")
     if metadata.encoding is not None:
         encoding = metadata.encoding
     else:

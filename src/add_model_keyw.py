@@ -14,6 +14,9 @@ from lxml.builder import ElementMaker
 
 from constants import OUTPUT_DIR
 
+""" Adds keywords to ISO 19139 and ISO 19115-3 XML using XPATH insertion
+"""
+
 
 def insert(root, insert_txt, master_xpath_list, ns):
     """ Generic routine to insert text into XML document
@@ -28,31 +31,22 @@ def insert(root, insert_txt, master_xpath_list, ns):
 
     # Look for a place to insert 'insert_root'
     xpath_list = copy(master_xpath_list)
-    #print(f'{xpath_list=}')
     result = []
     while len(result) == 0 and len(xpath_list) > 1:
         xpath = '/' + '/'.join(xpath_list)
-        #print("Searching for ", xpath)
         result = root.xpath(xpath, namespaces=ns)
-        #print(f"{result=}")
         xpath_list.pop()
-        #print(f'{xpath_list=}')
 
     # Insert 'online_root' and any other required elements 
-    #print(f'{result=}')
+
     # If not found then insert at root
     if result==[]:
-        #print("child = ROOT")
         leftovers = master_xpath_list[len(xpath_list):]
-        #print(f'{leftovers=}')
         child = root
     else:
-        #print(f"child = {result[0]=}")
         leftovers = master_xpath_list[len(xpath_list)+1:]
-        #print(f'{leftovers=}')
         child = result[0]
     if len(leftovers) == 1:
-        #print(f'Only 1 leftover, inserting {insert_root=} @ {child=}')
         child.append(insert_root)
     else:
         for elemtag in leftovers:
@@ -61,11 +55,9 @@ def insert(root, insert_txt, master_xpath_list, ns):
             # If not at the end
             if tagname != 'BLAH':
                 # IF we need to insert a new tag in path
-                #print(f'Inserting PATH {newtag=} @ {child=}')
                 child = etree.SubElement(child, newtag, nsmap=ns)
             else:
                 # If at end - insert inline objects here
-                #print(f'Inserting END {insert_root=} @ {child=}')
                 child.append(insert_root)
                 break
     return root
@@ -130,9 +122,6 @@ def __add_models_keyword_iso19139(model_endpath, text, encoding):
     # Insert 
     root = insert(root, insert_txt, insertpoint_xpath_list, ns)
     xml_string = etree.tostring(root, pretty_print=True).decode("utf-8")
-    #print(xml_string)
-    #print("\n\n\nROOT:")
-    #print(etree.tostring(root, pretty_print=True).decode("utf-8"))
 
     # write to disk
     with open(os.path.join(OUTPUT_DIR, f"{model_endpath}.xml"), 'w') as ff:
@@ -205,9 +194,6 @@ def __add_models_keyword_iso19115_3(model_endpath, text, encoding):
     # Insert 
     root = insert(root, insert_txt, insertpoint_xpath_list, ns)
     xml_string = etree.tostring(root, pretty_print=True).decode("utf-8")
-    #print(xml_string)
-    #print("\n\n\nROOT:")
-    #print(etree.tostring(root, pretty_print=True).decode("utf-8"))
 
     # write to disk
     with open(os.path.join(OUTPUT_DIR, f"{model_endpath}.xml"), 'w') as ff:
@@ -217,6 +203,7 @@ def __add_models_keyword_iso19115_3(model_endpath, text, encoding):
 
 
 
+# Used for testing only
 if __name__ == "__main__":
     metadata_url = "https://catalog.sarig.sa.gov.au/geonetwork/srv/api/records/9c6ae754-291d-4100-afd9-478c3a9ddf42/formatters/xml"
 
@@ -228,8 +215,6 @@ if __name__ == "__main__":
     except Exception as e:
         print(f"Cannot retrieve URL {metadata_url}\n", e)
         sys.exit(1)
-    #print(f"{metadata.text=}")
-    #print(f"{metadata.encoding=}")
     if metadata.encoding is not None:
         encoding = metadata.encoding
     else:

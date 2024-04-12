@@ -12,8 +12,16 @@ class ISO19139Extractor(Extractor):
         Outputs ISO 19139 XML to file
     """
 
-    # NB: bbox parameters are not used, uses the records' coords instead
     def write_record(self, name, bbox, model_endpath, metadata_url):
+        """
+        Reads ISO 19139 from a source adds extra fields and outputs XML to file
+
+        :param name: name of model
+        :param bbox: 2D bounding box. This parameter is not used, we use records' coords instead
+        :param model_endpath: model path
+        :param metadara_url: URL of metadata record
+        :returns: boolean
+        """
         print(f"Converting: {model_endpath}")
         # Read XML from URL
         try:

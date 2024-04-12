@@ -16,10 +16,15 @@ from add_model_keyw import insert
 from constants import OUTPUT_DIR
 
 
-"""
-Uses XPATH insert technique to add in models URL to an iso19139 record
-"""
 def add_model_link(model_endpath, text):
+    """
+    Uses XPATH insert technique to add in models URL to an ISO 19139 record
+    Saves XML text to file
+
+    :param model_endpath: model path
+    :param text: XML text
+    :returns: boolean
+    """
     print(f"Adding model download link to: {model_endpath}")
     # XML Namespace dict
     ns = {'gmd': 'http://www.isotc211.org/2005/gmd', 'gco': 'http://www.isotc211.org/2005/gco'}
@@ -49,9 +54,7 @@ def add_model_link(model_endpath, text):
     root = insert(root, insert_txt, insert_point_xpath_list, ns)
 
     xml_string = etree.tostring(root, pretty_print=True).decode("utf-8")
-    #print(xml_string)
-    #print("\n\n\nROOT:")
-    #print(etree.tostring(root, pretty_print=True).decode("utf-8"))
+
     # write to disk
     print(f"Writing {model_endpath}.xml")
     with open(os.path.join(OUTPUT_DIR, f"{model_endpath}.xml"), 'w') as ff:

@@ -15,8 +15,16 @@ class ISO19115_3Extractor(Extractor):
     Outputs ISO 19115-3 XML to file
     """
 
-    # bbox parameter is not used, use records' coords instead
     def write_record(self, name, bbox, model_endpath, metadata_url):
+        """
+        Writes out ISO 19115-3 XML from an ISO 19115-3 source
+
+        :param name: name of model
+        :param bbox: 2D bounding box. This parameter is not used, we use records' coords instead
+        :param model_endpath: model path
+        :param metadara_url: URL of metadata record
+        :returns: boolean
+        """
         print(f"Converting: {model_endpath}")
         # Read XML from URL
         try:
@@ -24,8 +32,6 @@ class ISO19115_3Extractor(Extractor):
         except Exception as e:
             print(f"Cannot retrieve URL {metadata_url}\n", e)
             return False
-        #print(f"{metadata.text=}")
-        #print(f"{metadata.encoding=}")
         if metadata.encoding is not None:
             encoding = metadata.encoding
         else:
