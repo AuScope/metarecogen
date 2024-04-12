@@ -20,8 +20,20 @@ from add_links import add_model_link
 from add_coords import add_coords
 
 class PDFExtractor(Extractor):
+    """ Creates an ISO 19115 XML file by reading a PDF file
+    """
 
     def get_record_config(self, keywords, summary, organisation, title, bbox, model_endpath):
+        """
+        :param keywords: keywords as a list of strings
+        :param summary: summarry string
+        :param organisation: organisation string
+        :param title: title string
+        :param bbox: 2D coordinate bounding box as a dict, keys are 'west' 'east' 'south' 'north', values are strings
+        :param model_endpath: path to model in geomodels website (used to extract metadata)
+
+        Creates a dict suitable for creating a metadata record using BAS metadata library
+        """
         now = datetime.datetime.now()
         current_date = datetime.date(year=now.year, month=now.month, day=now.day)
         keyw_terms = [{"term": keyw} for keyw in keywords]
@@ -77,19 +89,17 @@ class PDFExtractor(Extractor):
             sys.exit(1)
         # Extract keywords from PDF text
         pdf_text = parse_pdf(pdf_file, False)
-        #print(f"write_record {model_endpath} {len(pdf_text)=}")
         kwset = get_keywords(pdf_text)
-        #print("kwset=", kwset)
         summary = get_summary(pdf_file, cutoff)
-        #kwset = set(['kw1','kw2','kw3'])
-        #summary = 'summary summary summary'
+        # Create config for BAS metadata library
         record_config = self.get_record_config(list(kwset), summary, organisation, title, bbox, model_endpath)
         configuration = MetadataRecordConfigV2(**record_config)
         record = MetadataRecord(configuration=configuration)
+        # Generate XML
         document = record.generate_xml_document()
-        # bas-metadata-library does not output BBOX coords nor URL links so I have to do it manually
+        # BAS metadata library does not output BBOX coords nor URL links so I have to do it manually
         xml_txt = add_coords(bbox, model_endpath, document.decode(), 'utf-8', 'ISO19139')
-        # This writes out the file
+        # This writes out the XML as a file
         add_model_link(model_endpath, xml_txt)
 
 
