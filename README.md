@@ -29,7 +29,7 @@ cd src
 eval $(pdm venv activate)
 ./process.py
 ```
-XML files are written to 'src' directory
+XML files are written to 'ouput' directory
 
 ## Configuration
 
