@@ -33,7 +33,7 @@ XML files are written to 'src' directory
 
 ## Configuration
 
-The framework is configured via the [config.py](src/config.py) file. Its format is described in [CONFIG.md](src/CONFIG.md)
+The framework is configured via the [config.py](src/config.py) file. Its format is described in [CONFIG.md](CONFIG.md)
 
 ## Testing
 
