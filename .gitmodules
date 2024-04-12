@@ -1,0 +1,3 @@
+[submodule "src/geomodelportal"]
+	path = src/geomodelportal
+	url = https://github.com/AuScope/geomodelportal.git

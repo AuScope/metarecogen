@@ -17,6 +17,8 @@ The framework is capable of generating metadata records from these sources:
 Assumes PDM <https://github.com/pdm-project/pdm> is installed
 
 ```
+git clone --recurse-submodules https://github.com/vjf/isometarecgen
+cd isorecmetagen
 pdm install
 ```
 
