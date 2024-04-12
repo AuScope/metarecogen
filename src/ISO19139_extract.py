@@ -8,7 +8,8 @@ from extractor import Extractor
 from add_model_keyw import add_models_keyword
 
 class ISO19139Extractor(Extractor):
-    """ Uses an XSLT to insert elements into XML
+    """ Uses an XSLT to insert elements into ISO 19139 XML
+        Outputs ISO 19139 XML to file
     """
 
     # NB: bbox parameters are not used, uses the records' coords instead
@@ -132,6 +133,7 @@ class ISO19139Extractor(Extractor):
         return False
 
 
+# This is used for testing only
 if __name__ == "__main__":
 
     metadata_urls = [

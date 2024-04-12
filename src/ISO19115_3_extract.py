@@ -9,6 +9,11 @@ from extractor import Extractor
 from add_model_keyw import add_models_keyword
 
 class ISO19115_3Extractor(Extractor):
+    """
+    Retrieves ISO 19115-3 XML from a geonetwork server or similar
+    Uses an XSLT to insert extra fields
+    Outputs ISO 19115-3 XML to file
+    """
 
     # bbox parameter is not used, use records' coords instead
     def write_record(self, name, bbox, model_endpath, metadata_url):
@@ -172,6 +177,7 @@ class ISO19115_3Extractor(Extractor):
         return False
 
 
+# Used for testing only
 if __name__ == "__main__":
     metadata_url = "https://catalog.sarig.sa.gov.au/geonetwork/srv/api/records/9c6ae754-291d-4100-afd9-478c3a9ddf42/formatters/xml"
 
