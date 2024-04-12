@@ -5,7 +5,6 @@ Config for creation of ISO19139 or ISO19115-3 XML metadata records from PDF repo
 CONFIG = {
         #
         # Victoria has some PDF reports
-        # Can't use direct URLs, uses redirection
         'vic': { 'method': 'PDF',
             'params': [   { 'name': 'Otway Basin',
                             'model_endpath': 'otway',
@@ -19,14 +18,6 @@ CONFIG = {
                               'pdf_file': '../data/reports/vic/G35615_3DVIC1_pt1.pdf',
                               'organisation': "Geological Survey of Victoria",
                               'title': "Bendigo 3D model",
-                              'cutoff': 3000
-                            },
-                            # This is just for testing
-                            { 'name': 'Bendigo',
-                              'model_endpath': 'bendigo',
-                              'pdf_file': '../data/reports/vic/Gippsland-Basin.pdf',
-                              'organisation': "Geological Survey of Victoria",
-                              'title': "Gipplsand 3D model",
                               'cutoff': 3000
                             },
                        ],
