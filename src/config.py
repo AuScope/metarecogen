@@ -26,7 +26,7 @@ CONFIG = {
         # Use PDF version of academic paper for Stuart Shelf model
         'nci': { 'method': 'PDF',
             'params': [ { 'name': 'Stuart Shelf',
-                          'model_endpath': 'stuartshalf',
+                          'model_endpath': 'stuartshelf',
                           'pdf_file': '../data/reports/nci/Heinson-StuShelf.pdf',
                           'organisation': 'NCI/University of Adelaide',
                           'title': 'Stuart Shelf Model',
