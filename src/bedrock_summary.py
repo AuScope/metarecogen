@@ -45,7 +45,11 @@ def run_claude(text):
     body, modelId = run_model('claude', brt, text)
     accept = 'application/json'
     contentType = 'application/json'
-    response = brt.invoke_model(body=body, modelId=modelId, accept=accept, contentType=contentType)
+    try:
+        response = brt.invoke_model(body=body, modelId=modelId, accept=accept, contentType=contentType)
+    except botocore.exceptions.BotoCoreError as bce:
+        print("AWS boto3 error:", bce)
+        sys.exit(1)
     response_body = json.loads(response.get('body').read())
     summary = response_body.get('completion')
     #print(f"\nSUMMARY: {summary}")

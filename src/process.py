@@ -29,7 +29,11 @@ def convert(extractor, param_list):
     """
     e = extractor()
     for params in param_list:
-        e.write_record(**params)
+        try:
+            e.write_record(**params)
+        except TypeError as te:
+            print(f"Python Error in {params}\n{te}\n\nPlease check config.py file")
+            sys.exit(1)
 
 
 def get_model_info():
