@@ -39,5 +39,5 @@ The framework is configured via the [config.py](src/config.py) file. Its format 
 
 ## Testing
 
-No tests written yet
+Only small isolated unit tests so far
 
