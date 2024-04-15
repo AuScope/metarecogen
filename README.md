@@ -29,6 +29,8 @@ This allows the scripts to copy some model data (e.g. coordinates) for inclusion
 
 This project is written in Python and uses PDM <https://github.com/pdm-project/pdm> for its package management. PDM requires python version 3.7 or higher.
 
+This project uses AWS Bedrock to run a Claude LLM and assumes that the correct AWS credentials have been set up.
+
 ```
 cd src
 eval $(pdm venv activate)
