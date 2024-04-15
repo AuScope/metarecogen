@@ -1,8 +1,8 @@
-# isometarecgen
+# Metadata Record Generator
 
 [![pdm-managed](https://img.shields.io/badge/pdm-managed-blueviolet)](https://pdm.fming.dev)
 
-This is a basic framework of Python scripts that generate ISO 19115 geospatial metadata records (ISO19139 and ISO19115-3 XML). It is used for describing geological models from the AuScope 3D Geological Models website <https://geomodels.auscope.org.au>, but could easily be adapted for other kinds of metadata
+This is a basic framework of Python scripts that generate ISO 19115 geospatial metadata records (ISO19139 and ISO19115-3 XML). It is used for describing geological models from the AuScope 3D Geological Models website <https://geomodels.auscope.org.au>, but could be adapted for other kinds of metadata
 
 The framework is capable of generating metadata records from these sources:  
 
@@ -17,10 +17,13 @@ The framework is capable of generating metadata records from these sources:
 Assumes PDM <https://github.com/pdm-project/pdm> is installed
 
 ```
-git clone --recurse-submodules https://github.com/vjf/isometarecgen
-cd isorecmetagen
+git clone --recurse-submodules https://github.com/AuScope/metarecogen
+cd metarecogen
 pdm install
 ```
+
+NB: AuScope 'geomodelportal' repository is included in the git clone as a submodule.
+This allows the scripts to copy some model data (e.g. coordinates) for inclusion in the metadata record 
 
 ## Run
 
