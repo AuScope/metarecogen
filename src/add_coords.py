@@ -14,28 +14,34 @@ from lxml.builder import ElementMaker
 from add_model_keyw import insert
 from constants import OUTPUT_DIR
 
+"""
+Utility functions used to add bounding box coordinates to ISO 19139 & 19115-3 XML
+"""
 
 
-def add_coords(coords, model_endpath, text, encoding, iso_ver):
+def add_coords(coords, text, encoding, iso_ver):
     """
     Add coordinates to XML text
 
     :param coords: coordinates
-    :param model_endpath: model path name
     :param text: XML text
     :param encoding: XML text encoding e.g. 'utf-8'
     :param iso_ver: ISO XML version i.e. 'ISO19115-3' or 'ISO19139'
     :returns: boolean and saves to disk for iso_ver 'ISO19115-3' or XML string for 'ISO19139'
     """
-    print(f"Adding coords to {model_endpath}")
     if iso_ver.upper() == 'ISO19115-3':
-        return __add_coords_iso19115_3(coords, model_endpath, text, encoding)
-    return __add_coords_iso19139(coords, model_endpath, text, encoding)
+        return __add_coords_iso19115_3(coords, text, encoding)
+    return __add_coords_iso19139(coords, text, encoding)
 
 
-def __add_coords_iso19139(coords, model_endpath, text, encoding):
+def __add_coords_iso19139(coords, text, encoding):
     """
     Uses XPATH insert technique to add in BBOX coords to an ISO19139 XML record
+
+    :param coords: coordinates
+    :param text: XML text
+    :param encoding: XML text encoding e.g. 'utf-8'
+    :returns: boolean and saves to disk for iso_ver 'ISO19115-3' or XML string for 'ISO19139'
     """
     # ISO19139 XML Namespace dict
     ns = { 'gmd':"http://www.isotc211.org/2005/gmd",
@@ -82,9 +88,14 @@ def __add_coords_iso19139(coords, model_endpath, text, encoding):
 
 
 
-def __add_coords_iso19115_3(coords, model_endpath, text, encoding):
+def __add_coords_iso19115_3(coords, text, encoding):
     """
     Uses XPATH insert technique to add in BBOX coords to an ISO19115-3 XML record
+
+    :param coords: coordinates
+    :param text: XML text
+    :param encoding: XML text encoding e.g. 'utf-8'
+    :returns: boolean and saves to disk for iso_ver 'ISO19115-3' or XML string for 'ISO19139'
     """
     # ISO19115-3 XML Namespace dict
     ns = {'mdb': "http://standards.iso.org/iso/19115/-3/mdb/1.0",
@@ -125,7 +136,7 @@ def __add_coords_iso19115_3(coords, model_endpath, text, encoding):
     insertpoint_xpath_list = ['mdb:MD_Metadata', 'mdb:identificationInfo', 'mri:MD_DataIdentification', 'mri:BLAH'] 
 
     # XML snippet to be inserted into XML record
-    insert_txt = f"""<mri:extent xmlns:mri="http://standards.iso.org/iso/19115/-3/mri/1.0" xmlns:gco="http://standards.iso.org/iso/19115/-3/gco/1.0">
+    insert_txt = f"""<mri:extent xmlns:mri="http://standards.iso.org/iso/19115/-3/mri/1.0" xmlns:gex="http://standards.iso.org/iso/19115/-3/gex/1.0" xmlns:gco="http://standards.iso.org/iso/19115/-3/gco/1.0">
                        <gex:EX_Extent>
                          <gex:geographicElement>
                            <gex:EX_GeographicBoundingBox>
@@ -149,12 +160,7 @@ def __add_coords_iso19115_3(coords, model_endpath, text, encoding):
     # Insert 
     root = insert(root, insert_txt, insertpoint_xpath_list, ns)
     xml_string = etree.tostring(root, pretty_print=True).decode("utf-8")
-
-    # Write to disk
-    with open(os.path.join(OUTPUT_DIR, f"{model_endpath}.xml"), 'w') as ff:
-        ff.write(xml_string)
-
-    return True
+    return xml_string
 
 
 
@@ -162,8 +168,6 @@ def __add_coords_iso19115_3(coords, model_endpath, text, encoding):
 if __name__ == "__main__":
     metadata_url = "https://catalog.sarig.sa.gov.au/geonetwork/srv/api/records/9c6ae754-291d-4100-afd9-478c3a9ddf42/formatters/xml"
 
-    model_endpath ='ngawler'
-    print(f"Converting: {model_endpath}")
     # Read XML from URL
     try:
         metadata = requests.get(metadata_url)
@@ -174,4 +178,4 @@ if __name__ == "__main__":
         encoding = metadata.encoding
     else:
         encoding = 'utf-8'
-    __add_coords_iso19139(coords, model_endpath, metadata.text, encoding)
+    __add_coords_iso19139(coords, metadata.text, encoding)

@@ -97,10 +97,17 @@ class PDFExtractor(Extractor):
         record = MetadataRecord(configuration=configuration)
         # Generate XML
         document = record.generate_xml_document()
+
         # BAS metadata library does not output BBOX coords nor URL links so I have to do it manually
-        xml_txt = add_coords(bbox, model_endpath, document.decode(), 'utf-8', 'ISO19139')
-        # This writes out the XML as a file
-        add_model_link(model_endpath, xml_txt)
+        xml_txt = add_coords(bbox, document.decode(), 'utf-8', 'ISO19139')
+
+        # This adds geomodels keyword
+        xml_string = add_model_link(model_endpath, xml_txt)
+
+        # write to disk
+        with open(os.path.join(OUTPUT_DIR, f"{model_endpath}.xml"), 'w') as ff:
+            ff.write(xml_string)
+
 
 
 if __name__ == "__main__":

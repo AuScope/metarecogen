@@ -63,32 +63,28 @@ def insert(root, insert_txt, master_xpath_list, ns):
     return root
     
 
-def add_models_keyword(model_endpath, text, encoding, iso_ver):
+def add_models_keyword(text, encoding, iso_ver):
     """
     Uses XPATH insert technique to add in "3D Geological Models" keyword to an XML record
 
-    :param model_endpath:
     :param text: XML text to be inserted
     :param encoding: character encoding of text, e.g. 'utf-8'
     :param iso_ver: ISO XML version string, either 'ISO19139' or 'ISO19115-3'
-
-    Writes an XML file to {model_endpath}.xml
+    :returns: XML string
     """
     if iso_ver == 'ISO19115-3':
-        return __add_models_keyword_iso19115_3(model_endpath, text, encoding)
-    return __add_models_keyword_iso19139(model_endpath, text, encoding)
+        return __add_models_keyword_iso19115_3(text, encoding)
+    return __add_models_keyword_iso19139(text, encoding)
 
 
 
-def __add_models_keyword_iso19139(model_endpath, text, encoding):
+def __add_models_keyword_iso19139(text, encoding):
     """
     Uses XPATH insert technique to add in "3D Geological Models" keyword to an ISO19139 XML record
 
-    :param model_endpath:
     :param text: XML text to be inserted
     :param encoding: character encoding of text, e.g. 'utf-8'
-
-    Writes an XML file to {model_endpath}.xml
+    :returns: XML string
     """
     # ISO19139 XML Namespace dict
     ns = { 'gmd':"http://www.isotc211.org/2005/gmd",
@@ -122,24 +118,17 @@ def __add_models_keyword_iso19139(model_endpath, text, encoding):
     # Insert 
     root = insert(root, insert_txt, insertpoint_xpath_list, ns)
     xml_string = etree.tostring(root, pretty_print=True).decode("utf-8")
-
-    # write to disk
-    with open(os.path.join(OUTPUT_DIR, f"{model_endpath}.xml"), 'w') as ff:
-        ff.write(xml_string)
-
-    return True
+    return xml_string
 
 
 
-def __add_models_keyword_iso19115_3(model_endpath, text, encoding):
+def __add_models_keyword_iso19115_3(text, encoding):
     """
     Uses XPATH insert technique to add in "3D Geological Models" keyword to an ISO19115-3 XML record
 
-    :param model_endpath:
     :param text: XML text to be inserted
     :param encoding: character encoding of text, e.g. 'utf-8'
-
-    Writes an XML file to {model_endpath}.xml
+    :returns: XML string
     """
     # ISO19115-3 XML Namespace dict
     ns = {'mdb': "http://standards.iso.org/iso/19115/-3/mdb/1.0",
@@ -194,12 +183,7 @@ def __add_models_keyword_iso19115_3(model_endpath, text, encoding):
     # Insert 
     root = insert(root, insert_txt, insertpoint_xpath_list, ns)
     xml_string = etree.tostring(root, pretty_print=True).decode("utf-8")
-
-    # write to disk
-    with open(os.path.join(OUTPUT_DIR, f"{model_endpath}.xml"), 'w') as ff:
-        ff.write(xml_string)
-
-    return True
+    return xml_string
 
 
 
@@ -207,8 +191,6 @@ def __add_models_keyword_iso19115_3(model_endpath, text, encoding):
 if __name__ == "__main__":
     metadata_url = "https://catalog.sarig.sa.gov.au/geonetwork/srv/api/records/9c6ae754-291d-4100-afd9-478c3a9ddf42/formatters/xml"
 
-    model_endpath ='ngawler'
-    print(f"Converting: {model_endpath}")
     # Read XML from URL
     try:
         metadata = requests.get(metadata_url)
@@ -219,4 +201,4 @@ if __name__ == "__main__":
         encoding = metadata.encoding
     else:
         encoding = 'utf-8'
-    __add_models_keyword_iso19115_3(model_endpath, metadata.text, encoding)
+    __add_models_keyword_iso19115_3(metadata.text, encoding)

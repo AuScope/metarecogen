@@ -131,12 +131,13 @@ class ISO19139Extractor(Extractor):
         byte_result = etree.tostring(result, pretty_print=True)
         if byte_result is not None:
             str_result = byte_result.decode('utf-8')
+
             # Add '3D Geological Models' keyword and write to disk
-            add_models_keyword(model_endpath, str_result, 'utf-8', 'ISO19139')
-            ## write to disk
-            #with open(f"{model_endpath}.xml", 'w') as ff:
-            #    ff.write(str_result)
-            #print(f'{str_result=}')
+            xml_string = add_models_keyword(str_result, 'utf-8', 'ISO19139')
+
+            # Write to disk
+            with open(os.path.join(OUTPUT_DIR, f"{model_endpath}.xml"), 'w') as ff:
+                ff.write(xml_string)
             return True
         return False
 

@@ -72,11 +72,6 @@ def oaipmh_convert(param_list):
         oe.write_record(**params)
 
 if __name__ == "__main__":
-    # Get the geomodels json config files, temporary rough method, assumes git is installed
-    # TODO: Use a python API
-    if not os.path.exists("geomodelportal"):
-        os.system("git clone https://github.com/AuScope/geomodelportal.git")
-
     # Get cooordinates from geomodels JSON config
     coord_dict = get_model_info()
 
