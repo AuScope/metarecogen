@@ -1,14 +1,8 @@
 #!/usr/bin/env python3
 
-import io
-import sys
 import os
 import glob
 import re
-
-import yake
-import spacy
-import pytextrank
 
 from semantic_text_splitter import TextSplitter
 
@@ -73,8 +67,6 @@ def get_summary(filename, cutoff):
         txt_filename = os.path.basename(filename).split('.')[0] + ".txt"
         with open(os.path.join(OUTPUT_DIR, txt_filename), 'w') as fd:
             fd.write(pdf_text)
-    #print(f"get_summary(): {filename=}")
-    #print(f"{len(pdf_text)=}")
     if USE_CLAUDE:
         summary = run_claude(pdf_text)
         return summary

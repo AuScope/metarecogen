@@ -2,12 +2,7 @@
 
 import os
 import sys
-import requests
-import json
-from pathlib import Path
 import datetime
-import geojson
-from datetime import date
 
 # NB: If you import from 'iso_19115_1' you get MD_MetaData, 'iso_19115_2' will give you instrument MI_Metadata
 from bas_metadata_library.standards.iso_19115_1 import MetadataRecordConfigV2, MetadataRecord
@@ -18,6 +13,7 @@ from keywords import get_keywords
 from summary import get_summary
 from add_links import add_model_link
 from add_coords import add_coords
+from constants import OUTPUT_DIR
 
 class PDFExtractor(Extractor):
     """ Creates an ISO 19115 XML file by reading a PDF file
