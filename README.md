@@ -44,5 +44,8 @@ The framework is configured via the [config.py](src/config.py) file. Its format 
 
 ## Testing
 
-Only small isolated unit tests so far
+A few basic unit tests via pytest, more to come.
+```
+pytest tests/test.py
+```
 
