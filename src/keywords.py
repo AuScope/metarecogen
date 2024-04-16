@@ -6,8 +6,6 @@ import sqlite3
 from contextlib import closing
 
 import yake
-import spacy
-import pytextrank
 
 from pdf_helper import parse_pdf
 
@@ -52,23 +50,6 @@ def run_yake(kw_lookup, text):
         kw_set = set([kw[0] for kw in keywords])
     return kw_set
 
-def run_textrank(text):
-    """
-    Runs textrank - not used
-    """
-    # load a spaCy model, depending on language, scale, etc.
-    nlp = spacy.load("en_core_web_sm")
-
-    # add PyTextRank to the spaCy pipeline
-    nlp.add_pipe("textrank")
-    doc = nlp(text)
-
-    # examine the top-ranked phrases in the document
-    for phrase in doc._.phrases[:40]:
-        print(phrase.text)
-        print(phrase.rank, phrase.count)
-        print(phrase.chunks)
-        print()
 
 """
 This is the format of the USGS Vocab table in the SQLITE DB:
@@ -152,7 +133,6 @@ if __name__ == "__main__":
         yake_kwset = run_yake(kw_dict, text)
         print(f"{file}: usgs+yake: {yake_kwset}")
     
-        #run_textrank(text)
         #usgs_kwset = run_usgs(kw_dict, text)
         #print("pure usgs:", usgs_kwset)
 
