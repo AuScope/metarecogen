@@ -1,10 +1,12 @@
 #!/usr/bin/env python3
 
 import sys
+import os
 import requests
 from lxml import etree
 
 from extractor import Extractor
+from constants import OUTPUT_DIR
 from add_model_keyw import add_models_keyword
 
 class ISO19139Extractor(Extractor):

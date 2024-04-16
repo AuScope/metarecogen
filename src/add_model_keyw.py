@@ -184,21 +184,3 @@ def __add_models_keyword_iso19115_3(text, encoding):
     root = insert(root, insert_txt, insertpoint_xpath_list, ns)
     xml_string = etree.tostring(root, pretty_print=True).decode("utf-8")
     return xml_string
-
-
-
-# Used for testing only
-if __name__ == "__main__":
-    metadata_url = "https://catalog.sarig.sa.gov.au/geonetwork/srv/api/records/9c6ae754-291d-4100-afd9-478c3a9ddf42/formatters/xml"
-
-    # Read XML from URL
-    try:
-        metadata = requests.get(metadata_url)
-    except Exception as e:
-        print(f"Cannot retrieve URL {metadata_url}\n", e)
-        sys.exit(1)
-    if metadata.encoding is not None:
-        encoding = metadata.encoding
-    else:
-        encoding = 'utf-8'
-    __add_models_keyword_iso19115_3(metadata.text, encoding)
