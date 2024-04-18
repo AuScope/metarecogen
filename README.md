@@ -26,37 +26,50 @@ pdm install
 ```
 
 NB: AuScope 'geomodelportal' repository is included in the git clone as a submodule.
-This allows the scripts to copy some model data (e.g. coordinates) for inclusion in the metadata record
+This allows the scripts to copy some model data (i.e. geospatial coordinates) for inclusion in the metadata record
 
-## Metadata fields output
+## Input and Output Details
 
-**Table of supported fields for each source type**
+**Table of fields output for each source type**
 
-| Field             | PDF | CKAN | ISO19115-3 | ISO19139 | OAI-PMH  |
-| ------------------| ----|------|------------|--------- | -------- |
-| Title             | Y   | Y    |   Y        |    Y     |       Y  |
-| Organisation Name | Y   | Y    |   Y        |    Y     |      Y   |
-| Creation Date     | Y   | Y    |   Y        |    Y     |   Y      |
-| Publication Date  |     | Y    |   Y        |    Y     |      Y   |
-| Abstract          | Y   | Y    |   Y        |    Y     |     Y    |
-| Bounding Box      | Y   | Y    |   Y        |    Y     |     Y    |
-| Keywords          | Y   | Y    |   Y        |    Y     |      Y   |
-| License           | Y   | Y    |   Y        |   Y      |    Y     |
-| Maintenance Freq  | Y   | Y    |   Y        |    Y     |      Y   |
-| Lineage           |     | Y    |    Y       |   Y      |      Y   |
+| Field             | PDF | CKAN | ISO 19115-3 | ISO 19139 | OAI-PMH |
+| ------------------| ----|------|-------------|-----------|---------|
+| Title             | Y   | Y    |   Y         |    Y      |     Y   |
+| Abstract          | Y   | Y    |   Y         |    Y      |     Y   |
+| Organisation Name | Y   | Y    |   Y         |    Y      |     Y   |
+| Creation Date     | Y   | Y    |   Y         |    Y      |     Y   |
+| Publication Date  |     | Y    |   Y         |    Y      |     Y   |
+| Spatial Coordinates | Y   | Y    |   Y         |    Y      |     Y   |
+| Keywords          | Y   | Y    |   Y         |    Y      |     Y   |
+| License           | Y   | Y    |   Y         |   Y       |     Y   |
+| Maintenance Freq  | Y   | Y    |   Y         |    Y      |     Y   |
+| Lineage           |     | Y    |    Y        |   Y       |     Y   |
+
+&nbsp;
+
+**Table of output XML**
+
+| Input source | Output ISO XML standard |
+| ------------ | ----------------------- |
+| PDF          |  ISO 19115-3            |
+| CKAN         |  ISO 19115-3            |
+| ISO 19115-3  |  ISO 19115-3            |
+| ISO 19139    |  ISO 19139              |
+| OAI-PMH      |  ISO 19115-3            |
+
 
 ## Run
 
 This project is written in Python and uses PDM <https://github.com/pdm-project/pdm> for its package management. PDM requires python version 3.7 or higher.
 
-This project uses AWS Bedrock to run a Claude LLM and assumes that the correct AWS credentials have been set up.
+To generate metadata from PDF file, this project uses AWS Bedrock to run a Claude LLM and assumes that the correct AWS credentials have been set up in the user's environment.
 
 ```
 cd src
 eval $(pdm venv activate)
 ./process.py
 ```
-XML files are written to 'ouput' directory
+XML files are written to 'output' directory (defined in [constants.py](src/constants.py))
 
 ## Configuration
 
@@ -64,8 +77,9 @@ The framework is configured via the [config.py](src/config.py) file. Its format 
 
 ## Testing
 
-A few basic unit tests via pytest, more to come.
+There are a few basic unit tests in [tests](tests), run via using pytest
 ```
 pytest tests/test.py
 ```
+More to come.
 
