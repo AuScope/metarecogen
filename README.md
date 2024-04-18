@@ -2,15 +2,18 @@
 
 [![pdm-managed](https://img.shields.io/badge/pdm-managed-blueviolet)](https://pdm.fming.dev)
 
-This is a basic framework of Python scripts that generate ISO 19115 geospatial metadata records (ISO19139 and ISO19115-3 XML). It is used for describing geological models from the AuScope 3D Geological Models website <https://geomodels.auscope.org.au>, but could be adapted for other kinds of metadata
+This is a basic framework of Python scripts that generate ISO 19115 geospatial metadata records (ISO 19139 and ISO 19115-3 XML). It is used for describing geological models from the AuScope 3D Geological Models website <https://geomodels.auscope.org.au>, but could be adapted for other kinds of metadata
 
 The framework is capable of generating metadata records from these sources:  
 
 1. [CKAN](https://ckan.org/) API 
 2. PDF geoscience report files
-3. ISO19115-3 XML (e.g. [geonetwork](https://geonetwork-opensource.org/))
-4. ISO19139 XML (e.g. [geonetwork](https://geonetwork-opensource.org/))
+3. ISO 19115-3 XML (e.g. [geonetwork](https://geonetwork-opensource.org/))
+4. ISO 19139 XML (e.g. [geonetwork](https://geonetwork-opensource.org/))
 5. OAI-PMH (e.g. [dSpace](https://dspace.lyrasis.org/))
+
+For ISO 19115-3 and ISO 19139 the framework does little more than customisation of the XML records.
+For the other sources XML is generated from scratch.
 
 ## Initialise
 
@@ -29,18 +32,18 @@ This allows the scripts to copy some model data (e.g. coordinates) for inclusion
 
 **Table of supported fields for each source type**
 
-| Field             | PDF | CKAN | ISO19115-3 | ISO19139 | OAI-PMH |
+| Field             | PDF | CKAN | ISO19115-3 | ISO19139 | OAI-PMH  |
 | ------------------| ----|------|------------|--------- | -------- |
-| Title             | Y   | Y    |   Y         |    Y    |       Y  |
-| Organisation Name | Y   | Y    |   Y         |    Y    |      Y   |
-| Creation Date     | Y   | Y    |   Y         |    Y    |   Y      |
-| Publication Date  |     | Y    |   Y         |    Y    |      Y   |
-| Abstract          | Y   | Y    |   Y         |    Y    |     Y    |
-| Bounding Box      | Y   | Y    |   Y         |    Y    |     Y    |
-| Keywords          | Y   | Y    |   Y         |    Y    |      Y   |
-| License           | Y   | Y    |   Y          |   Y    |    Y     |
-| Maintenance Freq  | Y   | Y    |   Y         |    Y    |      Y   |
-| Lineage           |     | Y    |    Y        |   Y     |      Y   |
+| Title             | Y   | Y    |   Y        |    Y     |       Y  |
+| Organisation Name | Y   | Y    |   Y        |    Y     |      Y   |
+| Creation Date     | Y   | Y    |   Y        |    Y     |   Y      |
+| Publication Date  |     | Y    |   Y        |    Y     |      Y   |
+| Abstract          | Y   | Y    |   Y        |    Y     |     Y    |
+| Bounding Box      | Y   | Y    |   Y        |    Y     |     Y    |
+| Keywords          | Y   | Y    |   Y        |    Y     |      Y   |
+| License           | Y   | Y    |   Y        |   Y      |    Y     |
+| Maintenance Freq  | Y   | Y    |   Y        |    Y     |      Y   |
+| Lineage           |     | Y    |    Y       |   Y      |      Y   |
 
 ## Run
 
