@@ -7,7 +7,7 @@ This is a basic framework of Python scripts that generate ISO 19115 geospatial m
 The framework is capable of generating metadata records from these sources:  
 
 1. [CKAN](https://ckan.org/) API 
-2. PDF report files
+2. PDF geoscience report files
 3. ISO19115-3 XML (e.g. [geonetwork](https://geonetwork-opensource.org/))
 4. ISO19139 XML (e.g. [geonetwork](https://geonetwork-opensource.org/))
 5. OAI-PMH (e.g. [dSpace](https://dspace.lyrasis.org/))
@@ -23,7 +23,24 @@ pdm install
 ```
 
 NB: AuScope 'geomodelportal' repository is included in the git clone as a submodule.
-This allows the scripts to copy some model data (e.g. coordinates) for inclusion in the metadata record 
+This allows the scripts to copy some model data (e.g. coordinates) for inclusion in the metadata record
+
+## Metadata fields output
+
+**Table of supported fields for each source type**
+
+| Field             | PDF | CKAN | ISO19115-3 | ISO19139 | OAI-PMH |
+| ------------------| ----|------|------------|--------- | -------- |
+| Title             | Y   | Y    |   Y         |    Y    |       Y  |
+| Organisation Name | Y   | Y    |   Y         |    Y    |      Y   |
+| Creation Date     | Y   | Y    |   Y         |    Y    |   Y      |
+| Publication Date  |     | Y    |   Y         |    Y    |      Y   |
+| Abstract          | Y   | Y    |   Y         |    Y    |     Y    |
+| Bounding Box      | Y   | Y    |   Y         |    Y    |     Y    |
+| Keywords          | Y   | Y    |   Y         |    Y    |      Y   |
+| License           | Y   | Y    |   Y          |   Y    |    Y     |
+| Maintenance Freq  | Y   | Y    |   Y         |    Y    |      Y   |
+| Lineage           |     | Y    |    Y        |   Y     |      Y   |
 
 ## Run
 
