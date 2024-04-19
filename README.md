@@ -34,17 +34,21 @@ This allows the scripts to copy some model data (i.e. geospatial coordinates) fo
 
 | Field             | PDF | CKAN | ISO 19115-3 | ISO 19139 | OAI-PMH |
 | ------------------| ----|------|-------------|-----------|---------|
+| Id                |     | Y    |   Y         |    Y      |     Y   |
 | Title             | Y   | Y    |   Y         |    Y      |     Y   |
 | Abstract          | Y   | Y    |   Y         |    Y      |     Y   |
 | Organisation Name | Y   | Y    |   Y         |    Y      |     Y   |
 | Creation Date     | Y   | Y    |   Y         |    Y      |     Y   |
 | Publication Date  |     | Y    |   Y         |    Y      |     Y   |
-| Spatial Coordinates | Y   | Y    |   Y         |    Y      |     Y   |
-| Keywords          | Y   | Y    |   Y         |    Y      |     Y   |
+| Spatial Coordinates | Y   | Y    |   Y         |    Y      |    Y   |
+| Custom keywords   | Y   |      |     Y     |     Y     |      Y   |
+| Fixed Keywords    | Y   | Y    |   Y         |    Y      |     Y   |
 | License           | Y   | Y    |   Y         |   Y       |     Y   |
 | Maintenance Freq  | Y   | Y    |   Y         |    Y      |     Y   |
-| Lineage           |     | Y    |    Y        |   Y       |     Y   |
+| Lineage           | Y   | Y    |    Y        |   Y       |     Y   |
 
+&nbsp;
+NB: 'Fixed keywords' do not vary from record to record, 'Custom keywords' are tailored to each record
 &nbsp;
 
 **Table of output XML**
