@@ -1,17 +1,15 @@
 #!/usr/bin/env python3
 
 import os
-import glob
-import re
 
-from semantic_text_splitter import TextSplitter
+# from semantic_text_splitter import TextSplitter
 
 from bedrock_summary import run_claude
 
 from pdf_helper import parse_pdf
 from constants import OUTPUT_DIR
 
-#os.environ['PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION'] = 'python'
+# os.environ['PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION'] = 'python'
 
 OUTPUT_PDF_TXT = False
 

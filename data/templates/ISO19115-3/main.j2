@@ -129,6 +129,18 @@
           </gex:geographicElement>
         </gex:EX_Extent>
       </mri:extent>
+      {% for kw in record['identification']['keywords']['default']['keywords']['en'] %}
+      <mri:descriptiveKeywords>
+        <mri:MD_Keywords>
+          <mri:keyword>
+            <gco:CharacterString>{{ kw }}</gco:CharacterString>
+          </mri:keyword>
+        <mri:type>
+            <mri:MD_KeywordTypeCode codeList="http://standards.iso.org/iso/19115/resources/Codelists/cat/codelists.xml#MD_KeywordTypeCode" codeListValue="theme" />
+        </mri:type>
+        </mri:MD_Keywords>
+      </mri:descriptiveKeywords>
+      {% endfor %}
       <mri:descriptiveKeywords>
         <mri:MD_Keywords>
           <mri:keyword>
@@ -205,5 +217,26 @@
       </mrd:transferOptions>
     </mrd:MD_Distribution>
   </mdb:distributionInfo>
+  <mdb:resourceLineage>
+    <mrl:LI_Lineage>
+      <mrl:statement>
+        <gco:CharacterString>{{ record['dataquality']['lineage']['statement'] }}</gco:CharacterString>
+      </mrl:statement>
+      <mrl:scope>
+        <mcc:MD_Scope>
+          <mcc:level>
+            <mcc:MD_ScopeCode codeList="codeListLocation#MD_ScopeCode" codeListValue="service"/>
+          </mcc:level>
+          <mcc:levelDescription>
+            <mcc:MD_ScopeDescription>
+              <mcc:other>
+                <gco:CharacterString>Web Service</gco:CharacterString>
+              </mcc:other>
+            </mcc:MD_ScopeDescription>
+          </mcc:levelDescription>
+        </mcc:MD_Scope>
+      </mrl:scope>
+    </mrl:LI_Lineage>
+  </mdb:resourceLineage>
 </mdb:MD_Metadata>
 

@@ -4,8 +4,7 @@ import os
 import sys
 import datetime
 
-# NB: If you import from 'iso_19115_1' you get MD_MetaData, 'iso_19115_2' will give you instrument MI_Metadata
-from bas_metadata_library.standards.iso_19115_1 import MetadataRecordConfigV2, MetadataRecord
+from pygeometa.core import render_j2_template
 from pdf_helper import parse_pdf
 
 from extractor import Extractor
@@ -19,67 +18,9 @@ class PDFExtractor(Extractor):
     """ Creates an ISO 19115 XML file by reading a PDF file
     """
 
-    def get_record_config(self, keywords, summary, organisation, title, bbox, model_endpath):
-        """
-        :param keywords: keywords as a list of strings
-        :param summary: summarry string
-        :param organisation: organisation string
-        :param title: title string
-        :param bbox: 2D coordinate bounding box as a dict, keys are 'west' 'east' 'south' 'north', values are strings
-        :param model_endpath: path to model in geomodels website (used to extract metadata)
-
-        Creates a dict suitable for creating a metadata record using BAS metadata library
-        """
-        now = datetime.datetime.now()
-        current_date = datetime.date(year=now.year, month=now.month, day=now.day)
-        keyw_terms = [{"term": keyw} for keyw in keywords]
-        record_config = {
-            "hierarchy_level": "dataset",
-            "metadata": {
-                "language": "eng",
-                "character_set": "utf-8",
-                "contacts": [{"organisation": {"name": organisation}, "role": ["pointOfContact"]}],
-                "date_stamp": current_date,
-            },
-            "identification": {
-                "title": {"value": title},
-                "dates": {"creation": {"date": current_date, "date_precision": "year"}},
-                "abstract": summary,
-                "character_set": "utf-8",
-                "language": "eng",
-                "topics": ['geoscientificInformation'],
-                # NB: bas-metadata-library does not appear to output bboxes
-                "extent": {
-                    "geographic": {
-                        "bounding_box": {
-                            "west_longitude": bbox['west'],
-                            "east_longitude": bbox['east'],
-                            "south_latitude": bbox['south'],
-                            "north_latitude": bbox['north'],
-                        }
-                    }
-                },
-                "status": "completed",
-                "maintenance": {"maintenance_frequency": "asNeeded", "progress": "completed"},
-                "keywords": [{"terms": keyw_terms, "type": "theme"},
-                    {"terms": [{"term":"Auscope 3D Geological Models"}], "type": "theme"}],
-                "constraints": [
-                    {
-                        "type": "usage",
-                        "restriction_code": "license",
-                        "statement": "Creative Commons Attribution 4.0 International Licence",
-                        "href": "http://creativecommons.org/licenses/"
-                    }
-                ],
-            },
-        }
-        return record_config
-
-
-
-    def write_record(self, name, model_endpath, pdf_file, organisation, title, bbox, cutoff, pdf_url=None):
+    def write_record(self, name, model_endpath, pdf_file, pdf_url, organisation, title, bbox, cutoff, output_file):
         print(f"Converting: {model_endpath}")
-        #print("bbox=", repr(bbox))
+        print("bbox=", repr(bbox))
         if not os.path.exists(pdf_file):
             print(f"{pdf_file} does not exist")
             sys.exit(1)
@@ -87,21 +28,115 @@ class PDFExtractor(Extractor):
         pdf_text = parse_pdf(pdf_file, False)
         kwset = get_keywords(pdf_text)
         summary = get_summary(pdf_file, cutoff)
-        # Create config for BAS metadata library
-        record_config = self.get_record_config(list(kwset), summary, organisation, title, bbox, model_endpath)
-        configuration = MetadataRecordConfigV2(**record_config)
-        record = MetadataRecord(configuration=configuration)
-        # Generate XML
-        document = record.generate_xml_document()
+        now = datetime.datetime.now()
+        date_str = now.strftime("%d/%m/%Y")
+        keywords = list(kwset)
+        bbox_list = [str(bbox['west']), str(bbox['east']), str(bbox['south']), str(bbox['north'])]
 
-        # BAS metadata library does not output BBOX coords nor URL links so I have to do it manually
-        xml_txt = add_coords(bbox, document.decode(), 'utf-8', 'ISO19139')
+        # Assemble dict for jinja template
+        mcf_dict = {
+            "mcf": {
+                "version": 1.0
+            },
+            "metadata": {
+                "identifier": "",
+                "language": "en",
+                "charset": "utf8",
+                "parentidentifier": "",
+                "hierarchylevel": "dataset",
+                "datestamp": date_str,
+                "dataseturi": "",
+                "model_endpath": model_endpath
+            },
+            "spatial": {
+                "datatype": "tin",
+                "geomtype": "composite"
+            },
+            "identification": {
+                "language": "eng; AUS",
+                "charset": "utf8",
+                "title": {
+                    "en": title,
+                },
+                "abstract": {
+                    "en": summary,
+                },
+                "dates": {
+                    "creation": date_str,
+                    "publication": date_str
+                },
+                "keywords": {
+                    "default": {
+                        "keywords": {
+                            "en": keywords
+                        }
+                    }
+                },
+                "topiccategory": [
+                    "geoscientificInformation"
+                ],
+                "extents": {
+                    "spatial": [
+                        {
+                            "bbox": bbox_list,
+                            "crs": "4326"
+                        }
+                    ]
+                },
+                "fees": "None",
+                "accessconstraints": "license",
+                "rights": {
+                    "en": "CC BY 4.0",
+                },
+                "url": "https://creativecommons.org/licenses/by/4.0/",
+                "status": "completed",
+                "maintenancefrequency": "continual"
+            },
+            "contact": {
+                "distributor": {
+                    "organization": organisation
+                }
+            },
+            "distribution": [
+                {
+                    "url": pdf_url,
+                    "type": "WWW:LINK",
+                    "rel": "service",
+                    "name": {
+                        "en": name,
+                    },
+                    "description": {
+                        "en": "3D Model Report",
+                    },
+                    "function": "download"
+                },
+                {
+                    "url": f"http://geomodels.auscope.org.au/model/{model_endpath}",
+                    "type": "WWW:LINK",
+                    "rel": "service",
+                    "name": {
+                        "en": "3D Geological model website",
+                    },
+                    "description": {
+                        "en": "3D Geological model website",
+                    },
+                    "function": "website"
+                }
+            ],
+            "dataquality": {
+                "scope": {
+                    "level": "dataset"
+                },
+                "lineage": {
+                    "statement": f"This metadata record was reproduced from PDF report retrieved from {pdf_url} on {datetime.datetime.now():%d %b %Y}"
+                }
+            }
+        }
 
-        # This adds geomodels keyword
-        xml_string = add_model_link(model_endpath, xml_txt)
+        xml_string = render_j2_template(mcf_dict, template_dir='../data/templates/ISO19115-3')
 
         # write to disk
-        with open(os.path.join(OUTPUT_DIR, f"{model_endpath}.xml"), 'w') as ff:
+        with open(os.path.join(OUTPUT_DIR, output_file), 'w') as ff:
             ff.write(xml_string)
 
 

@@ -14,7 +14,7 @@ class ISO19139Extractor(Extractor):
         Outputs ISO 19139 XML to file
     """
 
-    def write_record(self, name, bbox, model_endpath, metadata_url):
+    def write_record(self, name, bbox, model_endpath, metadata_url, output_file):
         """
         Reads ISO 19139 from a source adds extra fields and outputs XML to file
 
@@ -22,6 +22,7 @@ class ISO19139Extractor(Extractor):
         :param bbox: 2D bounding box. This parameter is not used, we use records' coords instead
         :param model_endpath: model path
         :param metadara_url: URL of metadata record
+        :param output_file: name of output file e.g. 'blah.xml'
         :returns: boolean
         """
         print(f"Converting: {model_endpath}")
@@ -138,7 +139,7 @@ class ISO19139Extractor(Extractor):
             xml_string = add_models_keyword(str_result, 'utf-8', 'ISO19139')
 
             # Write to disk
-            with open(os.path.join(OUTPUT_DIR, f"{model_endpath}.xml"), 'w') as ff:
+            with open(os.path.join(OUTPUT_DIR, output_file), 'w') as ff:
                 ff.write(xml_string)
             return True
         return False
@@ -151,7 +152,7 @@ if __name__ == "__main__":
  ("mcarthur", "http://www.ntlis.nt.gov.au/metadata/export_data?type=xml&metadata_id=1080195AEBC6A054E050CD9B214436A1"),
  ("windimurra", "https://warsydprdstadasc.blob.core.windows.net/downloads/Metadata_Statements/XML/3D_Windimurra_2015.xml"),
  ("sandstone", "https://warsydprdstadasc.blob.core.windows.net/downloads/Metadata_Statements/XML/3D_Sandstone_2015.xml")
-                    ]
+    ]
     ce = ISO19139Extractor()
     for name, url in metadata_urls:
-        ce.write_record(name, url)
+        ce.write_record(name, {'north': '0.0', 'south': '-45', 'east': '-145', 'west':'-100'}, name, url, f"test_19139_{name}.xml")

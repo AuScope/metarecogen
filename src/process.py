@@ -84,7 +84,7 @@ if __name__ == "__main__":
             sys.exit(1)
 
     # Loop over datasets and process each one
-    for k,v in CONFIG.items():
+    for k, v in CONFIG.items():
         if v['method'] is None:
             continue
         param_list = v['params']

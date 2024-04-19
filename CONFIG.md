@@ -21,22 +21,25 @@ where:
 
 **'\<params>'** are detailed in the sections below
 
+NB: These parameters are reflected in the 'write_record' function for each kind of 'Extractor' class
 
 ### Parameters for 'PDF' method
 
-This method uses a PDF report file as a source of metadata
+This method uses a PDF report file as a source of metadata, all parameters are mandatory
 
 **name** - model name
 
-**model_endpath** - path in geomodels website, used to gather additional metadata
+**model_endpath** - part of the URL of this model in geomodels website, used to output path to model in metadata
 
 **pdf_file** - path to PDF file
+
+**pdf_url**  - URL to PDF file
 
 **organisation** - name of organisation
 
 **title** - title of metadata record
 
-**cutoff** - tolerance for non-text in the PDF file set to between 1000 and 3000
+**cutoff** - tolerance for non-text in the PDF file, used to exclude pages with a small amount of valid text, set to between 1000 and 3000
 
 
 ### Parameters for 'CKAN' method
@@ -45,7 +48,7 @@ This method uses a record in a CKAN repository as a source of metadata
 
 **name** - model name
 
-**model_endpath** - path in geomodels website, used to gather additional metadata
+**model_endpath** - part of the URL of this model in geomodels website, used to output path to model in metadata
 
 **ckan_url** - URL of CKAN website e.g. 'https://demo.ckan.org'
 
@@ -58,7 +61,7 @@ This method uses an ISO19115-3 XML record as a source of metadata fetched from a
 
 **name** - model name
 
-**model_endpath** - path in geomodels website, used to gather additional metadata
+**model_endpath** - part of the URL of this model in geomodels website, used to output path to model in metadata
 
 **metadata_url** - URL of ISO19115-3 XML metadata record
 
@@ -68,7 +71,7 @@ This method uses an ISO19139 XML record as a source of metadata fetched from a w
 
 **name** - model name
 
-**model_endpath** - path in geomodels website, used to gather additional metadata
+**model_endpath** - part of the URL of this model in geomodels website, used to output path to model in metadata
 
 **metadata_url** - URL of ISO19139 XML metadata record
 
@@ -78,12 +81,12 @@ This method queries a method from an OAI-PMH web service as a source of metadata
 
 **name** - model name
 
-**model_endpath** - path in geomodels website, used to gather additional metadata
+**model_endpath** - part of the URL of this model in geomodels website, used to output path to model in metadata
 
-**oai_id** - OAI-PMH id string
+**oai_id** - OAI-PMH id string e.g. 'oai:eprints.rclis.org:4088'
 
-**oai_prefix** - OAI-PMH prefix string
+**oai_prefix** - OAI-PMH prefix string e.g. 'oai_dc'
 
-**service_name** - OAI-PMH service name
+**service_name** - A general name for this OAI-PMH service
 
 
