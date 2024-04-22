@@ -2,6 +2,7 @@
 
 import glob
 import sys
+import os
 import sqlite3
 from contextlib import closing
 
@@ -68,7 +69,8 @@ def extract_db_terms():
     name_dict = {}
     link_dict = {}
     # Connect to USGS Thesaurus DB (https://apps.usgs.gov/thesaurus/)
-    with closing(sqlite3.connect("../db/thesauri.db")) as con:
+    db_file = os.path.join(os.path.dirname(__file__), '../db/thesauri.db')
+    with closing(sqlite3.connect(db_file)) as con:
         with closing(con.cursor()) as cur:
             for row in cur.execute("SELECT code, name, parent FROM term"):
                 # print(row)
@@ -112,27 +114,9 @@ def get_keywords(text):
     Extracts keywords from text
 
     :param text: text
-    :returns: 
+    :returns: set of geoscience keywords
     """
+    # Creates lookup table using USGS Thesaurus
     kw_dict = extract_db_terms()
- 
-    yake_kwset = run_yake(kw_dict, text)
-
-    return yake_kwset
-
-
-# Used for testing only
-if __name__ == "__main__":
-    kw_dict = extract_db_terms()
-    for file in ['G107513_OtwayBasin_3D_notes.pdf',
-                 # 'G161893_VGP_TR35_3D-Geological-framework-Otway_low-res.pdf', 
-                 #'G35615_3DVIC1_pt1.pdf'
-                 ]:
-        text = parse_pdf(f'../data/reports/vic/{file}', False)
- 
-        yake_kwset = run_yake(kw_dict, text)
-        print(f"{file}: usgs+yake: {yake_kwset}")
-    
-        #usgs_kwset = run_usgs(kw_dict, text)
-        #print("pure usgs:", usgs_kwset)
-
+    # Runs yake and matches yake's keywords with USGS Thesaurus
+    return run_yake(kw_dict, text)

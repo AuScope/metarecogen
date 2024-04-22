@@ -7,7 +7,7 @@ import os
 from bedrock_summary import run_claude
 
 from pdf_helper import parse_pdf
-from constants import OUTPUT_DIR
+from config import OUTPUT_DIR
 
 # os.environ['PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION'] = 'python'
 

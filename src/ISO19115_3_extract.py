@@ -6,7 +6,6 @@ from lxml import etree
 import lxml
 
 from extractor import Extractor
-from constants import OUTPUT_DIR
 
 from add_model_keyw import add_models_keyword
 
@@ -180,16 +179,10 @@ class ISO19115_3Extractor(Extractor):
             xml_string = add_models_keyword(str_result, 'utf-8', 'ISO19115-3')
 
             # Write to disk
-            with open(os.path.join(OUTPUT_DIR, output_file), 'w') as ff:
+            with open(os.path.join(self.output_dir, output_file), 'w') as ff:
                 ff.write(xml_string)
 
             return True
         return False
 
 
-# Used for testing only
-if __name__ == "__main__":
-    url = "https://catalog.sarig.sa.gov.au/geonetwork/srv/api/records/9c6ae754-291d-4100-afd9-478c3a9ddf42/formatters/xml"
-    name = 'ngawler'
-    ce = ISO19115_3Extractor()
-    ce.write_record(name, {'north': '0.0', 'south': '-45', 'east': '-145', 'west':'-100'}, name, url, f"test_19115_3_{name}.xml")

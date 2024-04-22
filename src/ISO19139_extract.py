@@ -6,7 +6,6 @@ import requests
 from lxml import etree
 
 from extractor import Extractor
-from constants import OUTPUT_DIR
 from add_model_keyw import add_models_keyword
 
 class ISO19139Extractor(Extractor):
@@ -139,20 +138,8 @@ class ISO19139Extractor(Extractor):
             xml_string = add_models_keyword(str_result, 'utf-8', 'ISO19139')
 
             # Write to disk
-            with open(os.path.join(OUTPUT_DIR, output_file), 'w') as ff:
+            with open(os.path.join(self.output_dir, output_file), 'w') as ff:
                 ff.write(xml_string)
             return True
         return False
 
-
-# This is used for testing only
-if __name__ == "__main__":
-
-    metadata_urls = [
- ("mcarthur", "http://www.ntlis.nt.gov.au/metadata/export_data?type=xml&metadata_id=1080195AEBC6A054E050CD9B214436A1"),
- ("windimurra", "https://warsydprdstadasc.blob.core.windows.net/downloads/Metadata_Statements/XML/3D_Windimurra_2015.xml"),
- ("sandstone", "https://warsydprdstadasc.blob.core.windows.net/downloads/Metadata_Statements/XML/3D_Sandstone_2015.xml")
-    ]
-    ce = ISO19139Extractor()
-    for name, url in metadata_urls:
-        ce.write_record(name, {'north': '0.0', 'south': '-45', 'east': '-145', 'west':'-100'}, name, url, f"test_19139_{name}.xml")

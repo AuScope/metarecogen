@@ -1,3 +1,4 @@
+import requests
 
 ns_19115_3 =  { 'mdb':"http://standards.iso.org/iso/19115/-3/mdb/2.0",
                 'cat': "http://standards.iso.org/iso/19115/-3/cat/1.0",
@@ -36,5 +37,37 @@ ns_19139 = { 'gmd':"http://www.isotc211.org/2005/gmd",
            'gml':"http://www.opengis.net/gml",
            'gts':"http://www.isotc211.org/2005/gts",
            'xlink':"http://www.w3.org/1999/xlink" }
+
+
+def make_xpath(ns_dict, path_elems):
+    """
+    Makes an xpath with namespaces  given a list of tags
+
+    :param ns_dict: namespace dictionary e.g. { 'cit': 'http://cit.org/1.0', 'dif': 'http://dif.org/2.0' }
+    :param path_elems: list of tags e.g. ['cit:citation', 'dif:differential']
+    :returns: xpath string
+    """
+    path = './/'
+    for ele in path_elems:
+        ns, dot, tag = ele.partition(':')
+        path += f"{{{ns_dict[ns]}}}{tag}/"
+    return path.rstrip('/')
+
+def get_metadata(metadata_url):
+    """
+    Fethes metadata from a URL
+
+    :param metadata_url: metadata URL
+    :returns: metadata, encoding
+    """
+    meta = requests.get(metadata_url)
+    if meta.encoding is not None:
+        encoding = meta.encoding
+    else:
+        encoding = 'utf-8'
+
+    # Read XML from URL
+    return encoding, meta
+
 
 

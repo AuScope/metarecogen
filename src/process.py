@@ -12,8 +12,7 @@ from ISO19139_extract import ISO19139Extractor
 from ISO19115_3_extract import ISO19115_3Extractor
 from pdf_extract import PDFExtractor
 
-from constants import OUTPUT_DIR
-from config import CONFIG
+from config import CONFIG, OUTPUT_DIR
 
 """
 Create ISO19139 or ISO19115-3 XML metadata records from PDF reports or online metadata services

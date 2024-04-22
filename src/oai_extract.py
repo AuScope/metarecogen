@@ -7,14 +7,13 @@ from pygeometa.core import render_j2_template
 from sickle import Sickle
 
 from extractor import Extractor
-from constants import OUTPUT_DIR
 
 
 class OaiExtractor(Extractor):
 
-    def __init__(self, oai_url, output_dir):
+    def __init__(self, oai_url):
+        super().__init__() 
         self.OAI_URL = oai_url
-        self.output_dir = output_dir
 
     def output_xml(self, oai_dict, oai_id, bbox, model_endpath, service_name, output_file):
         """
@@ -128,10 +127,11 @@ class OaiExtractor(Extractor):
             }
         }
 
-        xml_string = render_j2_template(mcf_dict, template_dir='../data/templates/ISO19115-3')
+        template_dir = os.path.join(os.path.dirname(__file__), '../data/templates/ISO19115-3')
+        xml_string = render_j2_template(mcf_dict, template_dir=template_dir)
 
         # write to disk
-        with open(os.path.join(OUTPUT_DIR, output_file), 'w') as ff:
+        with open(os.path.join(self.output_dir, output_file), 'w') as ff:
             ff.write(xml_string)
         return True
 
@@ -141,8 +141,9 @@ class OaiExtractor(Extractor):
         """
         Write an XML record to file using metadata from OAI-PMH service
 
+        :param name: model name
         :param bbox: bounding box dict, keys are 'north' 'south' 'east' 'west', values are decimals as strings, EPSG:4326 is assumed
-        :param model_endpath: path of model in website
+        :param model_endpath: path of model in website, used to create a link to website URL
         :param oai_id: OAI-PMH identifier e.g. 'oai:eprints.rclis.org:4088'
         :param oai_prefix: OAI-PMH prefix e.g. 'oai_dc'
         :param service_name: generic name of OAI-PMH service
@@ -158,21 +159,5 @@ class OaiExtractor(Extractor):
         #for k, v in oai_dict.items():
         #    print(k, '=>', v);
 
-        self.output_xml(oai_dict, oai_id, bbox, model_endpath, service_name, output_file)
-
-if __name__ == "__main__":
-    # Get records from Northern Territory Geological Service
-    # OAI-PMH URL
-    OAI__URL = 'https://geoscience.nt.gov.au/gemis/ntgsoai/request'
-    
-    # GEMIS permanent link of McArthur 3D model
-    MODEL__URL = 'https://geoscience.nt.gov.au/gemis/ntgsjspui/handle/1/81751'
-    oe = OaiExtractor(OAI__URL, 'output')
-    # Convert perm link to OAI-PMH ID
-    handle_id = '/'.join(MODEL__URL.split('/')[-2:])
-    print(handle_id)
-    # NB: Some geological fields that are present in GEMIS website are missing from OAI output with 'oai_dc' prefix,
-    # i.e. "Stratigraphy" The 'xoai' prefix will allow extraction of these missing fields but the XML output
-    # would need to be parsed
-    oe.write_record([154.3, 109.1, -43.9, -10.6], 'mcarthur', 'oai:geoscience.nt.gov.au:'+handle_id, 'oai_dc', "NTGS GEMIS", 'test_oai.xml')
+        return self.output_xml(oai_dict, oai_id, bbox, model_endpath, service_name, output_file)
 

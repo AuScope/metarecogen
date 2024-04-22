@@ -13,7 +13,6 @@ from pygeometa.core import render_j2_template
 
 from extractor import Extractor
 
-from constants import OUTPUT_DIR
 
 class CkanExtractor(Extractor):
     """ Connects to CKAN repository
@@ -143,11 +142,13 @@ class CkanExtractor(Extractor):
             }
         }
 
-        xml_string = render_j2_template(mcf_dict, template_dir='../data/templates/ISO19115-3')
+        template_dir = os.path.join(os.path.dirname(__file__), '../data/templates/ISO19115-3')
+        xml_string = render_j2_template(mcf_dict, template_dir=template_dir)
 
         # write to disk
-        with open(os.path.join(OUTPUT_DIR, output_file), 'w') as ff:
+        with open(os.path.join(self.output_dir, output_file), 'w') as ff:
             ff.write(xml_string)
+        return True
 
 
     def write_record(self, name, bbox, model_endpath, ckan_url, package_id, output_file):
@@ -172,13 +173,5 @@ class CkanExtractor(Extractor):
         except json.JSONDecodeError:
             return False
         if dict['success'] is True:
-            self.output_xml(dict['result'], r.url, model_endpath, output_file)
-            return True
+            return self.output_xml(dict['result'], r.url, model_endpath, output_file)
         return False
-
-
-# Used for testing only
-if __name__ == "__main__":
-    SITE__URL = 'https://geoscience.data.qld.gov.au'
-    ce = CkanExtractor()
-    ce.write_record('Mt Dore', 'mtdore', SITE__URL, 'ds000002', 'test_ckan.xml')

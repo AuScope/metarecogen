@@ -1,37 +1,19 @@
 import requests
 import xml.etree.ElementTree as etree
+from pathlib import Path
+import os
 
 from add_coords import add_coords
 from add_links import add_model_link
 from add_model_keyw import add_models_keyword
-from namespaces import ns_19115_3, ns_19139
+from helpers import ns_19115_3, ns_19139, get_metadata, make_xpath
+from keywords import extract_db_terms, run_yake
+from pdf_helper import parse_pdf
 
 ISO19139_URL = "http://52.65.91.200/geonetwork/srv/api/records/97ed8560c193e0c1855445cec4e812d4c59654ff/formatters/xml"
 ISO19115_3_URL = "https://catalog.sarig.sa.gov.au/geonetwork/srv/api/records/9c6ae754-291d-4100-afd9-478c3a9ddf42/formatters/xml"
 
-def make_xpath(ns_dict, path_elems):
-    """
-    Makes an xpath with namespaces  given a list of tags
-
-    :param ns_dict: namespace dictionary e.g. { 'cit': 'http://cit.org/1.0', 'dif': 'http://dif.org/2.0' }
-    :param path_elems: list of tags e.g. ['cit:citation', 'dif:differential']
-    :returns: xpath string
-    """
-    path = './/'
-    for ele in path_elems:
-        ns, dot, tag = ele.partition(':')
-        path += f"{{{ns_dict[ns]}}}{tag}/"
-    return path.rstrip('/')
-
-def get_metadata(metadata_url):
-    meta = requests.get(metadata_url)
-    if meta.encoding is not None:
-        encoding = meta.encoding
-    else:
-        encoding = 'utf-8'
-
-    # Read XML from URL
-    return encoding, meta
+DATA_DIR = str(Path(__file__).parent.parent / 'data')
 
 def test_add_coords():
     """
@@ -106,3 +88,12 @@ def test_add_keyw():
     xp = make_xpath(ns_19115_3, keywpath_list)
     xp += f"[.='AuScope 3D Geological Models']"
     assert root.findall(xp, namespaces=ns_19115_3) != []
+
+def test_keywords():
+    kw_dict = extract_db_terms()
+    print(f"{DATA_DIR=}")
+    text = parse_pdf(os.path.join(DATA_DIR, 'reports/vic/G107513_OtwayBasin_3D_notes.pdf'), False)
+    keywords = run_yake(kw_dict, text)
+    assert 'field inventory and monitoring' in keywords
+    assert 'topography' in keywords
+    assert 'Precambrian' in keywords

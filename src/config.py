@@ -1,3 +1,5 @@
+from pathlib import Path
+
 """
 Config for creation of ISO19139 or ISO19115-3 XML metadata records from PDF reports or online metadata services
 (e.g. CKAN, dSpace, geonetwork)
@@ -153,3 +155,6 @@ CONFIG = {
                 ]
         }
 }
+
+# Currently set to root dir
+OUTPUT_DIR = str(Path(__file__).parent / 'output')

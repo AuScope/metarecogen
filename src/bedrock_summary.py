@@ -7,8 +7,6 @@ import glob
 import boto3
 import botocore
 
-from constants import OUTPUT_DIR
-
 """
 Use Claude V2.0 model to summarize text via AWS Bedrock and 'boto3' package
 """

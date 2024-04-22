@@ -12,7 +12,7 @@ from io import BytesIO
 from copy import copy
 from lxml.builder import ElementMaker
 
-from constants import OUTPUT_DIR
+from config import OUTPUT_DIR
 
 """ Adds keywords to ISO 19139 and ISO 19115-3 XML using XPATH insertion
 """
