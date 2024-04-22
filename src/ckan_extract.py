@@ -123,10 +123,10 @@ class CkanExtractor(Extractor):
                     "type": "WWW:LINK",
                     "rel": "service",
                     "name": {
-                        "en": "3D Geological model website",
+                        "en": "AuScope 3D Geoscience model website",
                     },
                     "description": {
-                        "en": "3D Geological model website",
+                        "en": "AuSccope 3D Geoscience model website",
                     },
                     "function": "website"
                 }
