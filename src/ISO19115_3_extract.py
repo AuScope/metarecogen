@@ -44,7 +44,7 @@ class ISO19115_3Extractor(Extractor):
         model_online = f"""<mrd:onLine>
             <cit:CI_OnlineResource>
               <cit:linkage>
-                <gco:CharacterString>http://geomodels.auscope.org/model/mcarthur</gco:CharacterString>
+                <gco:CharacterString>https://geomodels.auscope.org/model/{model_endpath}</gco:CharacterString>
               </cit:linkage>
               <cit:protocol>
                 <gco:CharacterString>WWW:LINK-1.0-http--link</gco:CharacterString>
@@ -161,8 +161,8 @@ class ISO19115_3Extractor(Extractor):
         try:
             doc = etree.fromstring(bytes(metadata.text, encoding), parser=parser)
         except lxml.etree.XMLSyntaxError as xse:
-            print(f"Error in {metadata.text}")
-            sys.exit(0)
+            print(f"Error in {metadata.text}: {xse}")
+            return False
         xslt_tree = etree.XML(xslt)
         # Create XSLT
         transform = etree.XSLT(xslt_tree)

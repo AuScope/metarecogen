@@ -1,14 +1,11 @@
 #!/usr/bin/env python3
 
-import glob
-import sys
 import os
 import sqlite3
 from contextlib import closing
 
 import yake
 
-from pdf_helper import parse_pdf
 
 """
 Uses yake and USGS vocabulary to create geoscience keywords
@@ -81,7 +78,7 @@ def extract_db_terms():
         child = -1
         gchild = -1
         ggchild = -1
-        while parent != 1 and parent != None:
+        while parent != 1 and parent is not None:
             ggchild = gchild
             gchild = child
             child = parent

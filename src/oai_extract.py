@@ -1,6 +1,4 @@
-#!/usr/bin/env python3
 import os
-import sys
 import datetime
 
 from pygeometa.core import render_j2_template

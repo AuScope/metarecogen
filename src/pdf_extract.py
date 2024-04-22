@@ -1,7 +1,4 @@
-#!/usr/bin/env python3
-
 import os
-import sys
 import datetime
 
 from pygeometa.core import render_j2_template
@@ -10,9 +7,6 @@ from pdf_helper import parse_pdf
 from extractor import Extractor
 from keywords import get_keywords
 from summary import get_summary
-from add_links import add_model_link
-from add_coords import add_coords
-from config import OUTPUT_DIR
 
 class PDFExtractor(Extractor):
     """ Creates an ISO 19115 XML file by reading a PDF file
@@ -150,6 +144,6 @@ class PDFExtractor(Extractor):
         xml_string = render_j2_template(mcf_dict, template_dir=template_dir)
 
         # write to disk
-        with open(os.path.join(OUTPUT_DIR, output_file), 'w') as ff:
+        with open(os.path.join(self.output_dir, output_file), 'w') as ff:
             ff.write(xml_string)
         return True

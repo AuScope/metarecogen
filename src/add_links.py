@@ -1,19 +1,6 @@
-#!/usr/bin/env python3
-
-import sys
-import os
-import requests
-import json 
-from pathlib import Path
-import datetime
-import geojson
 from lxml import etree
-from io import BytesIO
-from copy import copy
-from lxml.builder import ElementMaker
 
 from add_model_keyw import insert
-from config import OUTPUT_DIR
 
 
 def add_model_link(model_endpath, text):

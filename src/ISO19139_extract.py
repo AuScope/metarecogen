@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
 
-import sys
 import os
 import requests
 from lxml import etree
@@ -39,7 +38,7 @@ class ISO19139Extractor(Extractor):
         model_online = f"""<gmd:onLine>
                   <gmd:CI_OnlineResource>
                      <gmd:linkage>
-                        <gmd:URL>http://geomodels.auscope.org/model/{model_endpath}</gmd:URL>
+                        <gmd:URL>https://geomodels.auscope.org/model/{model_endpath}</gmd:URL>
                      </gmd:linkage>
                      <gmd:protocol>
                         <gco:CharacterString>WWW:LINK-1.0-http--link</gco:CharacterString>

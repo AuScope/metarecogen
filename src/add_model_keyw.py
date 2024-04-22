@@ -1,18 +1,6 @@
-#!/usr/bin/env python3
-
-import sys
-import os
-import requests
-import json 
-from pathlib import Path
-import datetime
-import geojson
 from lxml import etree
-from io import BytesIO
 from copy import copy
-from lxml.builder import ElementMaker
 
-from config import OUTPUT_DIR
 
 """ Adds keywords to ISO 19139 and ISO 19115-3 XML using XPATH insertion
 """
@@ -103,7 +91,7 @@ def __add_models_keyword_iso19139(text, encoding):
 
     # XML snippet to be inserted into XML record
     # This uses a direct insert, results in messier XML.
-    insert_txt = f"""
+    insert_txt = """
          <gmd:descriptiveKeywords xmlns:gmd="http://www.isotc211.org/2005/gmd" xmlns:gco="http://www.isotc211.org/2005/gco" xmlns:srv="http://www.isotc211.org/2005/srv" xmlns:gmx="http://www.isotc211.org/2005/gmx" xmlns:gts="http://www.isotc211.org/2005/gts" xmlns:gsr="http://www.isotc211.org/2005/gsr" xmlns:gmi="http://www.isotc211.org/2005/gmi" xmlns:gml="http://www.opengis.net/gml/3.2" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.isotc211.org/2005/gmd http://schemas.opengis.net/csw/2.0.2/profiles/apiso/1.0.0/apiso.xsd">
             <gmd:MD_Keywords>
                <gmd:keyword>
@@ -169,7 +157,7 @@ def __add_models_keyword_iso19115_3(text, encoding):
     insertpoint_xpath_list = ['mdb:MD_Metadata', 'mdb:identificationInfo', 'mri:MD_DataIdentification', 'mri:BLAH'] 
 
     # XML snippet to be inserted into XML record
-    insert_txt = f"""<mri:descriptiveKeywords xmlns:mri="http://standards.iso.org/iso/19115/-3/mri/1.0" xmlns:gco="http://standards.iso.org/iso/19115/-3/gco/1.0">
+    insert_txt = """<mri:descriptiveKeywords xmlns:mri="http://standards.iso.org/iso/19115/-3/mri/1.0" xmlns:gco="http://standards.iso.org/iso/19115/-3/gco/1.0">
 <mri:MD_Keywords>
 <mri:keyword>
 <gco:CharacterString>AuScope 3D Geological Models</gco:CharacterString>

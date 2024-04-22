@@ -129,7 +129,7 @@ CONFIG = {
         },
         #
         # NT also has an OAI-PMH interface
-        'nt': { 'method': 'OAIPMH',
+        'nt2': { 'method': 'OAIPMH',
                 'params': [  { 'name': 'McArthur Basin',
                                'model_endpath': 'mcarthur',
                                'oai_id': 'oai:geoscience.nt.gov.au:1/81751',

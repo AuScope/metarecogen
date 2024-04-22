@@ -10,7 +10,7 @@ class Extractor:
         print(f"{OUTPUT_DIR=}")
         try:
             os.mkdir(OUTPUT_DIR)
-        except FileExistsError as fee:
+        except FileExistsError:
             pass
         self.output_dir = OUTPUT_DIR
 

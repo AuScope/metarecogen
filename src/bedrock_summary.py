@@ -1,8 +1,6 @@
 #!/usr/bin/env python3
 import json
-import os
 import sys
-import glob
 
 import boto3
 import botocore
@@ -70,29 +68,3 @@ def run_model(model_name, brt, text):
         **config["params"]
     })
     return body, config['modelId']
-        
-
-"""
-NB: This code is used for testing only
-"""
-if __name__ == "__main__":
-    # List foundation models
-    #boto3_bedrock = boto3.client('bedrock')
-    #print(boto3_bedrock.list_foundation_models())
-
-    # Run claude
-    brt = boto3.client(service_name='bedrock-runtime')
-    for file in glob.glob(os.path.join(OUTPUT_DIR,'*.txt')):
-        print(f"{file=}")
-        file_stats = os.stat(file)
-        file_size = file_stats.st_size
-        print(f"{file_size=}")
-        if file_size > MODELS["claude"]["maxTokens"]:
-            print("SKIP - too big")
-            continue
-        # Read text file
-        with open(os.path.join(file), 'r') as fd:
-            text = fd.read()
-        print(f"{text[:90]=}")
-        summary = run_claude(text)
-        print(f"\nSUMMARY: {summary}")
