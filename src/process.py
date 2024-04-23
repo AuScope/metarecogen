@@ -66,7 +66,7 @@ def oaipmh_convert(param_list):
     Get records from Northern Territory Geological Service
     """
     OAI__URL = 'https://geoscience.nt.gov.au/gemis/ntgsoai/request'
-    oe = OaiExtractor(OAI__URL, 'output')
+    oe = OaiExtractor(OAI__URL)
     for params in param_list:
         oe.write_record(**params)
 
