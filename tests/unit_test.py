@@ -17,7 +17,7 @@ DATA_DIR = str(Path(__file__).parent.parent / 'data')
 
 def test_add_coords():
     """
-    Tests 'add_coords()'
+    Tests 'add_coords()' for ISO 19115-3 XML
     """
     coords = {'north': '-10.0', 'south': '-20.0', 'east': '-30.0', 'west': '-40.0'}
         
@@ -50,10 +50,9 @@ def test_add_coords():
     xp += "[.='-10.0']"
     assert root.findall(xp, namespaces=ns_19115_3) != []
 
-
 def test_add_links():
     """
-    Tests 'add_links()'
+    Tests 'add_links()' for ISO 19139 XML
     """
     # Get XML string
     encoding, metadata = get_metadata(ISO19139_URL)
@@ -68,14 +67,12 @@ def test_add_links():
     modelpath_list = ['gmd:distributionInfo', 'gmd:MD_Distribution', 'gmd:transferOptions',
                    'gmd:MD_DigitalTransferOptions', 'gmd:onLine', 'gmd:CI_OnlineResource', 'gmd:linkage', 'gmd:URL']
     xp = make_xpath(ns_19139, modelpath_list)
-    xp += f"[.='https://geomodels.auscope.org/model/{model_endpath}']"
+    xp += f"[.='https://geomodels.auscope.org.au/model/{model_endpath}']"
     assert root.findall(xp, namespaces=ns_19139) != []
-
-
 
 def test_add_keyw():
     """
-    Tests 'add_models_keyword()"
+    Tests 'add_models_keyword()" for ISO 19115-3 XML
     """
     # Get XML string
     encoding, metadata = get_metadata(ISO19115_3_URL)
@@ -90,8 +87,10 @@ def test_add_keyw():
     assert root.findall(xp, namespaces=ns_19115_3) != []
 
 def test_keywords():
+    """
+    Tests extracting keywords from a PDF file
+    """
     kw_dict = extract_db_terms()
-    print(f"{DATA_DIR=}")
     text = parse_pdf(os.path.join(DATA_DIR, 'reports/vic/G107513_OtwayBasin_3D_notes.pdf'), False)
     keywords = run_yake(kw_dict, text)
     assert 'field inventory and monitoring' in keywords

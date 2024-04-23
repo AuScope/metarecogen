@@ -23,7 +23,7 @@ def add_model_link(model_endpath, text):
     insert_txt = f"""<gmd:onLine xmlns:gmd="http://www.isotc211.org/2005/gmd" xmlns:gco="http://www.isotc211.org/2005/gco">
               <gmd:CI_OnlineResource>
                  <gmd:linkage>
-                    <gmd:URL>https://geomodels.auscope.org/model/{model_endpath}</gmd:URL>
+                    <gmd:URL>https://geomodels.auscope.org.au/model/{model_endpath}</gmd:URL>
                  </gmd:linkage>
                  <gmd:protocol>
                     <gco:CharacterString>WWW:LINK-1.0-http--link</gco:CharacterString>

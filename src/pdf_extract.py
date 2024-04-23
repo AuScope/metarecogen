@@ -118,7 +118,7 @@ class PDFExtractor(Extractor):
                     "function": "download"
                 },
                 {
-                    "url": f"http://geomodels.auscope.org.au/model/{model_endpath}",
+                    "url": f"https://geomodels.auscope.org.au/model/{model_endpath}",
                     "type": "WWW:LINK",
                     "rel": "service",
                     "name": {

@@ -22,7 +22,7 @@ class ISO19115_3Extractor(Extractor):
         Writes out ISO 19115-3 XML from an ISO 19115-3 source
 
         :param name: name of model
-        :param bbox: 2D bounding box. This parameter is not used, we use records' coords instead
+        :param bbox: 2D bounding box. This parameter is not used, we retain the record's coords instead
         :param model_endpath: model path
         :param metadara_url: URL of metadata record
         :param output_file: name of output file e.g. 'blah.xml'
@@ -44,7 +44,7 @@ class ISO19115_3Extractor(Extractor):
         model_online = f"""<mrd:onLine>
             <cit:CI_OnlineResource>
               <cit:linkage>
-                <gco:CharacterString>https://geomodels.auscope.org/model/{model_endpath}</gco:CharacterString>
+                <gco:CharacterString>https://geomodels.auscope.org.au/model/{model_endpath}</gco:CharacterString>
               </cit:linkage>
               <cit:protocol>
                 <gco:CharacterString>WWW:LINK-1.0-http--link</gco:CharacterString>

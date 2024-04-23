@@ -17,7 +17,7 @@ class ISO19139Extractor(Extractor):
         Reads ISO 19139 from a source adds extra fields and outputs XML to file
 
         :param name: name of model
-        :param bbox: 2D bounding box. This parameter is not used, we use records' coords instead
+        :param bbox: 2D bounding box. This parameter is not used, we retain the record's coords instead
         :param model_endpath: model path
         :param metadara_url: URL of metadata record
         :param output_file: name of output file e.g. 'blah.xml'
@@ -38,7 +38,7 @@ class ISO19139Extractor(Extractor):
         model_online = f"""<gmd:onLine>
                   <gmd:CI_OnlineResource>
                      <gmd:linkage>
-                        <gmd:URL>https://geomodels.auscope.org/model/{model_endpath}</gmd:URL>
+                        <gmd:URL>https://geomodels.auscope.org.au/model/{model_endpath}</gmd:URL>
                      </gmd:linkage>
                      <gmd:protocol>
                         <gco:CharacterString>WWW:LINK-1.0-http--link</gco:CharacterString>

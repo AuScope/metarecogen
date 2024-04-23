@@ -114,10 +114,10 @@
           <gex:geographicElement>
             <gex:EX_GeographicBoundingBox>
               <gex:westBoundLongitude>
-                <gco:Decimal>{{ record['identification']['extents']['spatial'][0]['bbox'][1] }}</gco:Decimal>
+                <gco:Decimal>{{ record['identification']['extents']['spatial'][0]['bbox'][0] }}</gco:Decimal>
               </gex:westBoundLongitude>
               <gex:eastBoundLongitude>
-                <gco:Decimal>{{ record['identification']['extents']['spatial'][0]['bbox'][0] }}</gco:Decimal>
+                <gco:Decimal>{{ record['identification']['extents']['spatial'][0]['bbox'][1] }}</gco:Decimal>
               </gex:eastBoundLongitude>
               <gex:southBoundLatitude>
                 <gco:Decimal>{{ record['identification']['extents']['spatial'][0]['bbox'][2] }}</gco:Decimal>
@@ -200,7 +200,7 @@
           <mrd:onLine>
             <cit:CI_OnlineResource>
               <cit:linkage>
-		      <gco:CharacterString>http://geomodels.auscope.org/model/{{ record['metadata']['model_endpath'] }}</gco:CharacterString>
+		      <gco:CharacterString>https://geomodels.auscope.org.au/model/{{ record['metadata']['model_endpath'] }}</gco:CharacterString>
               </cit:linkage>
               <cit:protocol>
                 <gco:CharacterString>WWW:LINK-1.0-http--link</gco:CharacterString>
@@ -209,7 +209,7 @@
                 <gco:CharacterString>3D Geological Model</gco:CharacterString>
               </cit:name>
               <cit:description>
-                <gco:CharacterString>3D Geological Model in AuScope Geomodels Portal</gco:CharacterString>
+                <gco:CharacterString>3D Geological Model in AuScope 3D Geomodels Portal</gco:CharacterString>
               </cit:description>
             </cit:CI_OnlineResource>
           </mrd:onLine>
