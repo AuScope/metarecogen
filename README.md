@@ -81,9 +81,8 @@ The framework is configured via the [config.py](src/config.py) file. Its format 
 
 ## Testing
 
-There are a few basic unit tests in [tests](tests), run via using pytest
+There are very basic tests in [tests](tests), run via using pytest
 ```
-pytest tests/test.py
+pytest
 ```
-More to come.
 
