@@ -1,6 +1,14 @@
 import requests
 from pathlib import Path
 
+"""
+A simple script to:
+    1. Retrieve all public records from a CKAN service
+    2. Insert CKAN records into a Geonetwork service
+
+NB: This requires the 'iso19115' extension to be installed in CKAN
+"""
+
 # Geonetwork username and password:
 username = ''
 password = ''
