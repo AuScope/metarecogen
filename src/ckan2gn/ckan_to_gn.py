@@ -1,21 +1,27 @@
 import requests
 from pathlib import Path
+import os
+import sys
 
 """
 A simple script to:
     1. Retrieve all public records from a CKAN service
     2. Insert CKAN records into a Geonetwork service
 
-NB: This requires the 'iso19115' extension to be installed in CKAN
+This requires the 'iso19115' extension to be installed in CKAN and the following env. vars:
+    1. 'CKAN2GN_GN_USERNAME' geonetwork username for an account that can create records
+    2. 'CKAN2GN_GN_PASSWORD' geonetwork password for an account that can create records
+    3. 'CKAN2GN_GN_URL' geonetork service URL
+    4. 'CKAN2GN_CKAN_URL' CKAN service URL
 """
 
 # Geonetwork username and password:
-username = ''
-password = ''
+GN_USERNAME = os.environ.get('CKAN2GN_GN_USERNAME')
+GN_PASSWORD = os.environ.get('CKAN2GN_GN_PASSWORD')
 
 # Geonetwork and CKAN server URLs
-GN_URL = "http://localhost:8080"
-CKAN_URL = "http://localhost:5000"
+GN_URL = os.environ.get('CKAN2GN_GN_URL')
+CKAN_URL = os.environ.get('CKAN2GN_CKAN_URL')
 
 def get_gn_xsrf_token(session):
     """ Retrieves XSRF token from Geonetwork
@@ -42,7 +48,6 @@ def list_ckan_records():
     url = f'{CKAN_URL}/{url_path}'
     r = session.get(url)
     resp = r.json()
-    # print("resp=", resp)
     if resp['success'] is False:
         return None
     return resp['result']
@@ -58,7 +63,6 @@ def get_ckan_record(package_id):
     url_path =  Path('api') / '3' / 'action' / 'iso19115_package_show'
     url = f'{CKAN_URL}/{url_path}'
     r = session.get(url, params={'format':'xml', 'id':package_id})
-    # print("json:", r.json())
     resp = r.json()
     if resp['success'] is False:
         return None
@@ -97,7 +101,7 @@ def insert_gn_record(session, xsrf_token, xml_string):
     response = session.put(GN_URL + '/geonetwork/srv/api/0.1/records',
                         data=xml_string,
                         params=params,
-                        auth=(username, password),
+                        auth=(GN_USERNAME, GN_PASSWORD),
                         headers=headers
     )
     resp = response.json()
@@ -112,15 +116,24 @@ def insert_gn_record(session, xsrf_token, xml_string):
         
 
 if __name__ == "__main__":
+    # Check env. vars
+    if GN_USERNAME is None or GN_PASSWORD is None or GN_URL is None or CKAN_URL is None:
+        print("Please define the following env. vars:")
+        print("           'CKAN2GN_GN_USERNAME' 'CKAN2GN_GN_PASSWORD' 'CKAN2GN_GN_URL' 'CKAN2GN_CKAN_URL'")
+        sys.exit(1)
+    # Connect to server
     session = requests.Session()
     xsrf = get_gn_xsrf_token(session)
     if xsrf is not None:
+        # Get records from CKAN
         for id in list_ckan_records():
             print(f"Inserting '{id}'")
             xml_string = get_ckan_record(id)
             if xml_string is not None:
+                # Insert GN record
                 insert_gn_record(session, xsrf, xml_string)
             else:
-                print("Could not get record from CKAN")
+                print(f"Could not get record id {id} from CKAN")
+
     
 
