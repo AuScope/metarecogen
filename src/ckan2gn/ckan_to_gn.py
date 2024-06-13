@@ -87,14 +87,8 @@ def insert_gn_record(session, xsrf_token, xml_string):
     # Currently 'uuidProcessing' is set to 'NOTHING' so that records that
     # already exist are rejected by Geonetwork as duplicates
     params = {'metadataType': 'METADATA',
-              'file': 'bucketname',
-              'updateDateStamp': 'true',
-              'recursiveSearch': 'false',
               'publishToAll': 'true',
-              'assignToCatalog': 'false',
               'uuidProcessing': 'NOTHING',  # Available values : GENERATEUUID, NOTHING, OVERWRITE
-              'rejectIfInvalid': 'false',
-              'transformWith': '_none_'
     }
 
     # Send a put request to the endpoint to create record
