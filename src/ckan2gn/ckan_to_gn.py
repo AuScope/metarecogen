@@ -1,5 +1,4 @@
 import requests
-# from pathlib import Path
 import os
 import sys
 
@@ -44,11 +43,12 @@ def list_ckan_records():
     :returns: list of package id strings or None upon error
     """
     session = requests.Session()
-    url_path =  'api/3/action/package_list' # Path('api') / '3' / 'action' / 'package_list'
+    url_path =  'api/3/action/package_list'
     url = f'{CKAN_URL}/{url_path}'
     r = session.get(url)
     resp = r.json()
     if resp['success'] is False:
+        print(f"Package list error: {resp.get('error','')}")
         return None
     return resp['result']
 
@@ -60,11 +60,12 @@ def get_ckan_record(package_id):
     """
     session = requests.Session()
     # Set up CKAN URL
-    url_path =  'api/3/action/iso19115_package_show' #  Path('api') / '3' / 'action' / 'iso19115_package_show'
+    url_path =  'api/3/action/iso19115_package_show'
     url = f'{CKAN_URL}/{url_path}'
     r = session.get(url, params={'format':'xml', 'id':package_id})
     resp = r.json()
     if resp['success'] is False:
+        print(f"Package show error: {resp.get('error','')}")
         return None
     return resp['result']
     
@@ -121,12 +122,15 @@ if __name__ == "__main__":
     if xsrf is not None:
         # Get records from CKAN
         for id in list_ckan_records():
-            print(f"Inserting '{id}'")
+            print(f"\nInserting '{id}'")
             xml_string = get_ckan_record(id)
             if xml_string is not None:
                 # Insert GN record
                 insert_gn_record(session, xsrf, xml_string)
             else:
-                print(f"Could not get record id {id} from CKAN")
+                print(f"Could not get record id '{id}' from CKAN")
+    else:
+        print("Could not find geonetwork XSRF token")
 
     
+
