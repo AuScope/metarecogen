@@ -1,7 +1,7 @@
 # Metadata Record Generator
 
 [![pdm-managed](https://img.shields.io/badge/pdm-managed-blueviolet)](https://pdm.fming.dev)
-[![Coverage Status](./reports/coverage/coverage-badge.svg?dummy=8484744)](./reports/coverage/index.html)
+[![Coverage Status](https://github.com/AuScope/metarecogen/blob/gh-pages/coverage-badge.svg)]()
 
 This is a basic framework of Python scripts that generate ISO 19115 geospatial metadata records (ISO 19139 and ISO 19115-3 XML). It is used for describing geological models from the AuScope 3D Geological Models website <https://geomodels.auscope.org.au>, but could be adapted for other kinds of metadata
 
