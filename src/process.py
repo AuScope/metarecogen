@@ -101,12 +101,16 @@ def process_config(config_val):
         oaipmh_convert(param_list)
 
 
-if __name__ == "__main__":
+def main(sys_argv):
+    """ MAIN MAIN MAIN MAIN MAIN MAIN MAIN MAIN MAIN MAIN MAIN MAIN MAIN MAIN MAIN MAIN MAIN MAIN MAIN MAIN MAIN MAIN !!!
+
+    :param sys_argv: sys.argv from command line, can be overridden for testing purposes
+    """
     parser = argparse.ArgumentParser(description="Metarecogen")
     parser.add_argument('-r', '--record', action='store', help="Specify a record group to generate")
 
     # Parse command line arguments
-    args = parser.parse_args()
+    args = parser.parse_args(sys_argv[1:])
 
     # Create output dir
     if not os.path.exists(OUTPUT_DIR):
@@ -127,3 +131,6 @@ if __name__ == "__main__":
         # Loop over config and process each one
         for k, v in CONFIG.items():
             process_config(v)
+
+if __name__ == "__main__":
+        main(sys.argv)
