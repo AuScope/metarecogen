@@ -71,8 +71,7 @@ To generate metadata from PDF file, this project uses AWS Bedrock to run a Claud
 
 ```
 cd src
-eval $(pdm venv activate)
-./process.py
+pdm run process.py
 ```
 XML files are written to 'output' directory (defined in [constants.py](src/constants.py))
 
