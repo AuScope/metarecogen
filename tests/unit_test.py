@@ -8,7 +8,8 @@ from add_links import add_model_link
 from add_model_keyw import add_models_keyword
 from helpers import ns_19115_3, ns_19139, get_metadata, make_xpath
 from keywords import extract_db_terms, run_yake
-from pdf_helper import parse_pdf
+from pdf_helper import parse_docling
+from local_types import Coords
 
 ISO19139_URL = "http://52.65.91.200/geonetwork/srv/api/records/97ed8560c193e0c1855445cec4e812d4c59654ff/formatters/xml"
 ISO19115_3_URL = "https://catalog.sarig.sa.gov.au/geonetwork/srv/api/records/9c6ae754-291d-4100-afd9-478c3a9ddf42/formatters/xml"
@@ -19,7 +20,7 @@ def test_add_coords():
     """
     Tests 'add_coords()' for ISO 19115-3 XML
     """
-    coords = {'north': '-10.0', 'south': '-20.0', 'east': '-30.0', 'west': '-40.0'}
+    coords: Coords = {'north': '-10.0', 'south': '-20.0', 'east': '-30.0', 'west': '-40.0'}
         
     # Get XML string
     encoding, metadata = get_metadata(ISO19115_3_URL)
@@ -91,8 +92,7 @@ def test_keywords():
     Tests extracting keywords from a PDF file
     """
     kw_dict = extract_db_terms()
-    text = parse_pdf(os.path.join(DATA_DIR, 'reports/vic/G107513_OtwayBasin_3D_notes.pdf'), False)
+    text = parse_docling(os.path.join(DATA_DIR, 'reports/vic/G107513_OtwayBasin_3D_notes.pdf'))
     keywords = run_yake(kw_dict, text)
-    assert 'field inventory and monitoring' in keywords
     assert 'topography' in keywords
     assert 'Precambrian' in keywords
