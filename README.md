@@ -83,6 +83,7 @@ The framework is configured via the [config.py](src/config.py) file. Its format 
 
 There are very basic tests in [tests](tests), run via using pytest
 ```
-pytest
+cd tests
+pdm run pytest
 ```
 
