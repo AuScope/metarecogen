@@ -2,7 +2,7 @@ import os
 import datetime
 
 from pygeometa.core import render_j2_template
-from pdf_helper import parse_pdf
+from pdf_helper import parse_docling
 
 from extractor import Extractor
 from keywords import get_keywords
@@ -12,7 +12,7 @@ class PDFExtractor(Extractor):
     """ Creates an ISO 19115 XML file by reading a PDF file
     """
 
-    def write_record(self, name, model_endpath, pdf_file, pdf_url, organisation, title, bbox, cutoff, output_file):
+    def write_record(self, name, model_endpath, pdf_file, pdf_url, organisation, title, bbox, output_file):
         """
         Write XML record
 
@@ -23,7 +23,6 @@ class PDFExtractor(Extractor):
         :param organisation: name of organisation
         :param title: title
         :param bbox: bounding box coords, dict, keys are 'north', 'south' etc.
-        :param cutoff: skip pages that have less than this amount of text, set to between 1000 and 3000, used to filter out pages with no useful text
         :param output_file: output filename e.g. 'blah.xml'
         :returns: boolean
         """
@@ -32,9 +31,9 @@ class PDFExtractor(Extractor):
             print(f"{pdf_file} does not exist")
             return False
         # Extract keywords from PDF text
-        pdf_text = parse_pdf(pdf_file, False)
+        pdf_text = parse_docling(pdf_file)
         kwset = get_keywords(pdf_text)
-        summary = get_summary(pdf_file, cutoff)
+        summary = get_summary(pdf_file)
         now = datetime.datetime.now()
         date_str = now.strftime("%d/%m/%Y")
         keywords = list(kwset)

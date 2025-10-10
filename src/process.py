@@ -28,6 +28,7 @@ def convert(extractor, param_list):
     :param param_list: parameters for extraction process
     """
     e = extractor()
+    print(f"Converting using {e}")
     for params in param_list:
         try:
             e.write_record(**params)
