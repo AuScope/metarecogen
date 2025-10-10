@@ -4,6 +4,7 @@ import os
 import sys
 
 from bedrock_summary import run_claude
+from ollama_summary import ollama_summary
 
 from pdf_helper import parse_docling
 from config import OUTPUT_DIR, USE_CLAUDE
@@ -27,5 +28,5 @@ def get_summary(filename: str) -> str:
     if USE_CLAUDE:
         summary = run_claude(pdf_text)
     else:
-        raise NotImplementedError
+        summary = ollama_summary(pdf_text)
     return summary

@@ -12,6 +12,7 @@ from ckan_extract import CkanExtractor
 from ISO19139_extract import ISO19139Extractor
 from ISO19115_3_extract import ISO19115_3Extractor
 from pdf_extract import PDFExtractor
+from extractor import Extractor
 
 from config import CONFIG, OUTPUT_DIR
 
@@ -20,7 +21,7 @@ Create ISO19139 or ISO19115-3 XML metadata records from PDF reports or online me
 (e.g. CKAN, dSpace, geonetwork)
 """
 
-def convert(extractor, param_list):
+def convert(extractor: Extractor, param_list: list):
     """
     Runs conversion process
 
@@ -37,7 +38,7 @@ def convert(extractor, param_list):
             sys.exit(1)
 
 
-def get_model_info():
+def get_model_info() -> dict:
     """
     Extracts a little info from model files
 
@@ -63,7 +64,7 @@ def get_model_info():
             r_dict[name] = {'south': southLat, 'west': westLong, 'north': northLat, 'east': eastLong}
     return r_dict
 
-def oaipmh_convert(param_list):
+def oaipmh_convert(param_list: list):
     """
     Get records from Northern Territory Geological Service
     """
@@ -73,7 +74,7 @@ def oaipmh_convert(param_list):
         oe.write_record(**params)
 
 
-def process_config(config_val):
+def process_config(config_val: dict):
     # Get cooordinates from geomodels JSON config
     coord_dict = get_model_info()
 
@@ -102,7 +103,7 @@ def process_config(config_val):
         oaipmh_convert(param_list)
 
 
-def main(sys_argv):
+def main(sys_argv: list):
     """ MAIN MAIN MAIN MAIN MAIN MAIN MAIN MAIN MAIN MAIN MAIN MAIN MAIN MAIN MAIN MAIN MAIN MAIN MAIN MAIN MAIN MAIN !!!
 
     :param sys_argv: sys.argv from command line, can be overridden for testing purposes

@@ -23,7 +23,7 @@ GN_PASSWORD = os.environ.get('CKAN2GN_GN_PASSWORD')
 GN_URL = os.environ.get('CKAN2GN_GN_URL')
 CKAN_URL = os.environ.get('CKAN2GN_CKAN_URL')
 
-def get_gn_xsrf_token(session):
+def get_gn_xsrf_token(session: requests.sessions.Session) -> str:
     """ Retrieves XSRF token from Geonetwork
 
     :param session: requests Session object
@@ -52,7 +52,7 @@ def list_ckan_records():
         return None
     return resp['result']
 
-def get_ckan_record(package_id):
+def get_ckan_record(package_id: str) -> str|None:
     """ Given a package id retrieves its record metadata
 
     :param package_id: CKAN package_id string
@@ -69,7 +69,7 @@ def get_ckan_record(package_id):
     return resp['result']
     
 
-def insert_gn_record(session, xsrf_token, xml_string):
+def insert_gn_record(session: requests.sessions.Session, xsrf_token: str, xml_string: str) -> True:
     """ Inserts a record into Geonetwork
 
     :param session: requests Session object

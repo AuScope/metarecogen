@@ -1,12 +1,13 @@
 from lxml import etree
 from add_model_keyw import insert
+from local_types import Coords
 
 """
 Utility functions used to add bounding box coordinates to ISO 19139 & 19115-3 XML
 """
 
 
-def add_coords(coords, text, encoding, iso_ver):
+def add_coords(coords: Coords, text: str, encoding: str, iso_ver: str) -> str:
     """
     Add coordinates to XML text
 
@@ -21,7 +22,7 @@ def add_coords(coords, text, encoding, iso_ver):
     return __add_coords_iso19139(coords, text, encoding)
 
 
-def __add_coords_iso19139(coords, text, encoding):
+def __add_coords_iso19139(coords: Coords, text: str, encoding: str) -> str:
     """
     Uses XPATH insert technique to add in BBOX coords to an ISO19139 XML record
 
@@ -75,7 +76,7 @@ def __add_coords_iso19139(coords, text, encoding):
 
 
 
-def __add_coords_iso19115_3(coords, text, encoding):
+def __add_coords_iso19115_3(coords: Coords, text: str, encoding: str) -> str:
     """
     Uses XPATH insert technique to add in BBOX coords to an ISO19115-3 XML record
 

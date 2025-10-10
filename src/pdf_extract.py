@@ -7,12 +7,13 @@ from pdf_helper import parse_docling
 from extractor import Extractor
 from keywords import get_keywords
 from summary import get_summary
+from local_types import Coords
 
 class PDFExtractor(Extractor):
     """ Creates an ISO 19115 XML file by reading a PDF file
     """
 
-    def write_record(self, name, model_endpath, pdf_file, pdf_url, organisation, title, bbox, output_file):
+    def write_record(self, name: str, model_endpath: str, pdf_file: str, pdf_url: str, organisation: str, title: str, bbox: Coords, output_file: str) -> bool:
         """
         Write XML record
 
@@ -145,7 +146,12 @@ class PDFExtractor(Extractor):
 
         # Create ISO 19115-3 XML with a modified version pygeometa's jinja template
         template_dir = os.path.join(os.path.dirname(__file__), '../data/templates/ISO19115-3')
-        xml_string = render_j2_template(mcf_dict, template_dir=template_dir)
+        try:
+            xml_string = render_j2_template(mcf_dict, template_dir=template_dir)
+        except Exception as e:
+            print(f"ERROR - jinja error {e} {mcf_dict=} {template_dir=}")
+            sys.exit(1)
+            return False
 
         # write to disk
         with open(os.path.join(self.output_dir, output_file), 'w') as ff:

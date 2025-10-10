@@ -5,6 +5,7 @@ from pygeometa.core import render_j2_template
 from sickle import Sickle
 
 from extractor import Extractor
+from local_types import Coords
 
 
 class OaiExtractor(Extractor):
@@ -13,7 +14,7 @@ class OaiExtractor(Extractor):
         super().__init__() 
         self.OAI_URL = oai_url
 
-    def output_xml(self, oai_dict, oai_id, bbox, model_endpath, service_name, output_file):
+    def output_xml(self, oai_dict: dict, oai_id: str, bbox: Coords, model_endpath: str, service_name: str, output_file: str) -> bool:
         """
         Uses jinja template to write to file OAI-PMH metadata as an ISO 19115-3 XML record
 

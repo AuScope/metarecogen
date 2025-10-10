@@ -13,7 +13,7 @@ Uses yake and USGS vocabulary to create geoscience keywords
     yake:   https://pypi.org/project/yake/
 """
 
-def phrase_in_dict(phrase, in_dict):
+def phrase_in_dict(phrase: str, in_dict: dict) -> (bool, str):
     """
     Returns true if phrase is in in_dict
     """
@@ -23,7 +23,7 @@ def phrase_in_dict(phrase, in_dict):
             return True, in_dict[word]
     return False, ''
 
-def run_yake(kw_lookup, text):
+def run_yake(kw_lookup: dict, text: str) -> set:
     """
     Runs yake on some text and returns the top keywords
 
@@ -59,7 +59,7 @@ CREATE TABLE term (
   scope   character varying(1024)
   );
 """
-def extract_db_terms():
+def extract_db_terms() -> dict:
     """ Function to create a lookup table that translates geological terms into keywords using USGS vocab
     """
     keyword_lkup = {}
@@ -91,7 +91,7 @@ def extract_db_terms():
             pass
     return keyword_lkup
 
-def run_usgs(kw_dict, text):
+def run_usgs(kw_dict: dict, text: str) -> set:
     """
     Looks for keywords using USGS vocabulary
 
@@ -106,7 +106,7 @@ def run_usgs(kw_dict, text):
             kw_set.add(kw_dict[word])
     return kw_set    
 
-def get_keywords(text):
+def get_keywords(text: str) -> set:
     """
     Extracts keywords from text
 
