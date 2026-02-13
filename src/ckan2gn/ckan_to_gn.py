@@ -42,6 +42,7 @@ def list_ckan_records():
 
     :returns: list of package id strings or None upon error
     """
+    print("LISTING CKAN RECORDS")
     session = requests.Session()
     url_path =  'api/3/action/package_list'
     url = f'{CKAN_URL}/{url_path}'
@@ -58,6 +59,7 @@ def get_ckan_record(package_id: str) -> str|None:
     :param package_id: CKAN package_id string
     :returns: package metadata as a dict or None upon error
     """
+    print(f"FETCHING CKAN RECORD {package_id}")
     session = requests.Session()
     # Set up CKAN URL
     url_path =  'api/3/action/iso19115_package_show'
@@ -78,6 +80,7 @@ def insert_gn_record(session: requests.sessions.Session, xsrf_token: str, xml_st
     :param xml_string: XML to be inserted as a string
     :returns: True or False if insert succeeded
     """
+    print("INSERTING GN RECORD")
     # Set header for connection
     headers = {'Accept': 'application/json',
                'Content-Type': 'application/xml',
@@ -90,21 +93,29 @@ def insert_gn_record(session: requests.sessions.Session, xsrf_token: str, xml_st
     params = {'metadataType': 'METADATA',
               'publishToAll': 'true',
               'uuidProcessing': 'NOTHING',  # Available values : GENERATEUUID, NOTHING, OVERWRITE
+              'group': '2'
     }
 
-    # Send a put request to the endpoint to create record
-    response = session.put(GN_URL + '/geonetwork/srv/api/0.1/records',
-                        data=xml_string,
-                        params=params,
-                        auth=(GN_USERNAME, GN_PASSWORD),
-                        headers=headers
-    )
+    print(f"Doing PUT request: {GN_URL + '/geonetwork/srv/api/records'}")
+    try:
+        # Send a put request to the endpoint to create record
+        response = session.put(GN_URL + '/geonetwork/srv/api/records',
+                            data=xml_string,
+                            params=params,
+                            auth=(GN_USERNAME, GN_PASSWORD),
+                            headers=headers
+        )
+        response.raise_for_status()
+    except requests.exceptions.HTTPError:
+        print(f"Failed with status: {response.status_code}")
+        print(f"Error message: {response.text}")
+        return False
     resp = response.json()
 
     # Check if record was created in Geonetwork
     if response.status_code == requests.codes['created'] and resp['numberOfRecordsProcessed'] == 1 and \
             resp['numberOfRecordsWithErrors'] == 0:
-        print("Inserted")
+        print("GN Record Inserted")
         return True
     print(f"Insert failed: status code: {response.status_code}\n{resp}")
     return False
