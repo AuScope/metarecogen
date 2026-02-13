@@ -6,13 +6,15 @@ from lxml import etree
 
 from extractor import Extractor
 from add_model_keyw import add_models_keyword
+from local_types import Coords
 
 class ISO19139Extractor(Extractor):
     """ Uses an XSLT to insert elements into ISO 19139 XML
         Outputs ISO 19139 XML to file
+        Returns True upon success
     """
 
-    def write_record(self, name, bbox, model_endpath, metadata_url, output_file):
+    def write_record(self, name: str, bbox: Coords, model_endpath: str, metadata_url: str, output_file: str) -> bool:
         """
         Reads ISO 19139 from a source adds extra fields and outputs XML to file
 

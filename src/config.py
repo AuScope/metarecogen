@@ -16,7 +16,6 @@ CONFIG = {
                             'pdf_url': 'https://gsv.vic.gov.au/downloader/Downloader?ID=ERPublications/reports/GSV-3d-Vic/G107513_OtwayBasin_3D.pdf',
                             'organisation': "Geological Survey of Victoria",
                             'title': "Otway 3D model",
-                            'cutoff': 1000,
                             'output_file': 'otway_pdf.xml'
                             },
                             { 'name': 'Bendigo',
@@ -25,7 +24,6 @@ CONFIG = {
                               'pdf_url': 'https://gsv.vic.gov.au/downloader/Downloader?ID=ERPublications/reports/GSV-3d-Vic/G35615_3DVIC1_pt1.pdf',
                               'organisation': "Geological Survey of Victoria",
                               'title': "Bendigo 3D model",
-                              'cutoff': 3000,
                               'output_file': 'bendigo_pdf.xml'
                             },
                        ],
@@ -39,7 +37,6 @@ CONFIG = {
                           'pdf_url': 'https://www.nature.com/articles/s41598-018-29016-2',
                           'organisation': 'NCI/University of Adelaide',
                           'title': 'Stuart Shelf Model',
-                          'cutoff': 3000,
                           'output_file': 'stuartshelf_pdf.xml'
                           },
                      ],
@@ -104,7 +101,6 @@ CONFIG = {
         #                  'pdf_file': '../data/reports/sa/Burra.pdf',
         #                  'organisation': 'South Australia Geological Survey',
         #                  'title': 'Burra Mine Test',
-        #                  'cutoff': 3000,
         #                  'output_file': 'burra_pdf.xml'
         #                  },
         #               { 'name': 'Curnamona Sedimentary Basins',
@@ -112,7 +108,6 @@ CONFIG = {
         #                  'pdf_file': '../data/reports/sa/CurnamonaSed.pdf',
         #                  'organisation': 'South Australia Geological Survey',
         #                  'title': 'Curnamona Sed Basins Test',
-        #                  'cutoff': 3000,
         #                  'output_file': 'curnamonased_pdf.xml'
         #                  },
         #             ],
@@ -158,3 +153,7 @@ CONFIG = {
 
 # Currently set to root dir
 OUTPUT_DIR = str(Path(__file__).parent / 'output')
+
+# Runs in cloud using Anthropic Claude LLM via AWS Bedrock
+USE_CLAUDE = False
+

@@ -1,12 +1,12 @@
 from lxml import etree
 from copy import copy
-
+from xml.etree.ElementTree import Element
 
 """ Adds keywords to ISO 19139 and ISO 19115-3 XML using XPATH insertion
 """
 
 
-def insert(root, insert_txt, master_xpath_list, ns):
+def insert(root: Element, insert_txt: str, master_xpath_list: list, ns: dict) -> Element:
     """ Generic routine to insert text into XML document
 
     :param root: XML doc root 

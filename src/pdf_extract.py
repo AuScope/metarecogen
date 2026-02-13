@@ -2,17 +2,18 @@ import os
 import datetime
 
 from pygeometa.core import render_j2_template
-from pdf_helper import parse_pdf
+from pdf_helper import parse_docling
 
 from extractor import Extractor
 from keywords import get_keywords
 from summary import get_summary
+from local_types import Coords
 
 class PDFExtractor(Extractor):
     """ Creates an ISO 19115 XML file by reading a PDF file
     """
 
-    def write_record(self, name, model_endpath, pdf_file, pdf_url, organisation, title, bbox, cutoff, output_file):
+    def write_record(self, name: str, model_endpath: str, pdf_file: str, pdf_url: str, organisation: str, title: str, bbox: Coords, output_file: str) -> bool:
         """
         Write XML record
 
@@ -23,7 +24,6 @@ class PDFExtractor(Extractor):
         :param organisation: name of organisation
         :param title: title
         :param bbox: bounding box coords, dict, keys are 'north', 'south' etc.
-        :param cutoff: skip pages that have less than this amount of text, set to between 1000 and 3000, used to filter out pages with no useful text
         :param output_file: output filename e.g. 'blah.xml'
         :returns: boolean
         """
@@ -32,9 +32,9 @@ class PDFExtractor(Extractor):
             print(f"{pdf_file} does not exist")
             return False
         # Extract keywords from PDF text
-        pdf_text = parse_pdf(pdf_file, False)
+        pdf_text = parse_docling(pdf_file)
         kwset = get_keywords(pdf_text)
-        summary = get_summary(pdf_file, cutoff)
+        summary = get_summary(pdf_file)
         now = datetime.datetime.now()
         date_str = now.strftime("%d/%m/%Y")
         keywords = list(kwset)
@@ -146,7 +146,12 @@ class PDFExtractor(Extractor):
 
         # Create ISO 19115-3 XML with a modified version pygeometa's jinja template
         template_dir = os.path.join(os.path.dirname(__file__), '../data/templates/ISO19115-3')
-        xml_string = render_j2_template(mcf_dict, template_dir=template_dir)
+        try:
+            xml_string = render_j2_template(mcf_dict, template_dir=template_dir)
+        except Exception as e:
+            print(f"ERROR - jinja error {e} {mcf_dict=} {template_dir=}")
+            sys.exit(1)
+            return False
 
         # write to disk
         with open(os.path.join(self.output_dir, output_file), 'w') as ff:

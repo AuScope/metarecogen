@@ -1,2 +1,4 @@
 .pdm-python
 __pycache__/
+**/.coverage
+**/.tox

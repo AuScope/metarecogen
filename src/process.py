@@ -3,6 +3,7 @@ import os
 import sys
 import glob
 import json
+import argparse
 
 from pyproj import CRS, Transformer
 
@@ -11,6 +12,7 @@ from ckan_extract import CkanExtractor
 from ISO19139_extract import ISO19139Extractor
 from ISO19115_3_extract import ISO19115_3Extractor
 from pdf_extract import PDFExtractor
+from extractor import Extractor
 
 from config import CONFIG, OUTPUT_DIR
 
@@ -19,7 +21,7 @@ Create ISO19139 or ISO19115-3 XML metadata records from PDF reports or online me
 (e.g. CKAN, dSpace, geonetwork)
 """
 
-def convert(extractor, param_list):
+def convert(extractor: Extractor, param_list: list):
     """
     Runs conversion process
 
@@ -27,6 +29,7 @@ def convert(extractor, param_list):
     :param param_list: parameters for extraction process
     """
     e = extractor()
+    print(f"Converting using {e}")
     for params in param_list:
         try:
             e.write_record(**params)
@@ -35,7 +38,7 @@ def convert(extractor, param_list):
             sys.exit(1)
 
 
-def get_model_info():
+def get_model_info() -> dict:
     """
     Extracts a little info from model files
 
@@ -61,7 +64,7 @@ def get_model_info():
             r_dict[name] = {'south': southLat, 'west': westLong, 'north': northLat, 'east': eastLong}
     return r_dict
 
-def oaipmh_convert(param_list):
+def oaipmh_convert(param_list: list):
     """
     Get records from Northern Territory Geological Service
     """
@@ -70,9 +73,46 @@ def oaipmh_convert(param_list):
     for params in param_list:
         oe.write_record(**params)
 
-if __name__ == "__main__":
+
+def process_config(config_val: dict):
     # Get cooordinates from geomodels JSON config
     coord_dict = get_model_info()
+
+    if config_val['method'] is None:
+        return
+    param_list = config_val['params']
+
+    # Insert model coordinates
+    for params in param_list:
+        name = params['name']
+        params['bbox'] = coord_dict[name]
+
+    if config_val['method'] == 'PDF':
+        convert(PDFExtractor, param_list)
+
+    elif config_val['method'] == 'CKAN':
+        convert(CkanExtractor, param_list)
+
+    elif config_val['method'] == 'ISO19115-3':
+        convert(ISO19115_3Extractor, param_list)
+
+    elif config_val['method'] == 'ISO19139':
+        convert(ISO19139Extractor, param_list)
+
+    elif config_val['method'] == 'OAIPMH':
+        oaipmh_convert(param_list)
+
+
+def main(sys_argv: list):
+    """ MAIN MAIN MAIN MAIN MAIN MAIN MAIN MAIN MAIN MAIN MAIN MAIN MAIN MAIN MAIN MAIN MAIN MAIN MAIN MAIN MAIN MAIN !!!
+
+    :param sys_argv: sys.argv from command line, can be overridden for testing purposes
+    """
+    parser = argparse.ArgumentParser(description="Metarecogen")
+    parser.add_argument('-r', '--record', action='store', help="Specify a record group to generate")
+
+    # Parse command line arguments
+    args = parser.parse_args(sys_argv[1:])
 
     # Create output dir
     if not os.path.exists(OUTPUT_DIR):
@@ -82,26 +122,17 @@ if __name__ == "__main__":
             print(f"ERROR: Cannot create output dir {OUTPUT_DIR}: {oe}")
             sys.exit(1)
 
-    # Loop over datasets and process each one
-    for k, v in CONFIG.items():
-        if v['method'] is None:
-            continue
-        param_list = v['params']
-        for params in param_list:
-            name = params['name']
-            params['bbox'] = coord_dict[name]
+    # Process one record specified on command line
+    if args.record is not None:
+        if args.record in CONFIG:
+            process_config(CONFIG[args.record])
+        else:
+            print(f"ERROR: Cannot find {args.record} in config")
+            sys.exit(1)
+    else:
+        # Loop over config and process each one
+        for k, v in CONFIG.items():
+            process_config(v)
 
-        if v['method'] == 'PDF':
-            convert(PDFExtractor, param_list)
-
-        elif v['method'] == 'CKAN':
-            convert(CkanExtractor, param_list)
-
-        elif v['method'] == 'ISO19115-3':
-            convert(ISO19115_3Extractor, param_list)
-
-        elif v['method'] == 'ISO19139':
-            convert(ISO19139Extractor, param_list)
-
-        elif v['method'] == 'OAIPMH':
-            oaipmh_convert(param_list)
+if __name__ == "__main__":
+        main(sys.argv)

@@ -17,9 +17,10 @@ class CkanExtractor(Extractor):
     """ Connects to CKAN repository
         Uses Jinja templates to create ISO 19115-3 XML
         Writes XML to disk
+        Returns True upon success
     """
 
-    def output_xml(self, ckan_dict, url, model_endpath, output_file):
+    def output_xml(self, ckan_dict: dict, url: str, model_endpath: str, output_file: str) -> bool:
         """
         Outputs XML
 

@@ -8,16 +8,17 @@ import lxml
 from extractor import Extractor
 
 from add_model_keyw import add_models_keyword
-
+from local_types import Coords
 
 class ISO19115_3Extractor(Extractor):
     """
     Retrieves ISO 19115-3 XML from a geonetwork server or similar
     Uses an XSLT to insert extra fields
     Outputs ISO 19115-3 XML to file
+    Returns True upon success
     """
 
-    def write_record(self, name, bbox, model_endpath, metadata_url, output_file):
+    def write_record(self, name: str, bbox: Coords, model_endpath: str, metadata_url: str, output_file: str) -> bool:
         """
         Writes out ISO 19115-3 XML from an ISO 19115-3 source
 

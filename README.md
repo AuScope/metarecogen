@@ -1,6 +1,7 @@
 # Metadata Record Generator
 
 [![pdm-managed](https://img.shields.io/badge/pdm-managed-blueviolet)](https://pdm.fming.dev)
+[![Coverage Status](https://github.com/AuScope/metarecogen/blob/gh-pages/coverage-badge.svg)]()
 
 This is a basic framework of Python scripts that generate ISO 19115 geospatial metadata records (ISO 19139 and ISO 19115-3 XML). It is used for describing geological models from the AuScope 3D Geological Models website <https://geomodels.auscope.org.au>, but could be adapted for other kinds of metadata
 
@@ -70,8 +71,7 @@ To generate metadata from PDF file, this project uses AWS Bedrock to run a Claud
 
 ```
 cd src
-eval $(pdm venv activate)
-./process.py
+pdm run process.py
 ```
 XML files are written to 'output' directory (defined in [constants.py](src/constants.py))
 
@@ -83,6 +83,7 @@ The framework is configured via the [config.py](src/config.py) file. Its format 
 
 There are very basic tests in [tests](tests), run via using pytest
 ```
-pytest
+cd tests
+pdm run pytest
 ```
 

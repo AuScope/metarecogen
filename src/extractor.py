@@ -1,5 +1,6 @@
 import os
 from config import OUTPUT_DIR
+from local_types import Coords
 
 """
 Parent class for reading sources and writing out XML
@@ -14,7 +15,7 @@ class Extractor:
             pass
         self.output_dir = OUTPUT_DIR
 
-    def write_record(self, bbox, model_endpath):
+    def write_record(self, bbox: Coords, model_endpath: str):
         """ NB: The input  parameters for this function should match the parameters defined in the configuration file
         """
         pass

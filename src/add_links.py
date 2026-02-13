@@ -3,13 +3,13 @@ from lxml import etree
 from add_model_keyw import insert
 
 
-def add_model_link(model_endpath, text):
+def add_model_link(model_endpath: str, text: str) -> str:
     """
     Uses XPATH insert technique to add in models URL to an ISO 19139 record
 
     :param model_endpath: model path in geomodels website
     :param text: XML text
-    :returns: boolean
+    :returns: XML string
     """
     # XML Namespace dict
     ns = {'gmd': 'http://www.isotc211.org/2005/gmd', 'gco': 'http://www.isotc211.org/2005/gco'}
