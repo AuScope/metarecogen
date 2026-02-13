@@ -1,5 +1,4 @@
 import requests
-from pathlib import Path
 import os
 import sys
 
@@ -43,12 +42,14 @@ def list_ckan_records():
 
     :returns: list of package id strings or None upon error
     """
+    print("LISTING CKAN RECORDS")
     session = requests.Session()
-    url_path =  Path('api') / '3' / 'action' / 'package_list'
+    url_path =  'api/3/action/package_list'
     url = f'{CKAN_URL}/{url_path}'
     r = session.get(url)
     resp = r.json()
     if resp['success'] is False:
+        print(f"Package list error: {resp.get('error','')}")
         return None
     return resp['result']
 
@@ -58,13 +59,15 @@ def get_ckan_record(package_id: str) -> str|None:
     :param package_id: CKAN package_id string
     :returns: package metadata as a dict or None upon error
     """
+    print(f"FETCHING CKAN RECORD {package_id}")
     session = requests.Session()
     # Set up CKAN URL
-    url_path =  Path('api') / '3' / 'action' / 'iso19115_package_show'
+    url_path =  'api/3/action/iso19115_package_show'
     url = f'{CKAN_URL}/{url_path}'
     r = session.get(url, params={'format':'xml', 'id':package_id})
     resp = r.json()
     if resp['success'] is False:
+        print(f"Package show error: {resp.get('error','')}")
         return None
     return resp['result']
     
@@ -77,6 +80,7 @@ def insert_gn_record(session: requests.sessions.Session, xsrf_token: str, xml_st
     :param xml_string: XML to be inserted as a string
     :returns: True or False if insert succeeded
     """
+    print("INSERTING GN RECORD")
     # Set header for connection
     headers = {'Accept': 'application/json',
                'Content-Type': 'application/xml',
@@ -89,21 +93,29 @@ def insert_gn_record(session: requests.sessions.Session, xsrf_token: str, xml_st
     params = {'metadataType': 'METADATA',
               'publishToAll': 'true',
               'uuidProcessing': 'NOTHING',  # Available values : GENERATEUUID, NOTHING, OVERWRITE
+              'group': '2'
     }
 
-    # Send a put request to the endpoint to create record
-    response = session.put(GN_URL + '/geonetwork/srv/api/0.1/records',
-                        data=xml_string,
-                        params=params,
-                        auth=(GN_USERNAME, GN_PASSWORD),
-                        headers=headers
-    )
+    print(f"Doing PUT request: {GN_URL + '/geonetwork/srv/api/records'}")
+    try:
+        # Send a put request to the endpoint to create record
+        response = session.put(GN_URL + '/geonetwork/srv/api/records',
+                            data=xml_string,
+                            params=params,
+                            auth=(GN_USERNAME, GN_PASSWORD),
+                            headers=headers
+        )
+        response.raise_for_status()
+    except requests.exceptions.HTTPError:
+        print(f"Failed with status: {response.status_code}")
+        print(f"Error message: {response.text}")
+        return False
     resp = response.json()
 
     # Check if record was created in Geonetwork
     if response.status_code == requests.codes['created'] and resp['numberOfRecordsProcessed'] == 1 and \
             resp['numberOfRecordsWithErrors'] == 0:
-        print("Inserted")
+        print("GN Record Inserted")
         return True
     print(f"Insert failed: status code: {response.status_code}\n{resp}")
     return False
@@ -121,13 +133,15 @@ if __name__ == "__main__":
     if xsrf is not None:
         # Get records from CKAN
         for id in list_ckan_records():
-            print(f"Inserting '{id}'")
+            print(f"\nInserting '{id}'")
             xml_string = get_ckan_record(id)
             if xml_string is not None:
                 # Insert GN record
                 insert_gn_record(session, xsrf, xml_string)
             else:
-                print(f"Could not get record id {id} from CKAN")
+                print(f"Could not get record id '{id}' from CKAN")
+    else:
+        print("Could not find geonetwork XSRF token")
 
     
 
