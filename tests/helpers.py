@@ -48,7 +48,7 @@ def coords_check(xml, coords, encoding='utf-8'):
     westpath_list = ['mri:MD_DataIdentification', 'mri:extent', 'gex:EX_Extent', 'gex:geographicElement', 'gex:EX_GeographicBoundingBox', 'gex:westBoundLongitude', 'gco:Decimal']
     xp = make_xpath(iso19115_3_ns, westpath_list)
     xp += f"[.='" + str(coords['west']) + "']"
-    assert root.findall(xp, namespaces=ns_19115_3) != []
+    assert root.findall(xp, namespaces=iso19115_3_ns) != []
 
     eastpath_list = ['mri:MD_DataIdentification', 'mri:extent', 'gex:EX_Extent', 'gex:geographicElement', 'gex:EX_GeographicBoundingBox', 'gex:eastBoundLongitude', 'gco:Decimal']
     xp = make_xpath(iso19115_3_ns, eastpath_list)

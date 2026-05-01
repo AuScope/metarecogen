@@ -7,6 +7,8 @@ from add_coords import add_coords
 from add_links import add_model_link
 from add_model_keyw import add_models_keyword
 from helpers import ns_19115_3, ns_19139, get_metadata, make_xpath
+from xmlns import iso19115_3_ns as ns11915_3
+from xmlns import iso19139_ns as ns_19139
 from keywords import extract_db_terms, run_yake
 from pdf_helper import parse_docling
 from local_types import Coords
