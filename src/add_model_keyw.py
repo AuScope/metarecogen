@@ -1,6 +1,4 @@
 from lxml import etree
-from copy import copy
-from xml.etree.ElementTree import Element
 
 from xmlns import iso19115_3_ns, iso19139_ns, insert
 

@@ -4,7 +4,8 @@ from helpers import keyword_check, onlineres_check
 from ISO19115_3_extract import ISO19115_3Extractor
 
 def test_ISO19115_3():
-    URL = "https://catalog.sarig.sa.gov.au/geonetwork/srv/api/records/9c6ae754-291d-4100-afd9-478c3a9ddf42/formatters/xml"
+    #URL = "https://catalog.sarig.sa.gov.au/geonetwork/srv/api/records/9c6ae754-291d-4100-afd9-478c3a9ddf42/formatters/xml"
+    URL="westgawler_19115-3-orig.xml"
     name = 'ngawler'
     XML_FILE = f"test_19115_3_{name}.xml"
     coords = {'north': '0.0', 'south': '-45', 'east': '-145', 'west':'-100'}

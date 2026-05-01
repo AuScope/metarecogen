@@ -123,18 +123,6 @@ CONFIG = {
                  ]
         },
         #
-        # NT also has an OAI-PMH interface
-        'nt2': { 'method': 'OAIPMH',
-                'params': [  { 'name': 'McArthur Basin',
-                               'model_endpath': 'mcarthur',
-                               'oai_id': 'oai:geoscience.nt.gov.au:1/81751',
-                               'oai_prefix': 'oai_dc',
-                               'service_name': "NTGS GEMIS",
-                               'output_file': 'mcarthur_oai.xml'
-                             }
-                 ]
-        },
-        #
         # Geo Survey of WA has ISO19139 records 
         'wa': { 'method': 'ISO19139',
                 'params': [{ 'name': 'Sandstone',

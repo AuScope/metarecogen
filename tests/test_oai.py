@@ -1,10 +1,12 @@
 import os
+import pytest
 
 from oai_extract import OaiExtractor
 from helpers import coords_check, title_check, orgname_check, id_check, keyword_check, onlineres_check
 
 
 
+@pytest.mark.xfail(reason="Known issue: OAI not supported any more")
 def test_oai():
     # Get records from Northern Territory Geological Service
     # OAI-PMH URL
