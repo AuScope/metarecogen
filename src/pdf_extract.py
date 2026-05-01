@@ -1,5 +1,6 @@
 import os
 import datetime
+import sys
 
 from pygeometa.core import render_j2_template
 from pdf_helper import parse_docling
