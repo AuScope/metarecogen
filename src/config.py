@@ -59,36 +59,38 @@ CONFIG = {
                  ]
         },
         #
-        # SA Geo Survey has a geonetwork with ISO19115-3 records
-        'sa': { 'method': 'ISO19115-3',
+        # SA Geo Survey has CKAN
+        'sa': { 'method': 'CKAN',
                 'params': [  { 'name': 'Burra Mine',
                                'model_endpath': 'burramine',
-                               'metadata_url' :'https://catalog.sarig.sa.gov.au/geonetwork/srv/api/records/37e0f6f0-b9c7-47f0-bbed-482ce35851a4/formatters/xml',
+                               'ckan_url' :'https://catalog.sarig.sa.gov.au'
+                               'package_id': 'mesac271',
                                'output_file': 'burra_19115-3.xml'
                              },
                              { 'name': 'Central Flinders',
                                'model_endpath': 'centralflinders',
-                               'metadata_url' :'https://catalog.sarig.sa.gov.au/geonetwork/srv/api/records/2369469b-4906-4352-9100-632974e0ec04/formatters/xml',
+                               'ckan_url' :'https://catalog.sarig.sa.gov.au',
+                               'package_id': 'mesac178',
                                'output_file': 'centralflinders_19115-3.xml'
                              },
                              { 'name': 'North Flinders',
                                'model_endpath': 'northflinders',
-                               'metadata_url' :'https://catalog.sarig.sa.gov.au/geonetwork/srv/api/records/a86d7379-ca96-4e7d-8e1f-58bfeba9a8f5/formatters/xml',
+                               'package_id'; 'mesac776',
                                'output_file': 'northflinders_19115-3.xml'
                              },
                              { 'name': 'North Gawler',
                                'model_endpath': 'ngawler',
-                               'metadata_url' :'https://catalog.sarig.sa.gov.au/geonetwork/srv/api/records/9c6ae754-291d-4100-afd9-478c3a9ddf42/formatters/xml',
+                               'package_id': 'mesac25693',
                                'output_file': 'ngawler_19115-3.xml'
                              },
                              { 'name': 'Curnamona Sedimentary Basins',
                                'model_endpath': 'curnamonased',
-                               'metadata_url' :'https://catalog.sarig.sa.gov.au/geonetwork/srv/api/records/bda114bc-1eb8-4569-94e5-a9fa1a994645/formatters/xml',
+                               'package_id': 'mesac25808',
                                'output_file': 'curnamonased_19115-3.xml'
                              },
                              { 'name': 'Western Gawler',
                                'model_endpath': 'westgawler',
-                               'metadata_url' :'https://catalog.sarig.sa.gov.au/geonetwork/srv/api/records/13ed6259-1ceb-4728-848f-35e81b502d12/formatters/xml',
+                               'package_id': 'mesac27247',
                                'output_file': 'westgawler_19115-3.xml'
                              }
                 ]
