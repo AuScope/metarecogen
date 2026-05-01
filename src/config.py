@@ -63,7 +63,7 @@ CONFIG = {
         'sa': { 'method': 'CKAN',
                 'params': [  { 'name': 'Burra Mine',
                                'model_endpath': 'burramine',
-                               'ckan_url' :'https://catalog.sarig.sa.gov.au'
+                               'ckan_url' :'https://catalog.sarig.sa.gov.au',
                                'package_id': 'mesac271',
                                'output_file': 'burra_19115-3.xml'
                              },
@@ -126,6 +126,9 @@ CONFIG = {
         },
         #
         # Geo Survey of WA has ISO19139 records 
+        # TODO: also has CKAN:
+        #   https://catalogue.data.wa.gov.au/api/3/action/package_show?id=windimurra-3d-geology
+        #   https://catalogue.data.wa.gov.au/api/3/action/package_show?id=sandstone-3d-geology
         'wa': { 'method': 'ISO19139',
                 'params': [{ 'name': 'Sandstone',
                              'model_endpath': 'sandstone',
