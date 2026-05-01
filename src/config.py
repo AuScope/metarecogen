@@ -75,21 +75,25 @@ CONFIG = {
                              },
                              { 'name': 'North Flinders',
                                'model_endpath': 'northflinders',
-                               'package_id'; 'mesac776',
+                               'ckan_url' :'https://catalog.sarig.sa.gov.au',
+                               'package_id': 'mesac776',
                                'output_file': 'northflinders_19115-3.xml'
                              },
                              { 'name': 'North Gawler',
                                'model_endpath': 'ngawler',
+                               'ckan_url' :'https://catalog.sarig.sa.gov.au',
                                'package_id': 'mesac25693',
                                'output_file': 'ngawler_19115-3.xml'
                              },
                              { 'name': 'Curnamona Sedimentary Basins',
                                'model_endpath': 'curnamonased',
+                               'ckan_url' :'https://catalog.sarig.sa.gov.au',
                                'package_id': 'mesac25808',
                                'output_file': 'curnamonased_19115-3.xml'
                              },
                              { 'name': 'Western Gawler',
                                'model_endpath': 'westgawler',
+                               'ckan_url' :'https://catalog.sarig.sa.gov.au',
                                'package_id': 'mesac27247',
                                'output_file': 'westgawler_19115-3.xml'
                              }
